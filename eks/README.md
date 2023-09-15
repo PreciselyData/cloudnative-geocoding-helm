@@ -37,7 +37,7 @@ The requirements need to be checked before installing helm chart are as follows:
 To run the geo-addressing helm chart use the following command:
 
 ```shell
-helm install geo-addressing .\charts\geo-addressing\ \
+helm install geo-addressing ./charts/geo-addressing\ \
 --dependency-update \
 --set "global.awsRegion=[aws-region]" \ 
 --set "global.efs.fileSystemId=[file-system-id]" \
@@ -63,17 +63,17 @@ To enable other API's like autocomplete, lookup and reverse-geocode you can also
 In case the base root path of data for an API (verify-geocode,autocomplete,lookup,reverse) is different from [mentioned](README.md#infrastructure-requirements) format in point 5 then set the root path for an API using below parameters.
 
 ```shell
---set global.efs.addressingBasePath=<your_efs_path>
---set global.efs.autoCompleteBasePath=<your_efs_path>
---set global.efs.lookupBasePath=<your_efs_path>
---set global.efs.reverseBasePath=<your_efs_path>
+--set "global.efs.addressingBasePath=<your_efs_path>"
+--set "global.efs.autoCompleteBasePath=<your_efs_path>"
+--set "global.efs.lookupBasePath=<your_efs_path>"
+--set "global.efs.reverseBasePath=<your_efs_path>"
 ```
 
 *Example:*
 *Here the data for verify/geocode API's is on the root of EFS therefore set base path '.'*
 
 ```shell
---set global.efs.addressingBasePath=.
+--set "global.efs.addressingBasePath=."
 ```
 
 Please refer [values.yaml](./charts/geo-addressing/values.yaml) to update any of the default parameters in the helm command.
@@ -194,6 +194,26 @@ curl -X 'POST' \
       "type": "PB_KEY"
     }
   ]
+}'
+```
+
+### `/li/v1/oas/autocomplete`:
+API to autocomplete the addresses
+
+Sample Request:
+```curl
+curl --location 'https://[EXTERNAL-URL]/li/v1/oas/autocomplete' --header 'Content-Type: application/json' --data '{
+  "preferences": {
+    "maxResults": 2,
+    "returnAllInfo": true,
+    "customPreferences": {}
+  },
+  "address": {
+    "addressLines": [
+      "350 jordan"
+    ],
+    "country": "USA"
+  }
 }'
 ```
 
