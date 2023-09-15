@@ -37,7 +37,7 @@ The requirements need to be checked before installing helm chart are as follows:
 To run the geo-addressing helm chart use the following command:
 
 ```shell
-helm install geo-addressing ./charts/geo-addressing\ \
+helm install geo-addressing ./charts/geo-addressing \
 --dependency-update \
 --set "global.awsRegion=[aws-region]" \ 
 --set "global.efs.fileSystemId=[file-system-id]" \
