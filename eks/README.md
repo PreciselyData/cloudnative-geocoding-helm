@@ -1,4 +1,4 @@
-# Geo-Addressing Helm Chart Deployment Guide for for EKS
+# Geo-Addressing Helm Chart Deployment Guide for EKS
 
 ## Description
 
