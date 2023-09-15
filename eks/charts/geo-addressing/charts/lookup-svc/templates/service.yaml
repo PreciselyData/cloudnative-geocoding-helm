@@ -1,0 +1,21 @@
+{{- if .Values.enabled }}
+{{- $top := . -}}
+{{- range $.Values.global.countries }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "lookup-svc.fullname" (list $top .) }}
+  labels:
+    {{- include "lookup-svc.labels" (list $top .) | nindent 4 }}
+spec:
+  type: {{ $top.Values.service.type }}
+  ports:
+    - port: {{ $top.Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "lookup-svc.selectorLabels" (list $top .) | nindent 4 }}
+{{- end }}
+{{- end }}

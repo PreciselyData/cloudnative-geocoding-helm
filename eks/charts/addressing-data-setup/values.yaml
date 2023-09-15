@@ -1,0 +1,33 @@
+dataDownload:
+  enabled: true
+  image:
+    repository: pdx-s3-extractor
+    pullPolicy: Always
+    tag: latest
+    pullSecrets: [ ]
+
+nameOverride: "addressing-data"
+fullnameOverride: "addressing-data"
+
+service:
+  type: ClusterIP
+  port: 80
+
+nodeSelector: { }
+
+global:
+  pdxApiKey: "pdx-api-key"
+  pdxSecret: "pdx-api-secret"
+  mountBasePath: "/mnt/data/geoaddressing-data"
+  awsRegion: "us-east-1"
+  countries:
+    - usa
+    - gbr
+    - deu
+  efs:
+    fileSystemId: fileSystemId
+
+volumes:
+  - name: geoaddressing-host-volume
+    persistentVolumeClaim:
+      claimName: addressing-data-pvc

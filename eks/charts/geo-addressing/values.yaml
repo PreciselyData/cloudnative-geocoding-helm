@@ -1,0 +1,226 @@
+replicaCount: 1
+
+image:
+  repository: 603016229198.dkr.ecr.us-east-1.amazonaws.com/regional-addressing-service
+  pullPolicy: Always
+  tag: latest
+
+imagePullSecrets: [ ]
+nameOverride: "geo-addressing"
+fullnameOverride: "geo-addressing"
+
+serviceAccount:
+  create: true
+  annotations: { }
+  name: ""
+
+podAnnotations: { }
+podSecurityContext: { }
+securityContext: { }
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  hosts:
+    - host: geoaddressing.precisely.com
+      paths:
+        - path: /precisely/addressing
+          pathType: Prefix
+  tls: [ ]
+
+resources:
+  #   limits:
+  #     cpu: 100m
+  #     memory: 128Mi
+  requests:
+    cpu: 1
+    memory: 1500Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 60
+
+tolerations: [ ]
+affinity: { }
+
+global:
+  countries:
+    - usa
+    - gbr
+    - deu
+  awsRegion: us-east-1
+  addressingImage:
+    repository: 603016229198.dkr.ecr.us-east-1.amazonaws.com/addressing-service
+    pullPolicy: Always
+    tag: latest
+  efs:
+    fileSystemId: fileSystemId
+    volumeMountPath: /mnt/data/geoaddressing-data
+    addressingBasePath: verify-geocode
+    autoCompleteBasePath: autocomplete
+    lookupBasePath: lookup
+    reverseBasePath: verify-geocode
+  nodeSelector: { }
+  countryConfiguration:
+    usa:
+      nodeSelector: { }
+      resources:
+        requests:
+          cpu: 1
+          memory: 4Gi
+    deu:
+      nodeSelector: { }
+      resources:
+        requests:
+          cpu: 1
+          memory: 4Gi
+    gbr:
+      nodeSelector: { }
+      resources:
+        requests:
+          cpu: 1
+          memory: 4Gi
+    aus:
+      nodeSelector: { }
+      resources:
+        requests:
+          cpu: 1
+          memory: 4Gi
+    fra:
+      nodeSelector: { }
+      resources:
+        requests:
+          cpu: 1
+          memory: 4Gi
+    can:
+      nodeSelector: { }
+      resources:
+        requests:
+          cpu: 1
+          memory: 4Gi
+    mex:
+      nodeSelector: { }
+      resources:
+        requests:
+          cpu: 1
+          memory: 4Gi
+    bra:
+      nodeSelector: { }
+      resources:
+        requests:
+          cpu: 1
+          memory: 4Gi
+    arg:
+      nodeSelector: { }
+      resources:
+        requests:
+          cpu: 1
+          memory: 4Gi
+    rus:
+      nodeSelector: { }
+      resources:
+        requests:
+          cpu: 1
+          memory: 4Gi
+    ind:
+      nodeSelector: { }
+      resources:
+        requests:
+          cpu: 1
+          memory: 4Gi
+    sgp:
+      nodeSelector: { }
+      resources:
+        requests:
+          cpu: 1
+          memory: 4Gi
+    nzl:
+      nodeSelector: { }
+      resources:
+        requests:
+          cpu: 1
+          memory: 4Gi
+    jpn:
+      nodeSelector: { }
+      resources:
+        requests:
+          cpu: 1
+          memory: 4Gi
+    tgl:
+      nodeSelector: { }
+      resources:
+        requests:
+          cpu: 1
+          memory: 4Gi
+    world:
+      nodeSelector: { }
+      resources:
+        requests:
+          cpu: 1
+          memory: 4Gi
+
+addressing-svc:
+  enabled: true
+  replicaCount: 1
+  imagePullSecrets: [ ]
+  serviceAccount:
+    create: true
+    annotations: { }
+    name: ""
+  podAnnotations: { }
+  podSecurityContext: { }
+  securityContext: { }
+  tolerations: [ ]
+  affinity: { }
+
+autocomplete-svc:
+  enabled: false
+  replicaCount: 1
+  imagePullSecrets: [ ]
+  serviceAccount:
+    create: true
+    annotations: { }
+    name: ""
+  podAnnotations: { }
+  podSecurityContext: { }
+  securityContext: { }
+  tolerations: [ ]
+  affinity: { }
+
+lookup-svc:
+  enabled: false
+  replicaCount: 1
+  imagePullSecrets: [ ]
+  serviceAccount:
+    create: true
+    annotations: { }
+    name: ""
+  podAnnotations: { }
+  podSecurityContext: { }
+  securityContext: { }
+  tolerations: [ ]
+  affinity: { }
+
+reverse-svc:
+  enabled: false
+  replicaCount: 1
+  imagePullSecrets: [ ]
+  serviceAccount:
+    create: true
+    annotations: { }
+    name: ""
+  podAnnotations: { }
+  podSecurityContext: { }
+  securityContext: { }
+  tolerations: [ ]
+  affinity: { }

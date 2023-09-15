@@ -1,0 +1,93 @@
+{{- if .Values.enabled }}
+{{- $top := . -}}
+{{- range $.Values.global.countries }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "reverse-svc.fullname" (list $top .) }}
+  labels:
+    {{- include "reverse-svc.labels" (list $top .) | nindent 4 }}
+spec:
+  {{- if not $top.Values.autoscaling.enabled }}
+  replicas: {{ $top.Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "reverse-svc.selectorLabels" (list $top .) | nindent 6 }}
+  template:
+    metadata:
+      {{- with $top.Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "reverse-svc.selectorLabels" (list $top .) | nindent 8 }}
+    spec:
+      {{- with $top.Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "reverse-svc.serviceAccountName" (list $top .) }}
+      securityContext:
+        {{- toYaml $top.Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ $top.Chart.Name }}
+          securityContext:
+            {{- toYaml $top.Values.securityContext | nindent 12 }}
+          image: "{{ $top.Values.global.addressingImage.repository }}:{{ $top.Values.global.addressingImage.tag | default $top.Chart.AppVersion }}"
+          imagePullPolicy: {{ $top.Values.global.addressingImage.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 60
+            failureThreshold: 60
+            timeoutSeconds: 10
+            periodSeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 20
+            failureThreshold: 60
+            timeoutSeconds: 2
+            periodSeconds: 10
+          {{- with (get $top.Values.global.countryConfiguration .).resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            {{- include "reverse-svc.volumeMounts" $top | nindent 12 }}
+          env:
+            - name: DATA_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ $top.Values.dataVintage.configMap.name }}
+                  key: {{ (printf "reverse.%s.vintage" .) }}
+            - name: ENABLED_ENDPOINTS
+              value: reverse-geocode
+            - name: DATA_REGION
+              value: {{ . | upper }}
+      {{- with (default $top.Values.global.nodeSelector ((get $top.Values.global.countryConfiguration .).nodeSelector)) }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $top.Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $top.Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: geoaddressing-host-volume
+          persistentVolumeClaim:
+            claimName: {{ include "common-svc-pvc.name" $top }}
+{{- end }}
+{{- end }}

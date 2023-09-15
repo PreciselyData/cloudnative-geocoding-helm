@@ -1,0 +1,59 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: efs-precisely
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/resource-policy": delete
+provisioner: efs.csi.aws.com
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: addressing-data-pv
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/resource-policy": delete
+  labels:
+    {{- include "addressing-data.labels" . | nindent 4 }}
+  finalizers: [ ]
+spec:
+  capacity:
+    storage: 100G
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: "efs-precisely"
+  mountOptions:
+    - tls
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: {{ .Values.global.efs.fileSystemId }}.efs.{{ .Values.global.awsRegion }}.amazonaws.com
+    volumeAttributes:
+      path: /
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: addressing-data-pvc
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/resource-policy": delete
+  finalizers: [ ]
+  labels:
+    {{- include "addressing-data.labels" . | nindent 4 }}
+spec:
+  storageClassName: "efs-precisely"
+  volumeName: addressing-data-pv
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100G

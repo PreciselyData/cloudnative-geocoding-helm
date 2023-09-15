@@ -1,0 +1,6 @@
+.idea/
+.vscode/
+Chart.lock
+*.tgz
+**/*.tgz
+**/*.lock

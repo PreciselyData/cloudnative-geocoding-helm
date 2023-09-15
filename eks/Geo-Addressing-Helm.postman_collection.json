@@ -1,0 +1,229 @@
+{
+	"info": {
+		"_postman_id": "c2eec28b-7662-433e-b6bb-dddecd918e7a",
+		"name": "Geo-Addressing-Helm",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20013413",
+		"_collection_link": "https://snowflake-ss4bd.postman.co/workspace/Team-Workspace~cdff7aff-bba4-49e1-8832-a674abc5d18c/collection/20013413-c2eec28b-7662-433e-b6bb-dddecd918e7a?action=share&source=collection_link&creator=20013413"
+	},
+	"item": [
+		{
+			"name": "GEOCODE",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"preferences\": {\r\n    \"returnAllInfo\": true\r\n  },\r\n  \"addresses\": [\r\n    {\r\n      \"addressLines\": [\r\n        \"1700 district ave #300 burlington, ma\"\r\n      ],\r\n      \"country\": \"USA\"\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{EXTERNAL-IP}}/li/v1/oas/geocode",
+					"host": [
+						"{{EXTERNAL-IP}}"
+					],
+					"path": [
+						"li",
+						"v1",
+						"oas",
+						"geocode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VERIFY",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"preferences\": {\r\n    \"returnAllInfo\": true\r\n  },\r\n  \"addresses\": [\r\n    {\r\n      \"addressLines\": [\r\n        \"1700 district ave #300 burlington, ma\"\r\n      ],\r\n      \"country\": \"USA\"\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{EXTERNAL-IP}}/li/v1/oas/verify",
+					"host": [
+						"{{EXTERNAL-IP}}"
+					],
+					"path": [
+						"li",
+						"v1",
+						"oas",
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LOOKUP",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"preferences\": {\r\n    \"type\": \"preferences\",\r\n    \"returnAllInfo\": true\r\n  },\r\n  \"keys\": [\r\n    {\r\n      \"key\": \"P0000GL41OME\",\r\n      \"country\": \"USA\",\r\n      \"type\": \"PB_KEY\"\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{EXTERNAL-IP}}/li/v1/oas/lookup",
+					"host": [
+						"{{EXTERNAL-IP}}"
+					],
+					"path": [
+						"li",
+						"v1",
+						"oas",
+						"lookup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AUTOCOMPLETE",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"preferences\": {\r\n    \"maxResults\": 2,\r\n    \"returnAllInfo\": true,\r\n    \"customPreferences\": {}\r\n  },\r\n  \"address\": {\r\n    \"addressLines\": [\r\n      \"350 jordan\"\r\n    ],\r\n    \"country\": \"USA\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{EXTERNAL-IP}}/li/v1/oas/autocomplete",
+					"host": [
+						"{{EXTERNAL-IP}}"
+					],
+					"path": [
+						"li",
+						"v1",
+						"oas",
+						"autocomplete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AUTOCOMPLETE-POSTAL-CITY",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"preferences\": {\r\n    \"maxResults\": 10\r\n  },\r\n  \"address\": {\r\n    \"type\": \"POSTAL\",\r\n    \"postAddress\": \"12180\",\r\n    \"country\": \"USA\"\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{EXTERNAL-IP}}/v1/autocomplete/postal-city",
+					"host": [
+						"{{EXTERNAL-IP}}"
+					],
+					"path": [
+						"v1",
+						"autocomplete",
+						"postal-city"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "REVERSE-GEOCODE",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"preferences\": {\r\n    \"maxResults\": 1,\r\n    \"returnAllInfo\": true\r\n  },\r\n  \"locations\": [\r\n    {\r\n      \"longitude\": -73.704719,\r\n      \"latitude\": 42.682251,\r\n      \"country\": \"USA\"\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{EXTERNAL-IP}}/li/v1/oas/reverse-geocode",
+					"host": [
+						"{{EXTERNAL-IP}}"
+					],
+					"path": [
+						"li",
+						"v1",
+						"oas",
+						"reverse-geocode"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "EXTERNAL-IP",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}
