@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ .Release.Name }}-config-map"
+  labels:
+    {{- include "addressing-hook.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/resource-policy": delete
+data:
+  data-vintage.sh: |
+    #!/bin/bash
+    
+    max_vintage=0
+    mount_base_path="$(cd "$(dirname "$1")"; pwd)/$(basename "$1")"
+    addressing_path=$2
+    autocomplete_path=$3
+    lookup_path=$4
+    reverse_path=$5
+
+    data_vintage_file="/tmp/$6"
+    touch $data_vintage_file
+
+    config_map_name=$7
+
+
+    create_config_file() {
+      search_dir=$1
+      cd $search_dir
+      
+      IFS=',' read -ra COUNTRIES <<< "$3"
+      
+      if [ -d $2 ]; then
+        cd $2
+        for country in "${COUNTRIES[@]}"
+        do
+          if [ -d "${country}" ];then
+          cd $country
+          for vintage in $(find $pwd -regex '^./[0-9]*$' -printf '%f\n')
+          do
+          if [ -d "${vintage}" ];then
+          if [ $((vintage)) -gt ${max_vintage} ]; then
+            max_vintage=$((vintage))
+          fi
+          fi
+          done
+          echo "${2}.${country} maximum vintage: ${max_vintage}"
+          echo "${5}.${country}.vintage=${search_dir}/${2}/${country}/${max_vintage}" >> $4
+          cd ..
+          max_vintage=0
+          fi
+        done
+        
+      fi
+    }
+
+    create_config_file $mount_base_path $addressing_path $8 $data_vintage_file verify-geocode
+    create_config_file $mount_base_path $autocomplete_path $8 $data_vintage_file autocomplete
+    create_config_file $mount_base_path $lookup_path $8 $data_vintage_file lookup
+    create_config_file $mount_base_path $reverse_path $8 $data_vintage_file reverse
+    echo "creating/updating config map: $config_map_name"
+
+    kubectl create configmap $config_map_name --from-env-file=$data_vintage_file -o yaml --dry-run=client | kubectl apply -f -

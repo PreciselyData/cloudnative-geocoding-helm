@@ -1,0 +1,58 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-data-vintage"
+  labels:
+    {{- include "addressing-hook.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "10"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/resource-policy": delete
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: "{{ .Release.Name }}-data-vintage"
+      labels:
+        {{- include "addressing-hook.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.dataVintage.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: data-vintage-scripts-volume
+          configMap:
+            name: "{{ .Release.Name }}-config-map"
+            defaultMode: 0777
+        - name: geoaddressing-host-volume
+          persistentVolumeClaim:
+            claimName: {{ include "addressing-hook-pvc.name" . }}
+      restartPolicy: Never
+      serviceAccountName: "{{ .Release.Name }}-sa"
+      containers:
+        - name: data-vintage-job
+          image: "{{ .Values.dataVintage.image.repository }}:{{ .Values.dataVintage.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.dataVintage.image.pullPolicy }}
+          volumeMounts:
+            - name: data-vintage-scripts-volume
+              mountPath: /tmp/vintage-script
+            - name: geoaddressing-host-volume
+              mountPath: {{ .Values.global.efs.volumeMountPath }}
+          command: [
+             "/tmp/vintage-script/data-vintage.sh",
+             "{{- .Values.global.efs.volumeMountPath }}",
+             "{{- .Values.global.efs.addressingBasePath }}",
+             "{{- .Values.global.efs.autoCompleteBasePath }}",
+             "{{- .Values.global.efs.lookupBasePath }}",
+             "{{- .Values.global.efs.reverseBasePath }}",
+             "vintages.properties",
+             "{{ .Values.dataVintage.configMap.name }}",
+             "{{ .Values.global.countries | join "," }}"
+          ]
+      terminationGracePeriodSeconds: 0
+      {{- with .Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

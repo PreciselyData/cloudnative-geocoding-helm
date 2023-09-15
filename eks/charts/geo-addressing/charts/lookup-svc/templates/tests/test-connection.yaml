@@ -1,0 +1,21 @@
+{{- if .Values.enabled }}
+{{- $top := . -}}
+{{- range $.Values.global.countries }}
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "lookup-svc.fullname" (list $top .) }}-test-connection"
+  labels:
+    {{- include "lookup-svc.labels" (list $top .) | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: [ 'wget' ]
+      args: [ '{{ include "lookup-svc.fullname" (list $top .) }}:{{ $top.Values.service.port }}' ]
+  restartPolicy: Never
+{{- end }}
+{{- end }}

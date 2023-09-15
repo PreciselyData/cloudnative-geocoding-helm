@@ -1,0 +1,6 @@
+apiVersion: v2
+name: addressing-data
+description: A Helm chart for Installation of Data and Setting up EFS
+type: application
+version: 0.1.0
+appVersion: "1.16.0"
