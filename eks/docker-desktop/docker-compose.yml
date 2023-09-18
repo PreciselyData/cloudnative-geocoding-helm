@@ -33,7 +33,7 @@ services:
       - ${_DATA_PATH:-/data/extracted}:/mnt/data/extracted
     environment:
       - DATA_PATH=/mnt/data/extracted
-      - ENABLED_ENDPOINTS=verify,geocode,autocomplete,lookup,reverse-geocode
+      - ENABLED_ENDPOINTS=${_ENABLED_API:-verify,geocode}
       - DATA_REGION=${_DATA_REGION:-USA}
     networks:
       - preciselyaddressing

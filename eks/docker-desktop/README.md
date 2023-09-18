@@ -11,18 +11,38 @@ This section describes how to test docker images downloaded from PDX locally on 
         
     Modify the below variables in ****.env**** file and run the mentioned command.
 
+
     _DATA_REGION -> country region for the service (one from usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,tgl,world)
-    _DATA_PATH -> path to the extracted data of a country mentioned in *_DATA_REGION* variable
+    <br>
+
+    _DATA_PATH -> path to the **extracted** data of a country mentioned in *_DATA_REGION* variable
+    <br>
+
     _SERVICE_PORT -> port at which service should be started (Example 8080)
+    <br>
+
+    _ENABLED_API -> API enpoints to enable (Possible values: verify,geocode,autocomplete,lookup,reverse-geocode)
 
 
-    *Sample Values:*
+    ***Sample Values:***
 
+    *below values will enable autocomplete API endpoints.*
     ```shell
     _DATA_REGION=usa
-    _DATA_PATH=./data/usa/202307
+    _DATA_PATH=/data/autocomplete/usa/202307
     _SERVICE_PORT=8080
+    _ENABLED_API=autocomplete
     ```
+    <br>
+
+    *below values will enable verify/geocode API endpoints.*
+    ```shell
+    _DATA_REGION=usa
+    _DATA_PATH=/data/verify-geocode/usa/202307
+    _SERVICE_PORT=8080
+    _ENABLED_API=verify,geocode
+    ```
+
 
     ```shell
     docker compose -p [PROJECT_NAME] -f ./docker-compose.yml up -d
