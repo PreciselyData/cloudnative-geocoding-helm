@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: 603016229198.dkr.ecr.us-east-1.amazonaws.com/regional-addressing-service
+  repository: regional-addressing-service
   pullPolicy: Always
   tag: latest
 
@@ -62,7 +62,7 @@ global:
     - can
   awsRegion: us-east-1
   addressingImage:
-    repository: 603016229198.dkr.ecr.us-east-1.amazonaws.com/addressing-service
+    repository: addressing-service
     pullPolicy: Always
     tag: latest
   efs:
