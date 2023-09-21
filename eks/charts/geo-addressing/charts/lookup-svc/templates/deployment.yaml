@@ -57,7 +57,7 @@ spec:
             failureThreshold: 60
             timeoutSeconds: 2
             periodSeconds: 10
-          {{- with (get $top.Values.global.countryConfiguration .).resources }}
+          {{- with ((get $top.Values.countryConfigurations .) | default ($top.Values.countryConfigurations.default)).resources }}
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
@@ -73,7 +73,11 @@ spec:
               value: lookup
             - name: DATA_REGION
               value: {{ . | upper }}
-      {{- with (default $top.Values.global.nodeSelector ((get $top.Values.global.countryConfiguration .).nodeSelector)) }}
+            - name: BLOCK_DISPATCHER_POOL_SIZE
+              value: {{ ((get $top.Values.countryConfigurations .) | default $top.Values.countryConfigurations.default).blockDispatcherPoolSize | quote }}
+            - name: RESPONSE_DISPATCHER_MIN_THREADS
+              value: {{ ((get $top.Values.countryConfigurations .) | default $top.Values.countryConfigurations.default).responseDispatcherMinThreads | quote }}
+      {{- with ((get $top.Values.countryConfigurations .) | default ($top.Values.global)).nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}

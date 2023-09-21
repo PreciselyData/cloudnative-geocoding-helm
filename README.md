@@ -30,11 +30,14 @@ For complete Geo-Addressing documentation, follow [Geo-Addressing API Guide](htt
 ![img.png](geo-addressing-architecture.png)
 The core of the geo-addressing helm-chart based solution is dependent on OAS (Operational Addressing SDK) which provides various capabilities like address verification (verify), geocode, reverse geocode, parse, etc.
 
-The regional-addressing termed as `geo-addressing helm chart` is the parent helm chart responsible for deploying the geo-addressing-service.
+The regional-addressing termed as [`geo-addressing`](./eks/charts/geo-addressing) helm chart is the parent helm chart responsible for deploying the regional-addressing-service.
 This service exposes the operational addressing API endpoints, and calls the underlying country-based services for processing the requests.
 
-The Addressing-Service termed as `addressing-svc helm chart` is a sub-chart of geo-addressing helm chart which is responsible for deploying individual country/region based addressing services.
-The service is deployed with the reference data mounted in Network Storage, and is responsible for performing the operational-addressing capabilities.
+There are functionality-wise sub-charts present in the `geo-addressing` parent helm chart, viz:
+- [`addressing-svc`](./eks/charts/geo-addressing/charts/addressing-svc) helm chart: responsible for deploying individual country/region based addressing services and is primarily responsible for handling requests of `verify` and `geocode` requests.
+- [`autocomplete-svc`](./eks/charts/geo-addressing/charts/autocomplete-svc) helm chart: responsible for deploying individual country/region based addressing services and is primarily responsible for handling requests of `autocomplete` requests.
+- [`lookup-svc`](./eks/charts/geo-addressing/charts/lookup-svc) helm chart: responsible for deploying individual country/region based addressing services and is primarily responsible for handling requests of `lookup` requests.
+- [`reverse-svc`](./eks/charts/geo-addressing/charts/reverse-svc) helm chart: responsible for deploying individual country/region based addressing services and is primarily responsible for handling requests of `reverse-geocode` requests.
 
 ### Reference Data Management
 
