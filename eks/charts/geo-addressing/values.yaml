@@ -57,7 +57,9 @@ global:
   countries:
     - usa
     - gbr
-    - deu
+    - aus
+    - nzl
+    - can
   awsRegion: us-east-1
   addressingImage:
     repository: 603016229198.dkr.ecr.us-east-1.amazonaws.com/addressing-service

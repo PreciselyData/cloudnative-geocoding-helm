@@ -74,19 +74,21 @@ Environment Variables for Geo-Addressing Service
 - name: REVERSE_GEOCODE_BASE_URL
   value: http://reverse-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080
 - name: SUPPORTED_COUNTRIES_GEOCODE
-  value: usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,tgl,world
+  value: usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world
 - name: SUPPORTED_REGIONS_GEOCODE
   value: ""
 - name: SUPPORTED_COUNTRIES_VERIFY
-  value: usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,tgl,world
+  value: usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world
 - name: SUPPORTED_REGIONS_VERIFY
   value: ""
 - name: SUPPORTED_COUNTRIES_LOOKUP
-  value: usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,tgl,world
+  value: usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,jpn,world
 - name: SUPPORTED_COUNTRIES_AUTOCOMPLETE
-  value: usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,tgl,world
+  value: usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world
 - name: SUPPORTED_REGIONS_AUTOCOMPLETE
   value: ""
+- name: SUPPORTED_COUNTRIES_REVERSE_GEOCODE
+  value: usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world
 - name: AUTH_ENABLED
   value: "false"
 - name: DIS_DEVELOPER_URL

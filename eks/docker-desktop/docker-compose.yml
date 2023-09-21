@@ -15,13 +15,14 @@ services:
       - LOOKUP_BASE_URL=http://precisely-addressing-svc:8080
       - AUTOCOMPLETE_BASE_URL=http://precisely-addressing-svc:8080
       - REVERSE_GEOCODE_BASE_URL=http://precisely-addressing-svc:8080
-      - SUPPORTED_COUNTRIES_GEOCODE=usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,tgl,world
+      - SUPPORTED_COUNTRIES_GEOCODE=usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world
       - SUPPORTED_REGIONS_GEOCODE=""
-      - SUPPORTED_COUNTRIES_VERIFY=usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,tgl,world
+      - SUPPORTED_COUNTRIES_VERIFY=usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world
       - SUPPORTED_REGIONS_VERIFY=""
-      - SUPPORTED_COUNTRIES_LOOKUP=usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,tgl,world
-      - SUPPORTED_COUNTRIES_AUTOCOMPLETE=usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,tgl,world
+      - SUPPORTED_COUNTRIES_LOOKUP=usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world
+      - SUPPORTED_COUNTRIES_AUTOCOMPLETE=usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world
       - SUPPORTED_REGIONS_AUTOCOMPLETE=""
+      - SUPPORTED_COUNTRIES_REVERSE_GEOCODE=usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world
       - AUTH_ENABLED=false
     networks:
       - preciselyaddressing

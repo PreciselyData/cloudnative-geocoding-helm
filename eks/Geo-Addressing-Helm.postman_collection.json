@@ -17,7 +17,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"preferences\": {\r\n    \"returnAllInfo\": true\r\n  },\r\n  \"addresses\": [\r\n    {\r\n      \"addressLines\": [\r\n        \"1700 district ave #300 burlington, ma\"\r\n      ],\r\n      \"country\": \"USA\"\r\n    }\r\n  ]\r\n}",
+					"raw": "{\r\n    \"preferences\": {\r\n        \"customPreferences\": {\r\n            \"FALLBACK_TO_WORLD\": \"false\"\r\n        },\r\n        \"returnAllInfo\": true\r\n    },\r\n    \"addresses\": [\r\n        {\r\n            \"addressLines\": [\r\n                \"1700 district ave #300 burlington, ma\"\r\n            ],\r\n            \"country\": \"USA\"\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -49,7 +49,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"preferences\": {\r\n    \"returnAllInfo\": true\r\n  },\r\n  \"addresses\": [\r\n    {\r\n      \"addressLines\": [\r\n        \"1700 district ave #300 burlington, ma\"\r\n      ],\r\n      \"country\": \"USA\"\r\n    }\r\n  ]\r\n}",
+					"raw": "{\r\n    \"preferences\": {\r\n        \"customPreferences\": {\r\n            \"FALLBACK_TO_WORLD\": \"false\"\r\n        },\r\n        \"returnAllInfo\": true\r\n    },\r\n    \"addresses\": [\r\n        {\r\n            \"addressLines\": [\r\n                \"1700 district ave #300 burlington, ma\"\r\n            ],\r\n            \"country\": \"USA\"\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -81,7 +81,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"preferences\": {\r\n    \"type\": \"preferences\",\r\n    \"returnAllInfo\": true\r\n  },\r\n  \"keys\": [\r\n    {\r\n      \"key\": \"P0000GL41OME\",\r\n      \"country\": \"USA\",\r\n      \"type\": \"PB_KEY\"\r\n    }\r\n  ]\r\n}",
+					"raw": "{\r\n    \"preferences\": {\r\n        \"maxResults\": 1,\r\n        \"returnAllInfo\": true,\r\n        \"streetOffset\": {\r\n            \"value\": 7,\r\n            \"distanceUnit\": \"METER\"\r\n        },\r\n        \"cornerOffset\": {\r\n            \"value\": 7,\r\n            \"distanceUnit\": \"METER\"\r\n        },\r\n        \"customPreferences\": {\r\n            \"FALLBACK_TO_WORLD\": \"false\"\r\n        }\r\n    },\r\n    \"keys\": [\r\n        {\r\n            \"key\": \"P0000GL41OME\",\r\n            \"country\": \"USA\",\r\n            \"type\": \"PB_KEY\"\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -113,7 +113,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"preferences\": {\r\n    \"maxResults\": 2,\r\n    \"returnAllInfo\": true,\r\n    \"customPreferences\": {}\r\n  },\r\n  \"address\": {\r\n    \"addressLines\": [\r\n      \"350 jordan\"\r\n    ],\r\n    \"country\": \"USA\"\r\n  }\r\n}",
+					"raw": "{\r\n    \"preferences\": {\r\n        \"maxResults\": 2,\r\n        \"returnAllInfo\": true,\r\n        \"customPreferences\": {\r\n            \"FALLBACK_TO_WORLD\": \"false\"\r\n        }\r\n    },\r\n    \"address\": {\r\n        \"addressLines\": [\r\n            \"350 jordan\"\r\n        ],\r\n        \"country\": \"USA\"\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -136,37 +136,6 @@
 			"response": []
 		},
 		{
-			"name": "AUTOCOMPLETE-POSTAL-CITY",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"preferences\": {\r\n    \"maxResults\": 10\r\n  },\r\n  \"address\": {\r\n    \"type\": \"POSTAL\",\r\n    \"postAddress\": \"12180\",\r\n    \"country\": \"USA\"\r\n  }\r\n}\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{EXTERNAL-IP}}/v1/autocomplete/postal-city",
-					"host": [
-						"{{EXTERNAL-IP}}"
-					],
-					"path": [
-						"v1",
-						"autocomplete",
-						"postal-city"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "REVERSE-GEOCODE",
 			"request": {
 				"auth": {
@@ -176,7 +145,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"preferences\": {\r\n    \"maxResults\": 1,\r\n    \"returnAllInfo\": true\r\n  },\r\n  \"locations\": [\r\n    {\r\n      \"longitude\": -73.704719,\r\n      \"latitude\": 42.682251,\r\n      \"country\": \"USA\"\r\n    }\r\n  ]\r\n}",
+					"raw": "{\r\n    \"preferences\": {\r\n        \"maxResults\": 1,\r\n        \"returnAllInfo\": true,\r\n        \"customPreferences\": {\r\n            \"FALLBACK_TO_WORLD\": \"false\"\r\n        }\r\n    },\r\n    \"locations\": [\r\n        {\r\n            \"longitude\": -73.704719,\r\n            \"latitude\": 42.682251,\r\n            \"country\": \"USA\"\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -223,6 +192,12 @@
 		{
 			"key": "EXTERNAL-IP",
 			"value": "http://localhost:8080",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "EXTERNAL-IP",
+			"value": "http://acdcc1f25dd25441793c666e8975aedd-2113201898.us-east-1.elb.amazonaws.com/precisely/addressing",
 			"type": "string"
 		}
 	]
