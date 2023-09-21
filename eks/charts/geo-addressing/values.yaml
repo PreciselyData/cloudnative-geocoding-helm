@@ -73,103 +73,6 @@ global:
     lookupBasePath: lookup
     reverseBasePath: verify-geocode
   nodeSelector: { }
-  countryConfiguration:
-    usa:
-      nodeSelector: { }
-      resources:
-        requests:
-          cpu: 1
-          memory: 4Gi
-    deu:
-      nodeSelector: { }
-      resources:
-        requests:
-          cpu: 1
-          memory: 4Gi
-    gbr:
-      nodeSelector: { }
-      resources:
-        requests:
-          cpu: 1
-          memory: 4Gi
-    aus:
-      nodeSelector: { }
-      resources:
-        requests:
-          cpu: 1
-          memory: 4Gi
-    fra:
-      nodeSelector: { }
-      resources:
-        requests:
-          cpu: 1
-          memory: 4Gi
-    can:
-      nodeSelector: { }
-      resources:
-        requests:
-          cpu: 1
-          memory: 4Gi
-    mex:
-      nodeSelector: { }
-      resources:
-        requests:
-          cpu: 1
-          memory: 4Gi
-    bra:
-      nodeSelector: { }
-      resources:
-        requests:
-          cpu: 1
-          memory: 4Gi
-    arg:
-      nodeSelector: { }
-      resources:
-        requests:
-          cpu: 1
-          memory: 4Gi
-    rus:
-      nodeSelector: { }
-      resources:
-        requests:
-          cpu: 1
-          memory: 4Gi
-    ind:
-      nodeSelector: { }
-      resources:
-        requests:
-          cpu: 1
-          memory: 4Gi
-    sgp:
-      nodeSelector: { }
-      resources:
-        requests:
-          cpu: 1
-          memory: 4Gi
-    nzl:
-      nodeSelector: { }
-      resources:
-        requests:
-          cpu: 1
-          memory: 4Gi
-    jpn:
-      nodeSelector: { }
-      resources:
-        requests:
-          cpu: 1
-          memory: 4Gi
-    tgl:
-      nodeSelector: { }
-      resources:
-        requests:
-          cpu: 1
-          memory: 4Gi
-    world:
-      nodeSelector: { }
-      resources:
-        requests:
-          cpu: 1
-          memory: 4Gi
 
 addressing-svc:
   enabled: true
@@ -184,6 +87,22 @@ addressing-svc:
   securityContext: { }
   tolerations: [ ]
   affinity: { }
+  countryConfigurations:
+    default:
+      resources:
+        requests:
+          cpu: 1
+          memory: 6Gi
+      blockDispatcherPoolSize: 4
+      responseDispatcherMinThreads: 4
+    usa:
+      resources:
+        requests:
+          cpu: 1
+          memory: 8Gi
+      blockDispatcherPoolSize: 24
+      responseDispatcherMinThreads: 8
+      nodeSelector: { }
 
 autocomplete-svc:
   enabled: false
@@ -198,6 +117,22 @@ autocomplete-svc:
   securityContext: { }
   tolerations: [ ]
   affinity: { }
+  countryConfigurations:
+    default:
+      resources:
+        requests:
+          cpu: 1
+          memory: 6Gi
+      blockDispatcherPoolSize: 4
+      responseDispatcherMinThreads: 4
+    usa:
+      resources:
+        requests:
+          cpu: 1
+          memory: 6Gi
+      blockDispatcherPoolSize: 24
+      responseDispatcherMinThreads: 8
+      nodeSelector: { }
 
 lookup-svc:
   enabled: false
@@ -212,6 +147,22 @@ lookup-svc:
   securityContext: { }
   tolerations: [ ]
   affinity: { }
+  countryConfigurations:
+    default:
+      resources:
+        requests:
+          cpu: 1
+          memory: 6Gi
+      blockDispatcherPoolSize: 4
+      responseDispatcherMinThreads: 4
+    usa:
+      resources:
+        requests:
+          cpu: 1
+          memory: 6Gi
+      blockDispatcherPoolSize: 24
+      responseDispatcherMinThreads: 8
+      nodeSelector: { }
 
 reverse-svc:
   enabled: false
@@ -226,3 +177,19 @@ reverse-svc:
   securityContext: { }
   tolerations: [ ]
   affinity: { }
+  countryConfigurations:
+    default:
+      resources:
+        requests:
+          cpu: 1
+          memory: 8Gi
+      blockDispatcherPoolSize: 4
+      responseDispatcherMinThreads: 4
+    usa:
+      resources:
+        requests:
+          cpu: 1
+          memory: 8Gi
+      blockDispatcherPoolSize: 4
+      responseDispatcherMinThreads: 4
+      nodeSelector: { }
