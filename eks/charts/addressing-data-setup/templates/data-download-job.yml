@@ -38,6 +38,8 @@ spec:
             - "{{ .Values.global.countries }}"
             - "--dest-path"
             - "{{ .Values.global.mountBasePath }}"
+            - "--data-mapping"
+            - {{ .Values.global.dataConfigMap | quote }}
           volumeMounts:
             {{- include "addressing-data.volumeMounts" . | nindent 12 }}
       terminationGracePeriodSeconds: 0

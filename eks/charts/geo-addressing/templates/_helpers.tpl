@@ -76,7 +76,17 @@ Environment Variables for Geo-Addressing Service
 - name: SUPPORTED_COUNTRIES_GEOCODE
   value: usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,tgl,world
 - name: SUPPORTED_REGIONS_GEOCODE
-  value: amer,emea1,emea2,emea3,emea4,emea5,emea6,apac1,apac2
+  value: ""
+- name: SUPPORTED_COUNTRIES_VERIFY
+  value: usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,tgl,world
+- name: SUPPORTED_REGIONS_VERIFY
+  value: ""
+- name: SUPPORTED_COUNTRIES_LOOKUP
+  value: usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,tgl,world
+- name: SUPPORTED_COUNTRIES_AUTOCOMPLETE
+  value: usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,tgl,world
+- name: SUPPORTED_REGIONS_AUTOCOMPLETE
+  value: ""
 - name: AUTH_ENABLED
   value: "false"
 - name: DIS_DEVELOPER_URL
