@@ -51,8 +51,19 @@ You can create the EKS cluster or use existing EKS cluster.
     ```shell
     kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
     ```
+- The geo-addressing service requires ingress controller setup. Run the following command for setting up NGINX ingress controller:
+  ```shell
+  helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+  helm install nginx-ingress ingress-nginx/ingress-nginx --set "controller.nodeSelector.node-app=geo-addressing-ingress"
+  ```
+  *Note: You can update the nodeSelector according to your cluster's ingress node.*
 
-**NOTE**: EKS cluster must have the above addons for the east of installation of Geo-Addressing Helm Chart.
+  Once ingress controller setup is completed, you can verify the status and get the ingress URL by using the following command:
+  ```shell
+  kubectl get services -o wide -w nginx-ingress-ingress-nginx-controller    
+  ```
+
+**NOTE**: EKS cluster must have the above addons and ingress for the east of installation of Geo-Addressing Helm Chart.
 
 ## Step 3: Download Geo-Addressing Docker Images
 
