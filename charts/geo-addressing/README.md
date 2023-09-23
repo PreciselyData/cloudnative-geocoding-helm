@@ -71,6 +71,24 @@ provided by this chart:
 
 To get started with installation of helm chart, follow this [Quick Start Guide](../../docs/guides/eks/QuickStartEKS.md)
 
+## Memory Recommendations
+
+The `regional-addressing` pod is responsible for managing requests and routing them to
+country-based `addressing-service` pods. Since each country has its own unique reference data, we recommend allocating a
+minimum amount of pod memory for the addressing-services for each specific country, as outlined below:
+
+| Country | Addressing (Verify-Geocode) | Autocomplete | Lookup | Reverse-Geocode |
+|---------|-----------------------------|--------------|--------|-----------------|
+| USA     | 8Gi                         | 6Gi          | 6Gi    | 8Gi             |
+| AUS     | 6Gi                         | 8Gi          | 6Gi    | 8Gi             |
+| CAN     | 6Gi                         | 4Gi          | 6Gi    | 8Gi             |
+| GBR     | 6Gi                         | 6Gi          | 6Gi    | 8Gi             |
+| DEU     | 6Gi                         | 6Gi          | 6Gi    | 8Gi             |
+| NZL     | 10Gi                        | 6Gi          | 6Gi    | 8Gi             |
+| FRA     | 7Gi                         | 6Gi          | 6Gi    | 8Gi             |
+
+You can adjust the values in [values.yaml](values.yaml), or you can set these parameters in the helm command itself during installation/up-gradation.
+
 
 ## Geo-Addressing Service API Usage
 
