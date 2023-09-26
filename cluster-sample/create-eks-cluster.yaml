@@ -44,7 +44,7 @@ managedNodeGroups:
       CreatedBy: Precisely
 
   - name: geo-addressing-ingress
-    instanceType: m5.xlarge
+    instanceType: m5.2xlarge
     iam:
       attachPolicyARNs:
         - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
