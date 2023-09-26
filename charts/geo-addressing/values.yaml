@@ -217,6 +217,16 @@ addressing-svc:
   ##
   affinity: { }
   ##
+  ## Autoscaling configs
+  ## By default, minimum replicas are set to 1 and maximum to 10
+  ## You can override this parameter as follows:
+  # --set "addressing-svc.autoscaling.minReplicas=10"
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+  ##
   ## Country-specific configurations for addressing pods of the `verify-geocode` capability.
   ## You can specify country-specific configurations, such as resource requests, nodeSelector, and thread pool sizes.
   ## Follow the table below for country-specific recommendations:
@@ -276,7 +286,6 @@ addressing-svc:
           memory: 8Gi
       blockDispatcherPoolSize: 24
       responseDispatcherMinThreads: 8
-      nodeSelector: { }
 
 
 ###################################
@@ -314,6 +323,16 @@ autocomplete-svc:
   ##    https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#affinity-v1-core
   ##
   affinity: { }
+  ##
+  ## Autoscaling configs
+  ## By default, minimum replicas are set to 1 and maximum to 10
+  ## You can override this parameter as follows:
+  # --set "autocomplete-svc.autoscaling.minReplicas=10"
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
   ##
   ## Country-specific configurations for autocomplete pods of the `autocomplete` capability.
   ## You can specify country-specific configurations, such as resource requests, nodeSelector, and thread pool sizes.
@@ -375,7 +394,6 @@ autocomplete-svc:
           memory: 6Gi
       blockDispatcherPoolSize: 24
       responseDispatcherMinThreads: 8
-      nodeSelector: { }
 
 ###################################
 ## CONFIG | Look Functionalities
@@ -412,6 +430,16 @@ lookup-svc:
   ##    https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#affinity-v1-core
   ##
   affinity: { }
+  ##
+  ## Autoscaling configs
+  ## By default, minimum replicas are set to 1 and maximum to 10
+  ## You can override this parameter as follows:
+  # --set "lookup-svc.autoscaling.minReplicas=10"
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
   ##
   ## Country-specific configurations for lookup pods of the `lookup` capability.
   ## You can specify country-specific configurations, such as resource requests, nodeSelector, and thread pool sizes.
@@ -473,7 +501,6 @@ lookup-svc:
           memory: 6Gi
       blockDispatcherPoolSize: 24
       responseDispatcherMinThreads: 8
-      nodeSelector: { }
 
 
 ###################################
@@ -511,6 +538,16 @@ reverse-svc:
   ##    https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#affinity-v1-core
   ##
   affinity: { }
+  ##
+  ## Autoscaling configs
+  ## By default, minimum replicas are set to 1 and maximum to 10
+  ## You can override this parameter as follows:
+  # --set "reverse-svc.autoscaling.minReplicas=10"
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
   ##
   ## Country-specific configurations for reverse-geocode pods of the `reverse-geocode` capability.
   ## You can specify country-specific configurations, such as resource requests, nodeSelector, and thread pool sizes.
@@ -571,4 +608,3 @@ reverse-svc:
           memory: 8Gi
       blockDispatcherPoolSize: 4
       responseDispatcherMinThreads: 4
-      nodeSelector: { }

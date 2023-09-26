@@ -93,6 +93,8 @@ Environment Variables for Geo-Addressing Service
   value: "false"
 - name: DIS_DEVELOPER_URL
   value: http://{{ (index .Values.ingress.hosts 0).host | trimSuffix "/" }}{{ (index (index .Values.ingress.hosts 0).paths 0).path | trimSuffix "/"}}
+- name: REF_DATA_API_KEY
+  value: helmRefDataKey
 {{- end }}
 
 
