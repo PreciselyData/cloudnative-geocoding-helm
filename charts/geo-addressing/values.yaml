@@ -223,8 +223,8 @@ addressing-svc:
   # --set "addressing-svc.autoscaling.minReplicas=10"
   autoscaling:
     enabled: true
-    minReplicas: 2
-    maxReplicas: 20
+    minReplicas: 1
+    maxReplicas: 10
     targetCPUUtilizationPercentage: 70
   ##
   ## Country-specific configurations for addressing pods of the `verify-geocode` capability.
