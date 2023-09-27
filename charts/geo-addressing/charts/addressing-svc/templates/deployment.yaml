@@ -77,7 +77,7 @@ spec:
               value: {{ ((get $top.Values.countryConfigurations .) | default $top.Values.countryConfigurations.default).blockDispatcherPoolSize | quote }}
             - name: RESPONSE_DISPATCHER_MIN_THREADS
               value: {{ ((get $top.Values.countryConfigurations .) | default $top.Values.countryConfigurations.default).responseDispatcherMinThreads | quote }}
-      {{- with (get $top.Values.countryConfigurations .).nodeSelector | default ($top.Values.global.nodeSelector) }}
+      {{- with ((get $top.Values.countryConfigurations .) | default ($top.Values.global)).nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
