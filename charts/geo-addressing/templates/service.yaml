@@ -4,6 +4,9 @@ metadata:
   name: {{ include "regional-addressing.fullname" . }}
   labels:
     {{- include "regional-addressing.labels" . | nindent 4 }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: /prometheus
 spec:
   type: {{ .Values.service.type }}
   ports:

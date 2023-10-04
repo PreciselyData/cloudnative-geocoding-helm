@@ -41,17 +41,19 @@ spec:
             httpGet:
               path: /health
               port: http
-            initialDelaySeconds: 60
-            failureThreshold: 60
-            timeoutSeconds: 10
-            periodSeconds: 60
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            successThreshold: 1
+            timeoutSeconds: 1
+            periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /health
               port: http
-            initialDelaySeconds: 20
-            failureThreshold: 60
-            timeoutSeconds: 2
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            successThreshold: 1
+            timeoutSeconds: 1
             periodSeconds: 10
           {{- with .Values.resources }}
           resources:

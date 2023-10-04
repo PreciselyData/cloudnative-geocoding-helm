@@ -54,7 +54,7 @@ You can create the EKS cluster or use existing EKS cluster.
 - The geo-addressing service requires ingress controller setup. Run the following command for setting up NGINX ingress controller:
   ```shell
   helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-  helm install nginx-ingress ingress-nginx/ingress-nginx --set "controller.nodeSelector.node-app=geo-addressing-ingress"
+  helm install nginx-ingress ingress-nginx/ingress-nginx -f ./cluster-sample/ingress-values.yaml
   ```
   *Note: You can update the nodeSelector according to your cluster's ingress node.*
 
@@ -192,4 +192,5 @@ kubectl get services --namespace geo-addressing
 
 ## Next Sections
 - [Geo Addressing API Usage](../../../charts/geo-addressing/README.md#geo-addressing-service-api-usage)
+- [Metrics, Traces and Dashboard](../MetricsAndTraces.md)
 - [FAQs](../../faq/FAQs.md)
