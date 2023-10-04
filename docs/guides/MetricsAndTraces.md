@@ -55,7 +55,7 @@ Following are the metrics exposed by Regional-Addressing Application:
 </details>
 
 <details>
-<summary><code>system_**</code></summary>
+<summary><code>system_*</code></summary>
 
 |  Metric Name                         | Type    | Description                                                                                            |
 |--------------------------------------|---------|--------------------------------------------------------------------------------------------------------|
@@ -124,7 +124,7 @@ Following are the metrics exposed by country-based addressing service:
 
 
 <details>
-<summary><code>akka_http_**</code></summary>
+<summary><code>akka_http_*</code></summary>
 
 | Metric Name                                | Type      | Description                                                                                |
 |--------------------------------------------|-----------|--------------------------------------------------------------------------------------------|
