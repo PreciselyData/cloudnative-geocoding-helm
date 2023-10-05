@@ -10,7 +10,7 @@ metadata:
     {{- include "lookup-svc.labels" (list $top .) | nindent 4 }}
   annotations:
     prometheus.io/scrape: "true"
-    prometheus.io/path: /prometheus
+    prometheus.io/path: /metrics
 spec:
   type: {{ $top.Values.service.type }}
   ports:
