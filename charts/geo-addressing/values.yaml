@@ -336,7 +336,7 @@ autocomplete-svc:
   # --set "autocomplete-svc.autoscaling.minReplicas=10"
   autoscaling:
     enabled: true
-    minReplicas: 1
+    minReplicas: 2
     maxReplicas: 10
     targetCPUUtilizationPercentage: 70
   ##
@@ -443,7 +443,7 @@ lookup-svc:
   # --set "lookup-svc.autoscaling.minReplicas=10"
   autoscaling:
     enabled: true
-    minReplicas: 1
+    minReplicas: 2
     maxReplicas: 10
     targetCPUUtilizationPercentage: 70
   ##
@@ -551,7 +551,7 @@ reverse-svc:
   # --set "reverse-svc.autoscaling.minReplicas=10"
   autoscaling:
     enabled: true
-    minReplicas: 1
+    minReplicas: 2
     maxReplicas: 10
     targetCPUUtilizationPercentage: 70
   ##
