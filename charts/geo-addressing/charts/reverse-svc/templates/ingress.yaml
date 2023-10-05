@@ -5,14 +5,14 @@
 ---
 {{- $fullName := include "reverse-svc.fullname" (list $top .) -}}
 {{- $svcPort := $top.Values.service.port -}}
-{{- if and $top.Values.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
+{{- if and $top.Values.ingress.className (not (semverCompare ">=1.18-0" $top.Capabilities.KubeVersion.GitVersion)) }}
   {{- if not (hasKey $top.Values.ingress.annotations "kubernetes.io/ingress.class") }}
   {{- $_ := set $top.Values.ingress.annotations "kubernetes.io/ingress.class" $top.Values.ingress.className}}
   {{- end }}
 {{- end }}
-{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- if semverCompare ">=1.19-0" $top.Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1
-{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- else if semverCompare ">=1.14-0" $top.Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1beta1
 {{- else -}}
 apiVersion: extensions/v1beta1
@@ -27,7 +27,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and $top.Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+  {{- if and $top.Values.ingress.className (semverCompare ">=1.18-0" $top.Capabilities.KubeVersion.GitVersion) }}
   ingressClassName: {{ $top.Values.ingress.className }}
   {{- end }}
   {{- if $top.Values.ingress.tls }}
@@ -46,7 +46,7 @@ spec:
       http:
         paths:
           {{- range .paths }}
-          - path: {{ .path }}
+          - path: {{ printf "%s/%s" (.path | trimSuffix "/") "(.*)" }}
             {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
             pathType: {{ .pathType }}
             {{- end }}

@@ -8,6 +8,9 @@ metadata:
   name: {{ include "addressing-svc.fullname" (list $top .) }}
   labels:
     {{- include "addressing-svc.labels" (list $top .) | nindent 4 }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: /metrics
 spec:
   type: {{ $top.Values.service.type }}
   ports:

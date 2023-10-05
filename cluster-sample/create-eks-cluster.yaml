@@ -10,6 +10,7 @@ addons:
   - name: coredns
   - name: kube-proxy
   - name: aws-efs-csi-driver
+  - name: aws-ebs-csi-driver
 
 managedNodeGroups:
   - name: geo-addressing-worker

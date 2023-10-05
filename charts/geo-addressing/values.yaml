@@ -95,8 +95,8 @@ resources:
 ## For the regional-addressing service, autoscaling is enabled by default to handle large workloads.
 autoscaling:
   enabled: true
-  minReplicas: 1
-  maxReplicas: 10
+  minReplicas: 2
+  maxReplicas: 20
   targetCPUUtilizationPercentage: 60
 
 ## The toleration configs for the regional-addressing pods
@@ -180,6 +180,12 @@ global:
   ##   https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
   ##
   nodeSelector: { }
+  ##
+  ## OTEL_EXPORTER_OTLP_ENDPOINT is the endpoint from which otlp traces are collected.
+  ## You can replace the value, if jaeger is not being used as trace collector.
+  ## For more information, refer to https://opentelemetry.io/docs/concepts/sdk-configuration/otlp-exporter-configuration/
+  ## For information related to Jaeger installation, refer to https://github.com/jaegertracing/helm-charts/tree/main/charts/jaeger
+  otelExporterEndpoint: http://jaeger-collector.default.svc.cluster.local:4317
 
 ###################################
 ## CONFIG | Addressing Functionalities
@@ -223,8 +229,8 @@ addressing-svc:
   # --set "addressing-svc.autoscaling.minReplicas=10"
   autoscaling:
     enabled: true
-    minReplicas: 1
-    maxReplicas: 10
+    minReplicas: 2
+    maxReplicas: 20
     targetCPUUtilizationPercentage: 70
   ##
   ## Country-specific configurations for addressing pods of the `verify-geocode` capability.
@@ -275,7 +281,7 @@ addressing-svc:
       ## These threads control the number of parallel interactions with the internal SDK that can be performed for a specific country or group of countries.
       ## This configuration is introduced because geocoding for different countries behaves differently.
       ## These threads function similarly to a normal thread-per-request model.
-      blockDispatcherPoolSize: 4
+      blockDispatcherPoolSize: 16
       ## These are the non-blocking I/O threads.
       ## They continuously handle requests from the external world and forward them to the downstream blocking dispatcher.
       responseDispatcherMinThreads: 4
@@ -330,8 +336,8 @@ autocomplete-svc:
   # --set "autocomplete-svc.autoscaling.minReplicas=10"
   autoscaling:
     enabled: true
-    minReplicas: 1
-    maxReplicas: 10
+    minReplicas: 2
+    maxReplicas: 20
     targetCPUUtilizationPercentage: 70
   ##
   ## Country-specific configurations for autocomplete pods of the `autocomplete` capability.
@@ -437,8 +443,8 @@ lookup-svc:
   # --set "lookup-svc.autoscaling.minReplicas=10"
   autoscaling:
     enabled: true
-    minReplicas: 1
-    maxReplicas: 10
+    minReplicas: 2
+    maxReplicas: 20
     targetCPUUtilizationPercentage: 70
   ##
   ## Country-specific configurations for lookup pods of the `lookup` capability.
@@ -545,8 +551,8 @@ reverse-svc:
   # --set "reverse-svc.autoscaling.minReplicas=10"
   autoscaling:
     enabled: true
-    minReplicas: 1
-    maxReplicas: 10
+    minReplicas: 2
+    maxReplicas: 20
     targetCPUUtilizationPercentage: 70
   ##
   ## Country-specific configurations for reverse-geocode pods of the `reverse-geocode` capability.
