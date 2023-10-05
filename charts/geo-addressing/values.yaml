@@ -337,7 +337,7 @@ autocomplete-svc:
   autoscaling:
     enabled: true
     minReplicas: 2
-    maxReplicas: 10
+    maxReplicas: 20
     targetCPUUtilizationPercentage: 70
   ##
   ## Country-specific configurations for autocomplete pods of the `autocomplete` capability.
@@ -444,7 +444,7 @@ lookup-svc:
   autoscaling:
     enabled: true
     minReplicas: 2
-    maxReplicas: 10
+    maxReplicas: 20
     targetCPUUtilizationPercentage: 70
   ##
   ## Country-specific configurations for lookup pods of the `lookup` capability.
@@ -552,7 +552,7 @@ reverse-svc:
   autoscaling:
     enabled: true
     minReplicas: 2
-    maxReplicas: 10
+    maxReplicas: 20
     targetCPUUtilizationPercentage: 70
   ##
   ## Country-specific configurations for reverse-geocode pods of the `reverse-geocode` capability.
