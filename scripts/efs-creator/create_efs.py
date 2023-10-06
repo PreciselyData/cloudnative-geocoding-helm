@@ -84,7 +84,7 @@ try:
 
     else:
         result = subprocess.check_output(
-            f'aws efs create-file-system --throughput-mode provisioned --provisioned-throughput-in-mibps 100 '
+            f'aws efs create-file-system --throughput-mode elastic '
             f'--tags "Key=Name,Value={EFS_NAME}" --creation-token {EFS_NAME} --region {AWS_REGION}',
             shell=True, stderr=subprocess.STDOUT, encoding="utf-8")
         output = json.loads(result)
