@@ -77,11 +77,10 @@ ingress:
 ##      cpu: 1
 ##      memory: 1.5Gi
 resources:
-  #   limits:
-  #     cpu: 100m
-  #     memory: 128Mi
   requests:
     cpu: 1
+    memory: 1500Mi
+  limits:
     memory: 1500Mi
 
 ## Configurations for the HorizontalPodAutoscaler of the regional-addressing pods
@@ -275,6 +274,8 @@ addressing-svc:
         requests:
           cpu: 1
           memory: 6Gi
+        limits:
+          memory: 6Gi
       ## We have implemented a bulk heading pattern in the addressing service.
       ## You can refer to the following information:
       ##   https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead
@@ -289,6 +290,8 @@ addressing-svc:
       resources:
         requests:
           cpu: 1
+          memory: 8Gi
+        limits:
           memory: 8Gi
       blockDispatcherPoolSize: 24
       responseDispatcherMinThreads: 8
@@ -383,6 +386,8 @@ autocomplete-svc:
         requests:
           cpu: 1
           memory: 6Gi
+        limits:
+          memory: 6Gi
       ## We have implemented a bulk heading pattern in the addressing service.
       ## You can refer to the following information:
       ##   https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead
@@ -397,6 +402,8 @@ autocomplete-svc:
       resources:
         requests:
           cpu: 1
+          memory: 6Gi
+        limits:
           memory: 6Gi
       blockDispatcherPoolSize: 24
       responseDispatcherMinThreads: 8
@@ -490,6 +497,8 @@ lookup-svc:
         requests:
           cpu: 1
           memory: 6Gi
+        limits:
+          memory: 6Gi
       ## We have implemented a bulk heading pattern in the addressing service.
       ## You can refer to the following information:
       ##   https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead
@@ -504,6 +513,8 @@ lookup-svc:
       resources:
         requests:
           cpu: 1
+          memory: 6Gi
+        limits:
           memory: 6Gi
       blockDispatcherPoolSize: 24
       responseDispatcherMinThreads: 8
@@ -597,6 +608,8 @@ reverse-svc:
         requests:
           cpu: 1
           memory: 8Gi
+        limits:
+          memory: 8Gi
       ## We have implemented a bulk heading pattern in the addressing service.
       ## You can refer to the following information:
       ##   https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead
@@ -611,6 +624,8 @@ reverse-svc:
       resources:
         requests:
           cpu: 1
+          memory: 8Gi
+        limits:
           memory: 8Gi
       blockDispatcherPoolSize: 4
       responseDispatcherMinThreads: 4
