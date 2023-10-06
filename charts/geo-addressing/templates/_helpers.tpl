@@ -136,3 +136,39 @@ Common PVC labels
 app.kubernetes.io/name: {{ include "common-svc-pvc.name" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
+
+{{/*
+Gets the configuration from the provided country
+*/}}
+{{- define "common-svc.configuration" -}}
+{{- $dictionary := index . 0 -}}
+{{- $country := index . 1 -}}
+{{- $config := index . 2 -}}
+{{- if hasKey $dictionary $country }}
+{{- if hasKey (get $dictionary $country) $config }}
+{{- (get (get $dictionary $country) $config) | toYaml }}
+{{- else}}
+{{- (get (get $dictionary "default") $config) | toYaml }}
+{{- end }}
+{{- else}}
+{{- (get (get $dictionary "default") $config) | toYaml }}
+{{- end }}
+{{- end }}
+
+{{/*
+Gets the global config from the provided country
+*/}}
+{{- define "common-svc.global" -}}
+{{- $dictionary := index . 0 -}}
+{{- $country := index . 1 -}}
+{{- $config := index . 2 -}}
+{{- if hasKey (get $dictionary "countryConfigurations") $country }}
+{{- if hasKey (get (get $dictionary "countryConfigurations") $country) $config }}
+{{- (get (get (get $dictionary "countryConfigurations") $country) $config) | toYaml }}
+{{- else}}
+{{- (get (get $dictionary "global") $config) | toYaml }}
+{{- end }}
+{{- else}}
+{{- (get (get $dictionary "global") $config) | toYaml }}
+{{- end }}
+{{- end }}
