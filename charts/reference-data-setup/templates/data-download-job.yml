@@ -4,7 +4,7 @@ kind: Job
 metadata:
   name: "{{ .Release.Name }}-download"
   labels:
-    {{- include "addressing-data.labels" . | nindent 4 }}
+    {{- include "reference-data.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "5"
@@ -16,7 +16,7 @@ spec:
     metadata:
       name: "{{ .Release.Name }}-download"
       labels:
-        {{- include "addressing-data.labels" . | nindent 8 }}
+        {{- include "reference-data.labels" . | nindent 8 }}
     spec:
       {{- with .Values.dataDownload.image.pullSecrets }}
       imagePullSecrets:
@@ -41,7 +41,7 @@ spec:
             - "--data-mapping"
             - {{ .Values.global.dataConfigMap | quote }}
           volumeMounts:
-            {{- include "addressing-data.volumeMounts" . | nindent 12 }}
+            {{- include "reference-data.volumeMounts" . | nindent 12 }}
       terminationGracePeriodSeconds: 0
       {{- with .Values.nodeSelector }}
       nodeSelector:

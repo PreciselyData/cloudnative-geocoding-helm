@@ -12,14 +12,14 @@ provisioner: efs.csi.aws.com
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: addressing-data-pv
+  name: reference-data-pv
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "1"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
     "helm.sh/resource-policy": delete
   labels:
-    {{- include "addressing-data.labels" . | nindent 4 }}
+    {{- include "reference-data.labels" . | nindent 4 }}
   finalizers: [ ]
 spec:
   capacity:
@@ -40,7 +40,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: addressing-data-pvc
+  name: reference-data-pvc
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "1"
@@ -48,10 +48,10 @@ metadata:
     "helm.sh/resource-policy": delete
   finalizers: [ ]
   labels:
-    {{- include "addressing-data.labels" . | nindent 4 }}
+    {{- include "reference-data.labels" . | nindent 4 }}
 spec:
   storageClassName: "efs-precisely"
-  volumeName: addressing-data-pv
+  volumeName: reference-data-pv
   accessModes:
     - ReadWriteMany
   resources:

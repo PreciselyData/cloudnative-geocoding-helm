@@ -121,12 +121,10 @@ We have provided python script to create EFS and link it to EKS cluster, or dire
 
 The Geo-Addressing Application relies on reference data for performing geo-addressing operations. For more information related to reference data, please refer to [this link](../../../README.md#reference-data-management).
 
-As a generalized step, we follow a structured format for installing reference data in EFS, which is: [addressing-functionality]/[country]/[vintage].
-The extracted data in EFS should adhere to the recommended format. For example, if you want to install data for `autocomplete` functionality, for `Canada` country and for `2023.9` vintage, you have to extract it on `autocomplete/can/202309/*`
 
-We have provided a miscellaneous helm chart for installing reference data in EFS, please run the below command for installing data in EFS or contact Precisely Sales Team for the reference data installation.
+You can make use of a [miscellaneous helm chart for installing reference data](../../../charts/reference-data-setup/README.md), please follow the instructions mentioned in the helm chart or run the below command for installing data in EFS or contact Precisely Sales Team for the reference data installation.
 ```shell
-helm install addressing-data ./charts/addressing-data-setup/ \
+helm install reference-data ./charts/reference-data-setup/ \
 --set "global.pdxApiKey=[your-pdx-key]" \
 --set "global.pdxSecret=[your-pdx-secret]" \
 --set "global.efs.fileSystemId=[fileSystemId]" \

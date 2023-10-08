@@ -1,0 +1,36 @@
+dataDownload:
+  enabled: true
+  image:
+    repository: reference-data-extractor
+    pullPolicy: Always
+    tag: latest
+    pullSecrets: [ ]
+
+nameOverride: "reference-data"
+fullnameOverride: "reference-data"
+
+service:
+  type: ClusterIP
+  port: 80
+
+nodeSelector: { }
+
+global:
+  pdxApiKey: "pdx-api-key"
+  pdxSecret: "pdx-api-secret"
+  mountBasePath: "/mnt/data/geoaddressing-data"
+  awsRegion: "us-east-1"
+  countries:
+    - usa
+    - aus
+    - can
+    - gbr
+    - nzl
+  efs:
+    fileSystemId: fileSystemId
+  dataConfigMap: "{\"verify-geocode\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"lookup\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"autocomplete\":{\"usa\":[\"Predictive Addressing Points#United States#All USA#Interactive\"],\"aus\":[\"Predictive Addressing Points#Australia#All AUS#Interactive\"]}}"
+
+volumes:
+  - name: geoaddressing-host-volume
+    persistentVolumeClaim:
+      claimName: reference-data-pvc

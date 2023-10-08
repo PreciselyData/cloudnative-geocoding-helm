@@ -57,6 +57,7 @@ access files available in [Precisely Data Experience](https://data.precisely.com
 
 ## Next Sections
 - [Geo-Addressing Helm Chart Design](charts/geo-addressing)
+- [Reference Data Installation](charts/reference-data-setup/README.md)
 - [Quickstart Guide for EKS](docs/guides/eks/QuickStartEKS.md)
 - [Trying out on Local Docker Desktop](docker-desktop/README.md)
 - [Metrics, Traces and Dashboards](docs/guides/MetricsAndTraces.md)
