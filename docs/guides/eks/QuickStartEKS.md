@@ -192,3 +192,6 @@ kubectl get services --namespace geo-addressing
 - [Geo Addressing API Usage](../../../charts/geo-addressing/README.md#geo-addressing-service-api-usage)
 - [Metrics, Traces and Dashboard](../MetricsAndTraces.md)
 - [FAQs](../../faq/FAQs.md)
+
+
+[🔗 Return to `Table of Contents` 🔗](../../../README.md#guides)
