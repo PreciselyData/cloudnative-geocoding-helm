@@ -39,9 +39,10 @@
 ## Architecture
 
 ![architecture.png](images/geoaddressing_architecture.png)
-The core of the geo-addressing helm-chart-based solution relies on the Operational Addressing SDK (OAS). The robust
-functionality of OAS forms the backbone of our geo-addressing solution, empowering it to deliver accurate and efficient
-geo-addressing services while maintaining data integrity and usability.
+
+<br>The core of the geo-addressing helm-chart-based solution relies on the Operational Addressing SDK (OAS). The
+robust functionality of OAS forms the backbone of our geo-addressing solution, empowering it to deliver accurate and
+efficient geo-addressing services while maintaining data integrity and usability.
 
 The geo-addressing application is designed as a robust microservice-based architecture, utilizing a modular approach to
 provide highly optimized, scalable and precise addressing solutions.
