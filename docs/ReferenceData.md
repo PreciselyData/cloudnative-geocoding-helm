@@ -65,9 +65,11 @@ basePath/
 
 # Reference Data Installation
 
-To download the reference data (country-specific data) and all the requirement components to run the Helm Chart,
+To download the reference data (country-specific data) and all the required components for running the Helm Chart,
 visit [Precisely Data Portfolio](https://dataguide.precisely.com/) where you can also sign up for a free account and
 access files available in [Precisely Data Experience](https://data.precisely.com/).
 
 Additionally, we have provided a miscellaneous helm chart which will download the required reference data SPDs from Precisely Data Experience and extract it to the necessary reference data structure.
 Please visit the [reference-data-setup helm chart](../charts/reference-data-setup/README.md).
+
+[🔗 Return to `Table of Contents` 🔗](../README.md#components)
