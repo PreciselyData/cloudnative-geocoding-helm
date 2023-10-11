@@ -15,25 +15,24 @@ To get started with installation of helm chart, follow this [Quick Start Guide](
 
 The geo-addressing helm chart compromises of following components:
 
-1. Parent Chart
+- Parent Chart
 
-- The parent chart is responsible for the deployment of `regional-addressing-service`.
-- Additionally, it contains all the necessary helm components responsible for deploying geo-addressing application.
+   - The parent chart is responsible for the deployment of `regional-addressing-service`.
+   - Additionally, it contains all the necessary helm components responsible for deploying geo-addressing application.
+- Sub-Charts
 
-2. Sub-Charts
+   - addressing-svc:
+       - deploys country-specific addressing services for `verify`, `geocode` capabilities.
+   - autocomplete-svc:
+       - If enabled, it deploys country-specific addressing services for `autocomplete` capability.
+   - lookup-svc:
+       - If enabled, it deploys country-specific addressing services for `lookup` capability.
+   - reverse-svc:
+       - If enabled, it deploys country-specific addressing services for `reverse-geocode` capability.
 
-- addressing-svc:
-    - deploys country-specific addressing services for `verify`, `geocode` capabilities.
-- autocomplete-svc:
-    - If enabled, it deploys country-specific addressing services for `autocomplete` capability.
-- lookup-svc:
-    - If enabled, it deploys country-specific addressing services for `lookup` capability.
-- reverse-svc:
-    - If enabled, it deploys country-specific addressing services for `reverse-geocode` capability.
-
-3. Ingress
-4. Horizontal Autoscaler (HPA)
-5. Persistent Volume
+- Ingress
+- Horizontal Autoscaler (HPA)
+- Persistent Volume
 
 ## Helm Values
 
@@ -128,15 +127,15 @@ Refer to [this file](templates/_helpers.tpl) for overriding the environment vari
 
 Refer to the [deployment.yml](charts/addressing-svc/templates/deployment.yaml) of respective service for override variables for addressing-service.
 
-| Parameter                         | Description                                                                                                      | Default                                                                                                       |
-|-----------------------------------|------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
-| `*DATA_PATH`                      | Default path of the installed reference data. Please refer to the recommended path for the installation of data. | `<referenced from configMap>`                                                                                 |
-| `*ENABLED_ENDPOINTS`              | Value of the endpoints enabled. This is different for different sub-chart                                        | `<depends on the sub-chart functionality e.g. verify,geocode/lookup/autocomplete>`                            |
-| `*DATA_REGION`                    | The value of the referenced country or region.                                                                   | `<depends on the provided country e.g. usa/aus/can>`                                                          |
-| `BLOCK_DISPATCHER_POOL_SIZE`      | The no. of threads to control the parallel interactions with the internal SDK.                                   | `4`                                                                                                           |
-| `RESPONSE_DISPATCHER_MIN_THREADS` | The no. of non-blocking I/O threads                                                                              | `4`                                                                                                           |
-| `*JAVA_TOOL_OPTIONS`              | The default Java tool opts for addressing service.                                                               | `-Xverify:none -XX:TieredStopAtLevel=1 -javaagent:/opt/addressing-service/opentelemetry-javaagent-1.27.0.jar` |
-| `OTEL_EXPORTER_OTLP_ENDPOINT`     | If tracing is enabled, this is the endpoint for tracer host.                                                     | `http://jaeger-collector.default.svc.cluster.local:4317`                                                      |
+| Parameter                         | Description                                                                                                                                              | Default                                                                                                       |
+|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| `*DATA_PATH`                      | Default path of the installed reference data. Please refer to the recommended path for the installation of data.                                         | `<referenced from configMap>`                                                                                 |
+| `*ENABLED_ENDPOINTS`              | Value of the endpoints enabled. This is different for different sub-chart                                                                                | `<depends on the sub-chart e.g. verify,geocode/lookup/autocomplete>`                                          |
+| `*DATA_REGION`                    | The value of the referenced country or region.                                                                                                           | `<depends on the provided country e.g. usa/aus/can>`                                                          |
+| `BLOCK_DISPATCHER_POOL_SIZE`      | The no. of threads to control the parallel interactions with the internal SDK. This should vary per country, please follow country-wise recommendations. | `4`                                                                                                           |
+| `RESPONSE_DISPATCHER_MIN_THREADS` | The no. of non-blocking I/O threads. This should vary per country, please follow country-wise recommendations.                                           | `4`                                                                                                           |
+| `*JAVA_TOOL_OPTIONS`              | The default Java tool opts for addressing service.                                                                                                       | `-Xverify:none -XX:TieredStopAtLevel=1 -javaagent:/opt/addressing-service/opentelemetry-javaagent-1.27.0.jar` |
+| `OTEL_EXPORTER_OTLP_ENDPOINT`     | If tracing is enabled, this is the endpoint for tracer host.                                                                                             | `http://jaeger-collector.default.svc.cluster.local:4317`                                                      |
 <hr>
 </details>
 
@@ -149,15 +148,15 @@ minimum amount of pod memory for the addressing-services for each specific count
 The values are in the format:<br>
 `[memory],[blockDispatcherPoolSize],[responseDispatcherMinThreads]`
 
-| Country | Addressing (Verify-Geocode) | Autocomplete | Lookup   | Reverse-Geocode |
-|---------|-----------------------------|--------------|----------|-----------------|
-| USA     | 8Gi,24,8                    | 6Gi,24,8     | 6Gi,16,4 | 8Gi,4,4         |
-| AUS     | 6Gi,16,4                    | 8Gi,16,4     | 6Gi,4,4  | 8Gi,4,4         |
-| CAN     | 6Gi,16,4                    | 4Gi,16,4     | 6Gi,4,4  | 8Gi,4,4         |
-| GBR     | 6Gi,16,4                    | 6Gi,4,4      | 6Gi,4,4  | 8Gi,4,4         |
-| DEU     | 6Gi,16,4                    | 6Gi,4,4      | 6Gi,4,4  | 8Gi,4,4         |
-| NZL     | 10Gi,8,4                    | 6Gi,4,4      | 6Gi,4,4  | 8Gi,4,4         |
-| FRA     | 7Gi,16,4                    | 6Gi,4,4      | 6Gi,4,4  | 8Gi,4,4         |
+| Country | Addressing (Verify-Geocode) | Autocomplete | Lookup     | Reverse-Geocode |
+|---------|-----------------------------|--------------|------------|-----------------|
+| USA     | 8Gi, 24, 8                  | 6Gi, 24, 8   | 6Gi, 16, 4 | 8Gi, 4, 4       |
+| AUS     | 6Gi, 16, 4                  | 8Gi, 16, 4   | 6Gi, 4, 4  | 8Gi, 4, 4       |
+| CAN     | 6Gi, 16, 4                  | 4Gi, 16, 4   | 6Gi, 4, 4  | 8Gi, 4, 4       |
+| GBR     | 6Gi, 16, 4                  | 6Gi, 4, 4    | 6Gi, 4, 4  | 8Gi, 4, 4       |
+| DEU     | 6Gi, 16, 4                  | 6Gi, 4, 4    | 6Gi, 4, 4  | 8Gi, 4, 4       |
+| NZL     | 10Gi, 8, 4                  | 6Gi, 4, 4    | 6Gi, 4, 4  | 8Gi, 4, 4       |
+| FRA     | 7Gi, 16, 4                  | 6Gi, 4, 4    | 6Gi, 4, 4  | 8Gi, 4, 4       |
 
 You can adjust the values in [values.yaml](values.yaml), or you can set these parameters in the helm command itself during installation/up-gradation.
 
@@ -261,7 +260,7 @@ curl -X 'POST' \
 
 ### `/li/v1/oas/lookup`:
 
-API to lookup the addresses
+API to `lookup` the addresses
 
 Sample Request:
 
