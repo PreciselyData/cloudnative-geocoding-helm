@@ -11,6 +11,29 @@ Helm chart installation to deploy this specific type of infrastructure.
 
 To get started with installation of helm chart, follow this [Quick Start Guide](../../docs/guides/eks/QuickStartEKS.md)
 
+## Helm charts
+
+The geo-addressing helm chart compromises of following components:
+
+1. Parent Chart
+
+- The parent chart is responsible for the deployment of `regional-addressing-service`.
+- Additionally, it contains all the necessary helm components responsible for deploying geo-addressing application.
+
+2. Sub-Charts
+
+- addressing-svc:
+    - deploys country-specific addressing services for `verify`, `geocode` capabilities.
+- autocomplete-svc:
+    - If enabled, it deploys country-specific addressing services for `autocomplete` capability.
+- lookup-svc:
+    - If enabled, it deploys country-specific addressing services for `lookup` capability.
+- reverse-svc:
+    - If enabled, it deploys country-specific addressing services for `reverse-geocode` capability.
+
+3. Ingress
+4. Horizontal Autoscaler (HPA)
+5. Persistent Volume
 
 ## Helm Values
 
@@ -53,7 +76,10 @@ provided by this chart:
 | `global.addressingImage.repository`               | the addressing-service container image repository                                           | `addressing-service`    |
 | `global.addressingImage.tag`                      | the addressing-service container image version tag                                          | `latest`                |
 | `global.efs.fileSystemId`                         | the fileSystemId of the elastic file system (e.g. fs-0d49e756a)                             | `fileSystemId`          |
-| `global.nodeSelector`                             | the default nodeSelector for all the addressing services                                    | `{}`                    |
+| `global.efs.addressingBasePath`                   | the base path of the folder where verify-geocode data is present                            | `verify-geocode`        |
+| `global.efs.autoCompleteBasePath`                 | the base path of the folder where autocomplete data is present                              | `autocomplete`          |
+| `global.efs.lookupBasePath`                       | the base path of the folder where lookup data is present                                    | `lookup`                |
+| `global.efs.reverseBasePath`                      | the base path of the folder where reverse-geocode data is present                           | `verify-geocode`        |
 | `global.addressing-svc.enabled`                   | the flag to indicate whether `verify-geocode` functionality is enabled or not               | `true`                  |
 | `global.addressing-svc.countryConfigurations.*`   | the country-specific configurations like resource requests, nodeSelector and threadPoolSize | `<see values.yaml>`     |
 | `global.autocomplete-svc.enabled`                 | the flag to indicate whether `autocomplete` functionality is enabled or not                 | `false`                 |
@@ -77,23 +103,23 @@ NOTE: `*` indicates that we recommend not to modify those values during installa
 
 Refer to [this file](templates/_helpers.tpl) for overriding the environment variables for regional addressing service.
 
-| Parameter                              | Description                                                                                                                                                                                                                                                                                        | Default                                                                      |
-|----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|
-| `*ADDRESSING_BASE_URL`                 | The internal url of country-based verify/geocode service                                                                                                                                                                                                                                           | http://addressing-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080   |
-| `LOOKUP_BASE_URL`                      | The internal url of country-based lookup service. If you prefer not to maintain separate infrastructure for the lookup service and would like all calls to be handled by the addressing service, you have the flexibility to modify this URL and point it to addressing service.                   | http://lookup-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080       |
-| `AUTOCOMPLETE_BASE_URL`                | The internal url of country-based autocomplete service. If you prefer not to maintain separate infrastructure for the autocomplete service and would like all calls to be handled by the addressing service, you have the flexibility to modify this URL and point it to addressing service.       | http://autocomplete-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080 |
-| `REVERSE_GEOCODE_BASE_URL`             | The internal url of country-based reverse-geocode service. If you prefer not to maintain separate infrastructure for the reverse-geocode service and would like all calls to be handled by the addressing service, you have the flexibility to modify this URL and point it to addressing service. | http://reverse-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080      |
-| `OTEL_EXPORTER_OTLP_ENDPOINT`          | If tracing is enabled, this is the endpoint for tracer host.                                                                                                                                                                                                                                       | http://jaeger-collector.default.svc.cluster.local:4317                       |
-| `*SUPPORTED_COUNTRIES_GEOCODE`         | The countries that are supported for geocode functionality.                                                                                                                                                                                                                                        | usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world                |
-| `*SUPPORTED_REGIONS_GEOCODE`           | The regions that are supported for geocode functionality.                                                                                                                                                                                                                                          | ""                                                                           |
-| `*SUPPORTED_COUNTRIES_VERIFY`          | The countries that are supported for verify.                                                                                                                                                                                                                                                       | usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world                |
-| `*SUPPORTED_REGIONS_VERIFY`            | The regions that are supported for verify.                                                                                                                                                                                                                                                         | ""                                                                           |
-| `*SUPPORTED_COUNTRIES_LOOKUP`          | The countries that are supported for lookup.                                                                                                                                                                                                                                                       | usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world                |
-| `*SUPPORTED_COUNTRIES_AUTOCOMPLETE`    | The countries that are supported for autocomplete.                                                                                                                                                                                                                                                 | usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world                |
-| `*SUPPORTED_COUNTRIES_REVERSE_GEOCODE` | The regions that are supported for lookup.                                                                                                                                                                                                                                                         | ""                                                                           |
-| `*AUTH_ENABLED`                        | Flag to indicate whether authorization is enabled for the endpoints or not.                                                                                                                                                                                                                        | false                                                                        |
-| `*DIS_DEVELOPER_URL`                   | The url of the regional addressing service referred in the Swagger.                                                                                                                                                                                                                                | <current url of the deployed regional addressing service>                    |
-| `REF_DATA_API_KEY`                     | The key for which reference data endpoint is configured.                                                                                                                                                                                                                                           | helmRefDataKey                                                               |
+| Parameter                              | Description                                                                                                                                                                                                                                                                                        | Default                                                                        |
+|----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
+| `*ADDRESSING_BASE_URL`                 | The internal url of country-based verify/geocode service                                                                                                                                                                                                                                           | `http://addressing-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080`   |
+| `LOOKUP_BASE_URL`                      | The internal url of country-based lookup service. If you prefer not to maintain separate infrastructure for the lookup service and would like all calls to be handled by the addressing service, you have the flexibility to modify this URL and point it to addressing service.                   | `http://lookup-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080`       |
+| `AUTOCOMPLETE_BASE_URL`                | The internal url of country-based autocomplete service. If you prefer not to maintain separate infrastructure for the autocomplete service and would like all calls to be handled by the addressing service, you have the flexibility to modify this URL and point it to addressing service.       | `http://autocomplete-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080` |
+| `REVERSE_GEOCODE_BASE_URL`             | The internal url of country-based reverse-geocode service. If you prefer not to maintain separate infrastructure for the reverse-geocode service and would like all calls to be handled by the addressing service, you have the flexibility to modify this URL and point it to addressing service. | `http://reverse-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080`      |
+| `OTEL_EXPORTER_OTLP_ENDPOINT`          | If tracing is enabled, this is the endpoint for tracer host.                                                                                                                                                                                                                                       | `http://jaeger-collector.default.svc.cluster.local:4317`                       |
+| `*SUPPORTED_COUNTRIES_GEOCODE`         | The countries that are supported for geocode functionality.                                                                                                                                                                                                                                        | `usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world`                |
+| `*SUPPORTED_REGIONS_GEOCODE`           | The regions that are supported for geocode functionality.                                                                                                                                                                                                                                          |                                                                                |
+| `*SUPPORTED_COUNTRIES_VERIFY`          | The countries that are supported for verify.                                                                                                                                                                                                                                                       | `usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world`                |
+| `*SUPPORTED_REGIONS_VERIFY`            | The regions that are supported for verify.                                                                                                                                                                                                                                                         |                                                                                |
+| `*SUPPORTED_COUNTRIES_LOOKUP`          | The countries that are supported for lookup.                                                                                                                                                                                                                                                       | `usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world`                |
+| `*SUPPORTED_COUNTRIES_AUTOCOMPLETE`    | The countries that are supported for autocomplete.                                                                                                                                                                                                                                                 | `usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world`                |
+| `*SUPPORTED_COUNTRIES_REVERSE_GEOCODE` | The regions that are supported for lookup.                                                                                                                                                                                                                                                         |                                                                                |
+| `*AUTH_ENABLED`                        | Flag to indicate whether authorization is enabled for the endpoints or not.                                                                                                                                                                                                                        | `false`                                                                        |
+| `*DIS_DEVELOPER_URL`                   | The url of the regional addressing service referred in the Swagger.                                                                                                                                                                                                                                | `<current url of the deployed regional addressing service>`                    |
+| `REF_DATA_API_KEY`                     | The key for which reference data endpoint is configured.                                                                                                                                                                                                                                           | `helmRefDataKey`                                                               |
 <hr>
 </details>
 
@@ -102,15 +128,15 @@ Refer to [this file](templates/_helpers.tpl) for overriding the environment vari
 
 Refer to the [deployment.yml](charts/addressing-svc/templates/deployment.yaml) of respective service for override variables for addressing-service.
 
-| Parameter                         | Description                                                                    | Default                                                                                                     |
-|-----------------------------------|--------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
-| `*DATA_PATH`                      | Default path of the installed reference data                                   | <referenced from configMap>                                                                                 |
-| `*ENABLED_ENDPOINTS`              | Value of the endpoints enabled. This is different for different sub-chart      | <depends on sub-charts>                                                                                     |
-| `*DATA_REGION`                    | The value of the referenced country or region.                                 | <depends on the provided country>                                                                           |
-| `BLOCK_DISPATCHER_POOL_SIZE`      | The no. of threads to control the parallel interactions with the internal SDK. | 4                                                                                                           |
-| `RESPONSE_DISPATCHER_MIN_THREADS` | The no. of non-blocking I/O threads                                            | 4                                                                                                           |
-| `*JAVA_TOOL_OPTIONS`              | The default Java tool opts for addressing service.                             | -Xverify:none -XX:TieredStopAtLevel=1 -javaagent:/opt/addressing-service/opentelemetry-javaagent-1.27.0.jar |
-| `OTEL_EXPORTER_OTLP_ENDPOINT`     | If tracing is enabled, this is the endpoint for tracer host.                   | http://jaeger-collector.default.svc.cluster.local:4317                                                      |
+| Parameter                         | Description                                                                                                      | Default                                                                                                       |
+|-----------------------------------|------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| `*DATA_PATH`                      | Default path of the installed reference data. Please refer to the recommended path for the installation of data. | `<referenced from configMap>`                                                                                 |
+| `*ENABLED_ENDPOINTS`              | Value of the endpoints enabled. This is different for different sub-chart                                        | `<depends on the sub-chart functionality e.g. verify,geocode/lookup/autocomplete>`                            |
+| `*DATA_REGION`                    | The value of the referenced country or region.                                                                   | `<depends on the provided country e.g. usa/aus/can>`                                                          |
+| `BLOCK_DISPATCHER_POOL_SIZE`      | The no. of threads to control the parallel interactions with the internal SDK.                                   | `4`                                                                                                           |
+| `RESPONSE_DISPATCHER_MIN_THREADS` | The no. of non-blocking I/O threads                                                                              | `4`                                                                                                           |
+| `*JAVA_TOOL_OPTIONS`              | The default Java tool opts for addressing service.                                                               | `-Xverify:none -XX:TieredStopAtLevel=1 -javaagent:/opt/addressing-service/opentelemetry-javaagent-1.27.0.jar` |
+| `OTEL_EXPORTER_OTLP_ENDPOINT`     | If tracing is enabled, this is the endpoint for tracer host.                                                     | `http://jaeger-collector.default.svc.cluster.local:4317`                                                      |
 <hr>
 </details>
 
@@ -120,15 +146,18 @@ The `regional-addressing` pod is responsible for managing requests and routing t
 country-based `addressing-service` pods. Since each country has its own unique reference data, we recommend allocating a
 minimum amount of pod memory for the addressing-services for each specific country, as outlined below:
 
-| Country | Addressing (Verify-Geocode) | Autocomplete | Lookup | Reverse-Geocode |
-|---------|-----------------------------|--------------|--------|-----------------|
-| USA     | 8Gi                         | 6Gi          | 6Gi    | 8Gi             |
-| AUS     | 6Gi                         | 8Gi          | 6Gi    | 8Gi             |
-| CAN     | 6Gi                         | 4Gi          | 6Gi    | 8Gi             |
-| GBR     | 6Gi                         | 6Gi          | 6Gi    | 8Gi             |
-| DEU     | 6Gi                         | 6Gi          | 6Gi    | 8Gi             |
-| NZL     | 10Gi                        | 6Gi          | 6Gi    | 8Gi             |
-| FRA     | 7Gi                         | 6Gi          | 6Gi    | 8Gi             |
+The values are in the format:<br>
+`[memory],[blockDispatcherPoolSize],[responseDispatcherMinThreads]`
+
+| Country | Addressing (Verify-Geocode) | Autocomplete | Lookup   | Reverse-Geocode |
+|---------|-----------------------------|--------------|----------|-----------------|
+| USA     | 8Gi,24,8                    | 6Gi,24,8     | 6Gi,16,4 | 8Gi,4,4         |
+| AUS     | 6Gi,16,4                    | 8Gi,16,4     | 6Gi,4,4  | 8Gi,4,4         |
+| CAN     | 6Gi,16,4                    | 4Gi,16,4     | 6Gi,4,4  | 8Gi,4,4         |
+| GBR     | 6Gi,16,4                    | 6Gi,4,4      | 6Gi,4,4  | 8Gi,4,4         |
+| DEU     | 6Gi,16,4                    | 6Gi,4,4      | 6Gi,4,4  | 8Gi,4,4         |
+| NZL     | 10Gi,8,4                    | 6Gi,4,4      | 6Gi,4,4  | 8Gi,4,4         |
+| FRA     | 7Gi,16,4                    | 6Gi,4,4      | 6Gi,4,4  | 8Gi,4,4         |
 
 You can adjust the values in [values.yaml](values.yaml), or you can set these parameters in the helm command itself during installation/up-gradation.
 
@@ -291,4 +320,4 @@ curl --location 'https://[EXTERNAL-URL]/li/v1/oas/autocomplete' --header 'Conten
 }'
 ```
 
-[🔗 Return to `Table of Contents` 🔗](../../README.md#helm-charts)
+[🔗 Return to `Table of Contents` 🔗](../../README.md#components)

@@ -2,6 +2,12 @@
 
 ## Generating Insights from Metrics
 
+The geo-addressing application microservices expose metrics which can be used for monitoring and troubleshooting the
+performance and behavior of the geo-addressing application.
+
+Depending on your alerting setup, you can set up alerts based on these metrics to proactively respond to the issues in
+your application.
+
 ### Exposed Metrics
 
 Following are the metrics exposed by Regional-Addressing Application:
@@ -170,6 +176,13 @@ You can then view the Prometheus-UI for visualization, run the queries and gener
 ## Application Tracing
 Application tracing is a technique for troubleshooting cross-application traces in more depth than a regular log.
 
+By default, Geo-Addressing generates, collects and exports the traces
+using [OpenTelemetry Instrumentation](https://opentelemetry.io/).
+
+These traces can then be easily monitored using Microservice Trace Monitoring tools
+like [Jaeger](https://www.jaegertracing.io/docs/1.49/), [Zipkin](https://zipkin.io/)
+, [Datadog](https://www.datadoghq.com/).
+
 Traces are generated for each endpoint which are: `/li/v1/oas/verify`, `/li/v1/oas/geocode`, `/li/v1/oas/autocomplete`, `/li/v1/oas/reverse-geocode`.
 
 This section describes usage of application tracing using **_Jaeger_**. Please run the below command for installing Jaeger:
@@ -189,3 +202,5 @@ For logs management and analysis, you have the option to configure Microservice 
 Additionally, you can set up tools like [Kubernetes Dashboard](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/) or [K8s Lens](https://k8slens.dev/) for monitoring your kubernetes resources and logs easily.
 
 These recommendations are not exhaustive, and you have the flexibility to use any Microservice Log Analysis tool that supports log scraping from stdout within your Geo-Addressing Application Deployment.
+
+[🔗 Return to `Table of Contents` 🔗](../README.md#miscellaneous)

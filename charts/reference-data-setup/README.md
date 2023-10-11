@@ -1,12 +1,13 @@
 # Reference Data Setup
 
-The Geo-Addressing Application requires reference data installed in the worker nodes for running geo-addressing capabilities. This reference data should be
-deployed using [persistent volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/). This persistent
-volume is backed by Amazon Elastic File System (EFS) so that the data is ready to use immediately when the volume is
-mounted to the pods.
+The Geo-Addressing Application requires reference data installed in the worker nodes for running geo-addressing
+capabilities. This reference data should be deployed
+using [persistent volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/). This persistent volume is
+backed by Amazon Elastic File System (EFS) so that the data is ready to use immediately when the volume is mounted to
+the pods.
 
-As a generalized step, we follow a structured format for installing reference data in EFS, which is: [addressing-functionality]/[country]/[vintage].
-The extracted data in EFS should adhere to the recommended format. For example, if you want to install data for `autocomplete` functionality, for `Canada` country and for `2023.9` vintage, you have to extract it on `autocomplete/can/202309/*`
+For more information on reference data and reference data structure, please
+visit [this link](../../docs/ReferenceData.md).
 
 Follow the aforementioned steps for installation of the reference data in the EFS:
 
@@ -18,12 +19,14 @@ access files available in your [Precisely Data Experience](https://data.precisel
 
 ## Step 2: Creating and Pushing Docker Image
 
-This helm chart requires a `reference-data-extractor` docker image to be available in Elastic Container Registry (ECR). Follow the below steps to create and push the docker image to ECR:
+This helm chart requires a `reference-data-extractor` docker image to be available in Elastic Container Registry (ECR).
+Follow the below steps to create and push the docker image to ECR:
 
 ```shell
 cd ./charts/reference-data-setup/image
 docker build . -t reference-data-extractor:latest
 ```
+
 ```shell
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 603016229198.dkr.ecr.us-east-1.amazonaws.com
 
@@ -36,12 +39,13 @@ docker push [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-e
 
 ## Step 3: Creating EFS
 
-We already have scripts to create EFS and link to the current EKS cluster.
-Please follow the steps mentioned [here](../../scripts/efs-creator/README.md) to create EFS.
+We already have scripts to create EFS and link to the current EKS cluster. Please follow the steps
+mentioned [here](../../scripts/efs-creator/README.md) to create EFS.
 
 ## Step 4: Running the Reference Data Installation Helm Chart
 
 Run the below command for installation of reference data in EFS:
+
 ```shell
 helm install reference-data ./charts/reference-data-setup/ \
 --set "global.pdxApiKey=[your-pdx-key]" \
@@ -88,8 +92,9 @@ provided by this chart:
 
 ### Providing Information of Reference Data to be Downloaded
 
-You can provide the information about the reference data to be downloaded in the format of Map/Dictionary.
-Below is an example of default reference data map:
+You can provide the information about the reference data to be downloaded in the format of Map/Dictionary. Below is an
+example of default reference data map:
+
 ```shell
 {
   "verify-geocode": {
@@ -133,7 +138,8 @@ Below is an example of default reference data map:
 
 e.g. `Geocoding NT Street US#United States#All USA#Spectrum Platform Data`
 
-<br>You can create a map of the reference data to be downloaded and override the `global.dataConfigMap` parameter while installing the helm chart as follows:
+<br>You can create a map of the reference data to be downloaded and override the `global.dataConfigMap` parameter while
+installing the helm chart as follows:
 
 ```shell
 --set "global.dataConfigMap={\"verify-geocode\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"lookup\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"autocomplete\":{\"usa\":[\"Predictive Addressing Points#United States#All USA#Interactive\"],\"aus\":[\"Predictive Addressing Points#Australia#All AUS#Interactive\"]}}"
@@ -141,15 +147,13 @@ e.g. `Geocoding NT Street US#United States#All USA#Spectrum Platform Data`
 
 ## Monitoring the Helm Chart
 
-After running the helm chart command, the reference data installation step might take a couple of minutes to download and extract the reference data in the EFS.
-You can monitor the progress of the reference data downloads using following commands:
+After running the helm chart command, the reference data installation step might take a couple of minutes to download
+and extract the reference data in the EFS. You can monitor the progress of the reference data downloads using following
+commands:
 
 ```shell
 kubectl get pods -w
 kubectl logs -f -l "app.kubernetes.io/name=reference-data"
 ```
 
-## Next Sections
-- [Quickstart Guide for EKS](docs/guides/eks/QuickStartEKS.md)
-- [Metrics, Traces and Dashboards](docs/guides/MetricsAndTraces.md)
-- [FAQs](docs/faq/FAQs.md)
+[🔗 Return to `Table of Contents` 🔗](../../README.md#guides)

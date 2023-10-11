@@ -1,5 +1,11 @@
 ## FAQs
 
+If you encounter any challenges or have questions during the deployment of the geo-addressing helm chart, we recommend
+checking the below questions. This resource provides answers to common questions and solutions to known issues, offering
+assistance in troubleshooting any deployment-related difficulties you may encounter. If your question is not covered in
+the FAQs, feel free to reach out to our support team for personalized assistance.
+
+<br>
 1. How can I monitor the Geo-Addressing Helm Chart is installation?
    <br><br>
    Once you run the helm chart command, you can monitor the helm chart creation by using the following command:
@@ -7,8 +13,8 @@
     kubectl get pods -n [geo-addressing] -w
     ```
 
-   Please wait for all the services to be in the running stage:
-   ![kubectl-all.png](../../images/kubectl-all.png)
+Please wait for all the services to be in the running stage:
+![kubectl-all.png](../../images/kubectl-all.png)
 
 2. How to check the logs if the helm chart installation is unsuccessful?
    <br><br>
@@ -53,4 +59,4 @@
     kubectl delete pvc addressing-hook-svc-pvc -n [geo-addressing]
     ```
 
-[🔗 Return to `Table of Contents` 🔗](../../README.md)
+[🔗 Return to `Table of Contents` 🔗](../../README.md#miscellaneous)
