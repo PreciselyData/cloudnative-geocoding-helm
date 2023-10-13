@@ -40,9 +40,9 @@
 
 ![architecture.png](images/geoaddressing_architecture.png)
 
-<br>The core of the geo-addressing helm-chart-based solution relies on the Operational Addressing SDK (OAS). The
-robust functionality of OAS forms the backbone of our geo-addressing solution, empowering it to deliver accurate and
-efficient geo-addressing services while maintaining data integrity and usability.
+<br>The core of the geo-addressing helm-chart-based solution relies on the Operational Addressing SDK (OAS). The robust
+functionality of OAS forms the backbone of our geo-addressing solution, empowering it to deliver accurate and efficient
+geo-addressing services while maintaining data integrity and usability.
 
 The geo-addressing application is designed as a robust microservice-based architecture, utilizing a modular approach to
 provide highly optimized, scalable and precise addressing solutions.
@@ -83,6 +83,12 @@ Within this architecture, there are two key types of microservices:
 
 > NOTE: As of now, geo-addressing helm chart is only supported for AWS EKS.
 
+## Geo-Addressing Helm Version Chart
+
+| Helm Chart Version → <br> Geo-Addressing Docker Image version ↓ | `0.1.0` |
+|-----------------------------------------------------------------|---------|
+| `999.638.718/2023.9/Sept 12, 2023`                              | ✔️      |
+
 ## Miscellaneous
 
 - [Metrics](docs/MetricsAndTraces.md#generating-insights-from-metrics)
@@ -92,6 +98,7 @@ Within this architecture, there are two key types of microservices:
 
 ## References
 
+- [Releases](https://github.com/PreciselyData/cloudnative-geocoding-helm/releases)
 - [Helm Values](charts/geo-addressing/README.md#helm-values)
 - [Environment Variables](charts/geo-addressing/README.md#environment-variables)
 - [Memory Recommendations](charts/geo-addressing/README.md#memory-recommendations)
@@ -100,5 +107,6 @@ Within this architecture, there are two key types of microservices:
 ## Links
 
 - [Geo-Addressing API Guide](https://docs.precisely.com/docs/sftw/ggs/5.0/en/webhelp/GeoAddressingSDKDeveloperGuide/GlobalGeocodingGuide/source/AddressingAPI/addressing_api_title.html)
+- [Geo-Addressing Custom Output Fields](https://docs.precisely.com/docs/sftw/ggs/5.0/en/webhelp/GeoAddressingSDKDeveloperGuide/GlobalGeocodingGuide/source/CustomFields/global_custom_output_fields_all_countries.html)
 - [Helm Chart Tricks](https://helm.sh/docs/howto/charts_tips_and_tricks/)
 - [Nginx Ingress Controller](https://docs.nginx.com/nginx-ingress-controller/)
