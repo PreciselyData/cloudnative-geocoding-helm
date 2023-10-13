@@ -1,10 +1,16 @@
 # Precisely Geo-Addressing Service Setup on Local Docker Desktop
 
-This section explains how to test Docker images downloaded from PDX locally in a Docker Desktop environment. If you have
-not already downloaded docker images from Precisely Data Experience,
-follow [this link](../docs/guides/eks/QuickStartEKS.md#step-3-download-geo-addressing-docker-images)
+The geo-addressing application can be setup locally for test purpose.
 
-## Running Service Locally
+## Step 1: Download Reference Data and Required Docker Images
+
+To run the docker images locally, reference data and docker images should be downloaded from Precisely Data Experience.
+> For more information on downloading the docker images, follow [this section](../scripts/images-to-ecr-uploader/README.md#download-and-upload-docker-images-to-ecr).
+> 
+> For more information on reference data and downloading docker images, follow [this section](../docs/ReferenceData.md).
+>
+
+## Step 2: Running Service Locally
 
 Modify the below variables in ****.env**** file and run the mentioned command.
 
@@ -61,3 +67,5 @@ startup will fail.
 ## References
 
 - [Sample API Usage](../charts/geo-addressing/README.md#geo-addressing-service-api-usage)
+
+[🔗 Return to `Table of Contents` 🔗](../README.md#setup)

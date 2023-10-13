@@ -1,8 +1,14 @@
 # Configurations for Metrics, Traces and Dashboard
 
-# 1. Generating Insights from Metrics
+## Generating Insights from Metrics
 
-The regional-addressing service and country-based addressing-service exposes metrics which can be used for monitoring and troubleshooting the performance and behavior of Geo-Addressing application. Depending on your monitoring and alerting setup, you can set up alerts based on these metrics to proactively respond to issues in your application.
+The geo-addressing application microservices expose metrics which can be used for monitoring and troubleshooting the
+performance and behavior of the geo-addressing application.
+
+Depending on your alerting setup, you can set up alerts based on these metrics to proactively respond to the issues in
+your application.
+
+### Exposed Metrics
 
 Following are the metrics exposed by Regional-Addressing Application:
 
@@ -167,11 +173,15 @@ helm install prometheus prometheus-community/prometheus
 
 You can then view the Prometheus-UI for visualization, run the queries and generate the alerts.
 
-# 2. Application Tracing
+## Application Tracing
 Application tracing is a technique for troubleshooting cross-application traces in more depth than a regular log.
 
-By default, Geo-Addressing generates, collects and exports the traces using [OpenTelemetry Instrumentation](https://opentelemetry.io/).
-These traces can then be easily monitored using Microservice Trace Monitoring tools like [Jaeger](https://www.jaegertracing.io/docs/1.49/), [Zipkin](https://zipkin.io/), [Datadog](https://www.datadoghq.com/).
+By default, Geo-Addressing generates, collects and exports the traces
+using [OpenTelemetry Instrumentation](https://opentelemetry.io/).
+
+These traces can then be easily monitored using Microservice Trace Monitoring tools
+like [Jaeger](https://www.jaegertracing.io/docs/1.49/), [Zipkin](https://zipkin.io/)
+, [Datadog](https://www.datadoghq.com/).
 
 Traces are generated for each endpoint which are: `/li/v1/oas/verify`, `/li/v1/oas/geocode`, `/li/v1/oas/autocomplete`, `/li/v1/oas/reverse-geocode`.
 
@@ -183,7 +193,7 @@ helm install jaeger jaegertracing/jaeger --set "allInOne.enabled=true" --set "qu
 
 You can then run the Jaeger UI for visualization and viewing the traces.
 
-# 3. Logs and Monitoring
+## Logs and Monitoring
 
 The Geo-Addressing Application generates logs for all its services, such as regional-addressing, country-based addressing, autocomplete, lookup, and reverse-geocode, and outputs them in JSON format to stdout.
 
@@ -192,3 +202,5 @@ For logs management and analysis, you have the option to configure Microservice 
 Additionally, you can set up tools like [Kubernetes Dashboard](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/) or [K8s Lens](https://k8slens.dev/) for monitoring your kubernetes resources and logs easily.
 
 These recommendations are not exhaustive, and you have the flexibility to use any Microservice Log Analysis tool that supports log scraping from stdout within your Geo-Addressing Application Deployment.
+
+[🔗 Return to `Table of Contents` 🔗](../README.md#miscellaneous)

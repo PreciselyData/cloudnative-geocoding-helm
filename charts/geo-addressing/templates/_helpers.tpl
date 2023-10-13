@@ -91,8 +91,6 @@ Environment Variables for Geo-Addressing Service
   value: usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world
 - name: AUTH_ENABLED
   value: "false"
-- name: DIS_DEVELOPER_URL
-  value: http://{{ (index .Values.ingress.hosts 0).host | trimSuffix "/" }}{{ (index (index .Values.ingress.hosts 0).paths 0).path | trimSuffix "/"}}
 - name: REF_DATA_API_KEY
   value: helmRefDataKey
 - name: OTEL_EXPORTER_OTLP_ENDPOINT
