@@ -119,7 +119,7 @@ We have provided python script to create EFS and link it to EKS cluster, or dire
 
 ## Step 5: Installation of Reference Data
 
-The Geo-Addressing Application relies on reference data for performing geo-addressing operations. For more information related to reference data, please refer to [this link](../../../README.md#reference-data-management).
+The Geo-Addressing Application relies on reference data for performing geo-addressing operations. For more information related to reference data, please refer to [this link](../../ReferenceData.md).
 
 
 You can make use of a [miscellaneous helm chart for installing reference data](../../../charts/reference-data-setup/README.md), please follow the instructions mentioned in the helm chart or run the below command for installing data in EFS or contact Precisely Sales Team for the reference data installation.
@@ -166,7 +166,7 @@ reverse-geocode you have to set the parameters in helm command as follows.
 * ``global.awsRegion``: AWS Region
 * ``global.efs.fileSystemId``: The ID of the EFS
 * ``global.countries``: Required countries for Geo-Addressing (e.g. ``--set "global.countries={usa,deu,gbr}"``).
-  Possible Values are: (usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,tgl,world)
+  Provide a comma separated list to enable a particular set of countries from: `{usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world}`
 * ``ingress.hosts[0].host``: The Host name of Ingress e.g. http://aab329b2d767544.us-east-1.elb.amazonaws.com
 * ``ingress.hosts[0].paths[0].path``: The PATH at which the solution to be hosted. (e.g. ``/precisely/addressing``)
 * ``ingress.hosts[0].paths[0].pathType``: The pathType of the Ingress Path

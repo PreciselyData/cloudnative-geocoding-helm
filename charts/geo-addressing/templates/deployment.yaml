@@ -60,7 +60,36 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
-            {{- ( include "regional-addressing.environmentVariable" . ) | nindent 12 }}
+            - name: ADDRESSING_BASE_URL
+              value: http://addressing-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080
+            - name: LOOKUP_BASE_URL
+              value: http://lookup-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080
+            - name: AUTOCOMPLETE_BASE_URL
+              value: http://autocomplete-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080
+            - name: REVERSE_GEOCODE_BASE_URL
+              value: http://reverse-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080
+            - name: SUPPORTED_COUNTRIES_GEOCODE
+              value: {{ join "," .Values.global.countries }}
+            - name: SUPPORTED_REGIONS_GEOCODE
+              value: ""
+            - name: SUPPORTED_COUNTRIES_VERIFY
+              value: {{ join "," .Values.global.countries }}
+            - name: SUPPORTED_REGIONS_VERIFY
+              value: ""
+            - name: SUPPORTED_COUNTRIES_LOOKUP
+              value: {{ join "," .Values.global.countries }}
+            - name: SUPPORTED_COUNTRIES_AUTOCOMPLETE
+              value: {{ join "," .Values.global.countries }}
+            - name: SUPPORTED_REGIONS_AUTOCOMPLETE
+              value: ""
+            - name: SUPPORTED_COUNTRIES_REVERSE_GEOCODE
+              value: {{ join "," .Values.global.countries }}
+            - name: AUTH_ENABLED
+              value: "false"
+            - name: REF_DATA_API_KEY
+              value: helmRefDataKey
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: {{ .Values.global.otelExporterEndpoint }}
       {{- with .Values.global.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
