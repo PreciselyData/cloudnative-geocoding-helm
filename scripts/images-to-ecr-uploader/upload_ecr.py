@@ -189,7 +189,7 @@ def download_spd_to_local(product_url, spd_base_path):
     urllib.request.urlretrieve(product_url, file_path)
     return file_path
 
-def extract_spds_to_mount_path(country_path_value, extract_path_value, country_name):
+def extract_spds_to_mount_path(country_path_value, extract_path_value, country_name, current_date_folder):
     for f in os.listdir(country_path_value):
         country_spd_path = os.path.join(country_path_value, f)
         try:
@@ -199,6 +199,7 @@ def extract_spds_to_mount_path(country_path_value, extract_path_value, country_n
                     metadata = json.loads(data)
                     extract_path_spd = os.path.join(extract_path_value,
                                                     country_name,
+                                                    current_date_folder,
                                                     metadata['vintage'],
                                                     metadata['qualifier'])
                     os.makedirs(extract_path_spd, exist_ok=True)
@@ -215,6 +216,7 @@ LOCAL_PATH = args.local_path
 AWS_REGION = args.aws_region
 AWS_ACCESS_KEY = args.aws_access_key
 AWS_SECRET_KEY = args.aws_secret_key
+date_folder = str(time.strftime("%Y%m%d%H%M"))
 
 if not AWS_REGION:
     AWS_REGION = "us-east-1"

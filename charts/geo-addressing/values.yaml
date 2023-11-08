@@ -157,22 +157,22 @@ global:
     ##
     ## The base path where the data is present for verify-geocode functionalities.
     ##
-    ## [NOTE]: if your data for verify-geocode is not present in the format `verify-geocode/[country]/[vintage]`, this parameter needs to be overridden.
+    ## [NOTE]: if your data for verify-geocode is not present in the format `verify-geocode/[country]/[timestamp]/[vintage]`, this parameter needs to be overridden.
     addressingBasePath: verify-geocode
     ##
     ## The base path where the data is present for verify-geocode functionality.
     ##
-    ## [NOTE]: if your data for autocomplete is not present in the format `autocomplete/[country]/[vintage]`, this parameter needs to be overridden.
+    ## [NOTE]: if your data for autocomplete is not present in the format `autocomplete/[country]/[timestamp]/[vintage]`, this parameter needs to be overridden.
     autoCompleteBasePath: autocomplete
     ##
     ## The base path where the data is present for lookup functionality.
     ##
-    ## [NOTE]: if your data for lookup is not present in the format lookup/[country]/[vintage], this parameter needs to be overridden.
+    ## [NOTE]: if your data for lookup is not present in the format lookup/[country]/[timestamp]/[vintage], this parameter needs to be overridden.
     lookupBasePath: lookup
     ##
     ## The base path where the data is present for reverse-geocode functionality.
     ##
-    ## [NOTE]: if your data for reverse-geocode is not present in the format verify-geocode/[country]/[vintage], this parameter needs to be overridden.
+    ## [NOTE]: if your data for reverse-geocode is not present in the format verify-geocode/[country]/[timestamp]/[vintage], this parameter needs to be overridden.
     ##
     ## [NOTE]: the data used for reverse-geocode is the exactly same, that's why the default value is set to verify-geocode.
     reverseBasePath: verify-geocode

@@ -87,7 +87,7 @@ Within this architecture, there are two key types of microservices:
 
 Following is the helm version chart against geo-addressing PDX docker image version and GA-SDK version.
 
-| Helm Chart Version → <br> Docker Image Version & GA-SDK Version ↓ | `0.1.0` - `0.2.0` |
+| Helm Chart Version → <br> Docker Image Version & GA-SDK Version ↓ | `0.1.0` - `0.3.0` |
 |-------------------------------------------------------------------|-------------------|
 | `999.638.718/2023.9/Sept 12, 2023` & `5.1.488`                    | ✔️                |
 

@@ -27,40 +27,46 @@ seamlessly and with zero downtime.
 # Reference Data Structure
 
 As a generalized step, the reference data should exist in the following format only:
-<br>`[basePath]/[addressing-functionality]/[country]/[vintage]/[data]`
+<br>`[basePath]/[addressing-functionality]/[country]/[current-time]/[vintage]/[data]`
 
-
+NOTE: The current-time folder name should always be in the format: `YYMMDDhhmm` e.g. 202311081159
 ```
 basePath/
 ├── verify-geocode/
 │   │── usa/
-│   │   └── 202306/
-│   │       ├── data-folder-1/
-│   │       └── ...
+│   │   └── 202311081159/
+│   │       └── 202306/
+│   │           ├── data-folder-1/
+│   │           └── ...
 │   │── gbr/
-│   │   └── 202307/
-│   │       ├── data-folder-1/
-│   │       └── ...
+│   │   └── 202311081159/
+│   │       └── 202307/
+│   │           ├── data-folder-1/
+│   │           └── ...
 │   │── ...
 ├── autocomplete/
 │   │── usa/
-│   │   └── 202309/
-│   │       ├── data-folder-1/
-│   │       └── ...
+│   │   └── 202311081159/
+│   │       └── 202309/
+│   │           ├── data-folder-1/
+│   │           └── ...
 │   │── aus/
-│   │   └── 202308/
-│   │       ├── data-folder-1/
-│   │       └── ...
+│   │   └── 202311081159/
+│   │       └── 202308/
+│   │           ├── data-folder-1/
+│   │           └── ...
 │   │── ...
 ├── lookup/
 │   │── usa/
-│   │   └── 202309/
-│   │       ├── data-folder-1/
-│   │       └── ...
+│   │   └── 202311081159/
+│   │       └── 202309/
+│   │           ├── data-folder-1/
+│   │           └── ...
 │   │── fra/
-│   │   └── 202308/
-│   │       ├── data-folder-1/
-│   │       └── ...
+│   │   └── 202311081159/
+│   │       └── 202308/
+│   │           ├── data-folder-1/
+│   │           └── ...
 ```
 
 # Reference Data Installation

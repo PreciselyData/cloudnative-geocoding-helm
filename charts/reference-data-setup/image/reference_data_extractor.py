@@ -228,7 +228,7 @@ def download_spds_to_local(products_list, spd_base_path, country_name):
             urllib.request.urlretrieve(url, file_path)
 
 
-def extract_spds_to_mount_path(country_path_value, extract_path_value, country_name):
+def extract_spds_to_mount_path(country_path_value, extract_path_value, country_name, current_date_folder):
     for f in os.listdir(country_path_value):
         country_spd_path = os.path.join(country_path_value, f)
         try:
@@ -238,6 +238,7 @@ def extract_spds_to_mount_path(country_path_value, extract_path_value, country_n
                     metadata = json.loads(data)
                     extract_path_spd = os.path.join(extract_path_value,
                                                     country_name,
+                                                    current_date_folder,
                                                     metadata['vintage'],
                                                     metadata['qualifier'])
                     os.makedirs(extract_path_spd, exist_ok=True)
@@ -253,6 +254,7 @@ PDX_SECRET = args.pdx_api_secret
 REQUIRED_COUNTRIES = args.countries
 LOCAL_PATH = args.local_path
 COUNTRY_MAPPING = args.data_mapping
+date_folder = str(time.strftime("%Y%m%d%H%M"))
 
 if not COUNTRY_MAPPING:
     COUNTRY_MAPPING = COUNTRY_SPD_MAPPING
@@ -302,9 +304,9 @@ for addressing_type, country_mapping in COUNTRY_MAPPING.items():
                     "or the pdx data is accessible.")
 
             try:
-                extract_spds_to_mount_path(country_path, os.path.join(extract_path, addressing_type), country)
+                extract_spds_to_mount_path(country_path, os.path.join(extract_path, addressing_type), country, date_folder)
             except Exception as ex:
-                raise Exception(f'Exception while extracting spds to local for {country}: {ex}', ex)
+                raise Exception(f'Exception while extracting spds for {country}: {ex}', ex)
 
             try:
                 print(f'Deleting local directories: {country_path}')
@@ -315,7 +317,7 @@ for addressing_type, country_mapping in COUNTRY_MAPPING.items():
                     f"StdOut: {e.stdout}, StdErr: {e.stderr}")
         except Exception as ex:
             print(ex)
-            print(f'Data download and extraction to s3 process is not successful for {country}. '
+            print(f'Data download and extraction process is not successful for {country}. '
                   f'Please run the setup again for {country} by fixing the issues.')
             pass
 
