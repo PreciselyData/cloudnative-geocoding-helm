@@ -37,6 +37,6 @@ The following command downloads the docker images from PDX and uploads it to you
 >
 
 ```console
-python upload_ecr.py --pdx-api-key [pdx-api-key] --pdx-api-secret [pdx-secret] --aws-access-key [aws-access-key] --aws-secret [aws-secret] --aws-region [aws-region]
+python upload_ecr.py --pdx-api-key [pdx-api-key] --pdx-api-secret [pdx-secret] --aws-access-key [aws-access-key] --aws-secret [aws-secret] --aws-region [aws-region] --docker-tag latest
 ```
 [🔗 Return to `Table of Contents` 🔗](../../README.md#components)

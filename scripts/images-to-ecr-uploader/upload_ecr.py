@@ -153,6 +153,10 @@ def get_argument_parser():
     parser.add_argument('--aws-secret-key', dest='aws_secret_key',
                 help='AWS Account secret key',
                 required=False)
+    parser.add_argument('--docker-tag', dest='docker_tag',
+                        help='The image tag version',
+                        default='latest',
+                        required=False)
     return parser.parse_args()
 
 
@@ -189,24 +193,6 @@ def download_spd_to_local(product_url, spd_base_path):
     urllib.request.urlretrieve(product_url, file_path)
     return file_path
 
-def extract_spds_to_mount_path(country_path_value, extract_path_value, country_name, current_date_folder):
-    for f in os.listdir(country_path_value):
-        country_spd_path = os.path.join(country_path_value, f)
-        try:
-            if f.endswith('.spd'):
-                with ZipFile(country_spd_path, "r") as zip_ref:
-                    data = zip_ref.read('metadata.json')
-                    metadata = json.loads(data)
-                    extract_path_spd = os.path.join(extract_path_value,
-                                                    country_name,
-                                                    current_date_folder,
-                                                    metadata['vintage'],
-                                                    metadata['qualifier'])
-                    os.makedirs(extract_path_spd, exist_ok=True)
-                unzip(extract_path_spd, country_spd_path)
-        except Exception as exp:
-            raise exp
-
 
 args = get_argument_parser()
 
@@ -216,6 +202,7 @@ LOCAL_PATH = args.local_path
 AWS_REGION = args.aws_region
 AWS_ACCESS_KEY = args.aws_access_key
 AWS_SECRET_KEY = args.aws_secret_key
+image_tag = args.docker_tag
 date_folder = str(time.strftime("%Y%m%d%H%M"))
 
 if not AWS_REGION:
@@ -292,13 +279,13 @@ try:
                     shell=True, stderr=subprocess.STDOUT, encoding="utf-8"))
 
                 print(subprocess.check_output(
-                    f'docker tag {file_name_withour_ext}:latest {ecr_url}/{file_name_withour_ext}:latest',
+                    f'docker tag {file_name_withour_ext}:latest {ecr_url}/{file_name_withour_ext}:{image_tag}',
                     shell=True, stderr=subprocess.STDOUT, encoding="utf-8"))
                 
                 print(subprocess.check_output(
-                    f'docker push {ecr_url}/{file_name_withour_ext}:latest',
+                    f'docker push {ecr_url}/{file_name_withour_ext}:{image_tag}',
                     shell=True, stderr=subprocess.STDOUT, encoding="utf-8"))
-                images[file_name_withour_ext] = f'{ecr_url}/{file_name_withour_ext}:latest'
+                images[file_name_withour_ext] = f'{ecr_url}/{file_name_withour_ext}:{image_tag}'
 
             except Exception as ex:
                 print(f"Exception: {ex}, Output: {ex.output}, StdOut: {ex.stdout}, StdErr: {ex.stderr}")
