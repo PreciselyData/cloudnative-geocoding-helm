@@ -6,14 +6,13 @@
 replicaCount: 1
 
 ## Configuration for the regional-addressing-service container image.
-## We recommend that you always download the latest version of the regional-addressing-image before running the Helm chart.
 ##
 ## - Please visit the official 'Precisely Data Experience' website to download container images:
 ##   https://data.precisely.com/products
 image:
   repository: regional-addressing-service
   pullPolicy: Always
-  tag: latest
+  tag: 0.3.0
 imagePullSecrets: [ ]
 
 ## This will override the name of the installed regional-addressing deployment.
@@ -137,14 +136,13 @@ global:
   awsRegion: us-east-1
 
   ## Configurations for the addressing-service container image.
-  ## We strongly recommend that you always download the latest version of the addressing-image before running the Helm chart.
   ##
   ## To download container images, please visit the official 'Precisely Data Experience' website:
   ## https://data.precisely.com/products
   addressingImage:
     repository: addressing-service
     pullPolicy: Always
-    tag: latest
+    tag: 0.3.0
 
   ## Configurations related to AWS Elastic File System
   efs:

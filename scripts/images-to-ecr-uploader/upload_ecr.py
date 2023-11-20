@@ -153,10 +153,6 @@ def get_argument_parser():
     parser.add_argument('--aws-secret-key', dest='aws_secret_key',
                 help='AWS Account secret key',
                 required=False)
-    parser.add_argument('--docker-tag', dest='docker_tag',
-                        help='The image tag version',
-                        default='latest',
-                        required=False)
     return parser.parse_args()
 
 
@@ -202,7 +198,7 @@ LOCAL_PATH = args.local_path
 AWS_REGION = args.aws_region
 AWS_ACCESS_KEY = args.aws_access_key
 AWS_SECRET_KEY = args.aws_secret_key
-image_tag = args.docker_tag
+image_tag = '0.3.0'
 date_folder = str(time.strftime("%Y%m%d%H%M"))
 
 if not AWS_REGION:

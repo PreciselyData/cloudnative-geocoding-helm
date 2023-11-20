@@ -3,7 +3,7 @@ dataDownload:
   image:
     repository: reference-data-extractor
     pullPolicy: Always
-    tag: latest
+    tag: 0.3.0
     pullSecrets: [ ]
 
 nameOverride: "reference-data"

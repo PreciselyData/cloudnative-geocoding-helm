@@ -24,7 +24,7 @@ Follow the below steps to create and push the docker image to ECR:
 
 ```shell
 cd ./charts/reference-data-setup/image
-docker build . -t reference-data-extractor:latest
+docker build . -t reference-data-extractor:0.3.0
 ```
 
 ```shell
@@ -32,9 +32,9 @@ aws ecr get-login-password --region us-east-1 | docker login --username AWS --pa
 
 aws ecr create-repository --repository-name reference-data-extractor --image-scanning-configuration scanOnPush=true --region [AWS-REGION]
 
-docker tag reference-data-extractor:latest [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:latest
+docker tag reference-data-extractor:0.3.0 [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:0.3.0
 
-docker push [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:latest
+docker push [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:0.3.0
 ```
 
 ## Step 3: Creating EFS
@@ -70,7 +70,7 @@ provided by this chart:
 | Parameter          | Description                                              | Default                    |
 |--------------------|----------------------------------------------------------|----------------------------|
 | `image.repository` | the reference-data-extractor container image repository  | `reference-data-extractor` |
-| `image.tag`        | the reference-data-extractor container image version tag | `latest`                   |
+| `image.tag`        | the reference-data-extractor container image version tag | `0.3.0`                    |
 
 <hr>
 </details>
