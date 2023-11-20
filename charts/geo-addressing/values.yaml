@@ -6,14 +6,13 @@
 replicaCount: 1
 
 ## Configuration for the regional-addressing-service container image.
-## We recommend that you always download the latest version of the regional-addressing-image before running the Helm chart.
 ##
 ## - Please visit the official 'Precisely Data Experience' website to download container images:
 ##   https://data.precisely.com/products
 image:
   repository: regional-addressing-service
   pullPolicy: Always
-  tag: latest
+  tag: 0.3.0
 imagePullSecrets: [ ]
 
 ## This will override the name of the installed regional-addressing deployment.
@@ -137,14 +136,13 @@ global:
   awsRegion: us-east-1
 
   ## Configurations for the addressing-service container image.
-  ## We strongly recommend that you always download the latest version of the addressing-image before running the Helm chart.
   ##
   ## To download container images, please visit the official 'Precisely Data Experience' website:
   ## https://data.precisely.com/products
   addressingImage:
     repository: addressing-service
     pullPolicy: Always
-    tag: latest
+    tag: 0.3.0
 
   ## Configurations related to AWS Elastic File System
   efs:
@@ -157,22 +155,22 @@ global:
     ##
     ## The base path where the data is present for verify-geocode functionalities.
     ##
-    ## [NOTE]: if your data for verify-geocode is not present in the format `verify-geocode/[country]/[vintage]`, this parameter needs to be overridden.
+    ## [NOTE]: if your data for verify-geocode is not present in the format `verify-geocode/[country]/[timestamp]/[vintage]`, this parameter needs to be overridden.
     addressingBasePath: verify-geocode
     ##
     ## The base path where the data is present for verify-geocode functionality.
     ##
-    ## [NOTE]: if your data for autocomplete is not present in the format `autocomplete/[country]/[vintage]`, this parameter needs to be overridden.
+    ## [NOTE]: if your data for autocomplete is not present in the format `autocomplete/[country]/[timestamp]/[vintage]`, this parameter needs to be overridden.
     autoCompleteBasePath: autocomplete
     ##
     ## The base path where the data is present for lookup functionality.
     ##
-    ## [NOTE]: if your data for lookup is not present in the format lookup/[country]/[vintage], this parameter needs to be overridden.
+    ## [NOTE]: if your data for lookup is not present in the format lookup/[country]/[timestamp]/[vintage], this parameter needs to be overridden.
     lookupBasePath: lookup
     ##
     ## The base path where the data is present for reverse-geocode functionality.
     ##
-    ## [NOTE]: if your data for reverse-geocode is not present in the format verify-geocode/[country]/[vintage], this parameter needs to be overridden.
+    ## [NOTE]: if your data for reverse-geocode is not present in the format verify-geocode/[country]/[timestamp]/[vintage], this parameter needs to be overridden.
     ##
     ## [NOTE]: the data used for reverse-geocode is the exactly same, that's why the default value is set to verify-geocode.
     reverseBasePath: verify-geocode
