@@ -84,10 +84,10 @@ pip install -r requirements.txt
 python upload_ecr.py --pdx-api-key [pdx-api-key] --pdx-api-secret [pdx-secret] --aws-access-key [aws-access-key] --aws-secret [aws-secret] --aws-region [aws-region]
 ```
 
-There are two docker container images which will be pushed to ECR:
+There are two docker container images which will be pushed to ECR with the tag of helm chart version.
 
-1. regional-addressing-service:latest
-2. addressing-service:latest
+1. regional-addressing-service
+2. addressing-service
 
 For more details related to docker images download script, follow the
 instructions [here](../../../scripts/images-to-ecr-uploader/README.md)
@@ -133,6 +133,8 @@ helm install reference-data ./charts/reference-data-setup/ \
 ```
 
 ## Step 6: Installation of Geo-Addressing Helm Chart
+
+> NOTE: For every helm chart version update, make sure you run the [Step 3](#step-3-download-geo-addressing-docker-images) for uploading the docker images with the newest tag.
 
 To install/upgrade the geo-addressing helm chart, use the following command:
 
