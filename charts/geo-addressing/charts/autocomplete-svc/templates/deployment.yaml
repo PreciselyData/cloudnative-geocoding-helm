@@ -61,7 +61,6 @@ spec:
             periodSeconds: 10
           resources:
             {{- (include "common-svc.configuration" (list $top.Values.countryConfigurations . "resources")) | nindent 12 }}
-          {{- end }}
           volumeMounts:
             {{- include "autocomplete-svc.volumeMounts" $top | nindent 12 }}
           env:
