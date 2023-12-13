@@ -12,7 +12,7 @@ replicaCount: 1
 image:
   repository: regional-addressing-service
   pullPolicy: Always
-  tag: 0.3.0
+  tag: 0.4.0
 imagePullSecrets: [ ]
 
 ## This will override the name of the installed regional-addressing deployment.
@@ -142,7 +142,7 @@ global:
   addressingImage:
     repository: addressing-service
     pullPolicy: Always
-    tag: 0.3.0
+    tag: 0.4.0
 
   ## Configurations related to AWS Elastic File System
   efs:

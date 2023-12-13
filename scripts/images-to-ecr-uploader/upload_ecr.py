@@ -198,7 +198,7 @@ LOCAL_PATH = args.local_path
 AWS_REGION = args.aws_region
 AWS_ACCESS_KEY = args.aws_access_key
 AWS_SECRET_KEY = args.aws_secret_key
-image_tag = '0.3.0'
+image_tag = '0.4.0'
 date_folder = str(time.strftime("%Y%m%d%H%M"))
 
 if not AWS_REGION:
