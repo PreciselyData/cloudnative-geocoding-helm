@@ -141,6 +141,12 @@ e.g. `Geocoding NT Street US#United States#All USA#Spectrum Platform Data`
 <br>You can create a map of the reference data to be downloaded and override the `global.dataConfigMap` parameter while
 installing the helm chart as follows:
 
+> NOTE: If you want to download a specific vintage of data always, you can pass the vintage parameter as follows:
+> 
+> [ProductName#Geography#RoasterGranularity#DataFormat#Vintage]
+>
+> e.g. `Geocoding NT Street US#United States#All USA#Spectrum Platform Data#2023.11`
+
 ```shell
 --set "global.dataConfigMap={\"verify-geocode\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"lookup\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"autocomplete\":{\"usa\":[\"Predictive Addressing Points#United States#All USA#Interactive\"],\"aus\":[\"Predictive Addressing Points#Australia#All AUS#Interactive\"]}}"
 ```
