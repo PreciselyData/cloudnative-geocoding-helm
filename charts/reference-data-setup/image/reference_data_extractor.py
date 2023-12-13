@@ -193,7 +193,7 @@ def get_argument_parser():
 
 def get_products(country_spd_mapping, country_name):
     product_list = list()
-    for spd in country_spd_mapping.get(country_name, None):
+    for spd in country_spd_mapping.get(country_name, list()):
         pieces = spd.split('#')
         product_name = pieces[0]
         geography = pieces[1]
@@ -292,8 +292,8 @@ for addressing_type, country_mapping in COUNTRY_MAPPING.items():
                 products = get_products(country_mapping, country)
                 if not len(products):
                     raise Exception(
-                        f"{country}: Either no Deliveries available for provided country or vintage OR validate the parameters."
-                        f"To request access to the particular data, please visit https://data.precisely.com/")
+                        "Either no Deliveries available for provided OR validate the parameters."
+                        " To request access to the particular data, please visit https://data.precisely.com/")
             except Exception as ex:
                 raise Exception(f'Exception while getting download url for {country}: {ex}', ex)
 
