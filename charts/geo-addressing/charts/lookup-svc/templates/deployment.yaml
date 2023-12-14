@@ -6,7 +6,13 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "lookup-svc.fullname" (list $top .) }}
+  {{- if $top.Values.global.manualDataConfig.enabled }}
+  annotations:
+    preicsely.com/config-checksum: {{ $top.Values.global.manualDataConfig.configMapData | toYaml | sha256sum }}
+  {{- end}}
   labels:
+    service: precisely
+    app: {{ include "lookup-svc.fullname" (list $top .) }}
     {{- include "lookup-svc.labels" (list $top .) | nindent 4 }}
 spec:
   {{- if not $top.Values.autoscaling.enabled }}
@@ -14,6 +20,8 @@ spec:
   {{- end }}
   selector:
     matchLabels:
+      service: precisely
+      app: {{ include "lookup-svc.fullname" (list $top .) }}
       {{- include "lookup-svc.selectorLabels" (list $top .) | nindent 6 }}
   template:
     metadata:
@@ -22,6 +30,8 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
+        service: precisely
+        app: {{ include "lookup-svc.fullname" (list $top .) }}
         {{- include "lookup-svc.selectorLabels" (list $top .) | nindent 8 }}
     spec:
       {{- with $top.Values.imagePullSecrets }}
@@ -67,7 +77,7 @@ spec:
             - name: DATA_PATH
               valueFrom:
                 configMapKeyRef:
-                  name: {{ $top.Values.dataVintage.configMap.name }}
+                  name: {{ include "addressing-data-config.name" $top }}
                   key: {{ (printf "lookup.%s.vintage" .) }}
             - name: ENABLED_ENDPOINTS
               value: lookup
@@ -77,10 +87,15 @@ spec:
               value: {{ include "common-svc.configuration" (list $top.Values.countryConfigurations . "blockDispatcherPoolSize") | quote }}
             - name: RESPONSE_DISPATCHER_MIN_THREADS
               value: {{ include "common-svc.configuration" (list $top.Values.countryConfigurations . "responseDispatcherMinThreads") | quote }}
+            {{- if $top.Values.global.otelExporterEndpoint }}
             - name: JAVA_TOOL_OPTIONS
               value: -Xverify:none -XX:TieredStopAtLevel=1 -javaagent:/opt/addressing-service/opentelemetry-javaagent-1.27.0.jar
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: {{ $top.Values.global.otelExporterEndpoint }}
+            {{- else }}
+            - name: JAVA_TOOL_OPTIONS
+              value: -Xverify:none -XX:TieredStopAtLevel=1
+            {{- end }}
       {{- with ((get $top.Values.countryConfigurations .) | default ($top.Values.global)).nodeSelector }}
       nodeSelector:
         {{- include "common-svc.global" (list $top.Values . "nodeSelector") | nindent 8 }}

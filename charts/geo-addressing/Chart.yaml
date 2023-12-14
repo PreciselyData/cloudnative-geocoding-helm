@@ -9,6 +9,7 @@ dependencies:
   - name: addressing-hook
     repository: file://charts/addressing-hook
     version: "0.4.0"
+    condition: addressing-hook.enabled
   - name: addressing-svc
     repository: file://charts/addressing-svc
     version: "0.4.0"

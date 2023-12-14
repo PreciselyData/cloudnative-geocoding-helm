@@ -134,3 +134,15 @@ Gets the global config from the provided country
 {{- (get (get $dictionary "global") $config) | toYaml }}
 {{- end }}
 {{- end }}
+
+
+{{/*
+Addressing data config map name
+*/}}
+{{- define "addressing-data-config.name" -}}
+{{- if .Values.global.manualDataConfig.enabled }}
+{{- printf "%s-%s" .Values.global.manualDataConfig.nameOverride .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s" "addressing-data-mnt-config" }}
+{{- end }}
+{{- end }}
