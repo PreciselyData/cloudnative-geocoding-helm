@@ -87,6 +87,17 @@ provided by this chart:
 | `global.lookup-svc.countryConfigurations.*`       | the country-specific configurations like resource requests, nodeSelector and threadPoolSize                                                                                                                                        | `<see values.yaml>`     |
 | `global.reverse-svc.enabled`                      | the flag to indicate whether `reverse-geocode` functionality is enabled or not                                                                                                                                                     | `false`                 |
 | `global.reverse-svc.countryConfigurations.*`      | the country-specific configurations like resource requests, nodeSelector and threadPoolSize                                                                                                                                        | `<see values.yaml>`     |
+| `global.manualDataConfig.*`                       | the config to enable the manual configuration for country-specific vintage data config-map. `addressing-hook.enabled` should be set to false, else `global.manualDataConfig` will be given higher precedence.                      | `false`                 |
+
+<hr>
+</details>
+
+<details>
+<summary><code>addressing-hook.*</code></summary>
+
+| Parameter                 | Description                                                                                                                                                             | Default |
+|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| `addressing-hook.enabled` | flag to enable or disable the hook jobs for identifying the latest vintage. If you want to disable the hook, you should provide `global.manualDataConfigs` information. | `true`  |
 
 <hr>
 </details>

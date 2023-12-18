@@ -150,6 +150,9 @@ global:
   ## Configuration for manually configuring the data mount path for addressing-service
   ## When doing the manual configuration for data mount path, disable the data-vintage
   ## job by setting addressing-hook.enabled=false
+  ##
+  ## This configuration will be useful if you want to mount a specific data folder for addressing.
+  ## Please update the configMapData parameters as required.
   manualDataConfig:
     enabled: false
     nameOverride: addressing-data-mnl-config
@@ -204,6 +207,8 @@ global:
   ## Example endpoind http://jaeger-collector.default.svc.cluster.local:4317
   otelExporterEndpoint: ""
 
+## addressing-hook is used to identify the latest vintage of reference data to mount to the addressing containers.
+## In case, if you want to provide a specific reference data vintage, use the `global.manualDataConfig` parameters and disable addressing-hook.
 addressing-hook:
 ## Config for enabling or disabling `data-vintage` job hook.
   enabled: true
