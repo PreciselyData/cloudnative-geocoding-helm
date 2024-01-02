@@ -193,15 +193,20 @@ def get_argument_parser():
 
 def get_products(country_spd_mapping, country_name):
     product_list = list()
-    for spd in country_spd_mapping.get(country_name, None):
+    for spd in country_spd_mapping.get(country_name, list()):
         pieces = spd.split('#')
         product_name = pieces[0]
         geography = pieces[1]
         roster_gran = pieces[2]
         data_format = pieces[3]
+        byLatest = True
+        vintage = None
+        if len(pieces) > 4:
+            byLatest = False
+            vintage = pieces[4]
         try:
             search_results = client.get_deliveries(product_name, geography, roster_gran, 1, None, None, data_format,
-                                                   latest=True)
+                                                   latest=byLatest)
             if 'errors' in search_results:
                 raise Exception(f'An error occurred getting product information: {search_results}')
 
@@ -210,7 +215,8 @@ def get_products(country_spd_mapping, country_name):
                     raise Exception(f'Deliveries are not available for the product: {product_name}'
                                     f'. Response from PDX: {search_results}')
                 for delivery_info in search_results['deliveries']:
-                    product_list.append((product_name, delivery_info['downloadUrl']))
+                    if vintage == None or vintage == delivery_info['vintage']:
+                        product_list.append((product_name, delivery_info['downloadUrl']))
             except Exception as exp:
                 raise exp
 
@@ -286,8 +292,8 @@ for addressing_type, country_mapping in COUNTRY_MAPPING.items():
                 products = get_products(country_mapping, country)
                 if not len(products):
                     raise Exception(
-                        "No Deliveries available for provided country. "
-                        "To request access to the particular data, please visit https://data.precisely.com/")
+                        "Either no Deliveries available for provided OR validate the parameters."
+                        " To request access to the particular data, please visit https://data.precisely.com/")
             except Exception as ex:
                 raise Exception(f'Exception while getting download url for {country}: {ex}', ex)
 

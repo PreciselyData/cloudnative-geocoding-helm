@@ -12,7 +12,7 @@ replicaCount: 1
 image:
   repository: regional-addressing-service
   pullPolicy: Always
-  tag: 0.3.0
+  tag: 0.4.0
 imagePullSecrets: [ ]
 
 ## This will override the name of the installed regional-addressing deployment.
@@ -27,6 +27,9 @@ serviceAccount:
 
 ## podAnnotations for regional-addressing deployments
 podAnnotations: { }
+
+podLabels: {}
+
 ## The security context for the regional-addressing Pods
 ## - spec for PodSecurityContext:
 ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core
@@ -142,7 +145,23 @@ global:
   addressingImage:
     repository: addressing-service
     pullPolicy: Always
-    tag: 0.3.0
+    tag: 0.4.0
+
+  ## Configuration for manually configuring the data mount path for addressing-service
+  ## When doing the manual configuration for data mount path, disable the data-vintage
+  ## job by setting addressing-hook.enabled=false
+  ##
+  ## This configuration will be useful if you want to mount a specific data folder for addressing.
+  ## Please update the configMapData parameters as required.
+  manualDataConfig:
+    enabled: false
+    nameOverride: addressing-data-mnl-config
+    configMapData:
+      verify-geocode.usa.vintage: /mnt/data/geoaddressing-data/verify-geocode/usa/202312131538
+      reverse.usa.vintage: /mnt/data/geoaddressing-data/verify-geocode/usa/202312131538
+      lookup.usa.vintage: /mnt/data/geoaddressing-data/lookup/usa/202312131538
+      autocomplete.usa.vintage: /mnt/data/geoaddressing-data/autocomplete/usa/202312131538
+      
 
   ## Configurations related to AWS Elastic File System
   efs:
@@ -185,8 +204,16 @@ global:
   ## You can replace the value, if jaeger is not being used as trace collector.
   ## For more information, refer to https://opentelemetry.io/docs/concepts/sdk-configuration/otlp-exporter-configuration/
   ## For information related to Jaeger installation, refer to https://github.com/jaegertracing/helm-charts/tree/main/charts/jaeger
-  otelExporterEndpoint: http://jaeger-collector.default.svc.cluster.local:4317
+  ## Example endpoind http://jaeger-collector.default.svc.cluster.local:4317
+  otelExporterEndpoint: ""
 
+## addressing-hook is used to identify the latest vintage of reference data to mount to the addressing containers.
+## In case, if you want to provide a specific reference data vintage, use the `global.manualDataConfig` parameters and disable addressing-hook.
+addressing-hook:
+## Config for enabling or disabling `data-vintage` job hook.
+  enabled: true
+
+  
 ###################################
 ## CONFIG | Addressing Functionalities
 ###################################

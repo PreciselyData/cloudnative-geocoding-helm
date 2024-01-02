@@ -1,3 +1,5 @@
+enabled: ~
+
 dataVintage:
   image:
     repository: bitnami/kubectl

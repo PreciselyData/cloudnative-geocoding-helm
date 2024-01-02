@@ -10,6 +10,8 @@ spec:
   {{- end }}
   selector:
     matchLabels:
+      service: precisely
+      app: {{ include "regional-addressing.fullname" . }}
       {{- include "regional-addressing.selectorLabels" . | nindent 6 }}
   template:
     metadata:
@@ -18,7 +20,12 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
+        service: precisely
+        app: {{ include "regional-addressing.fullname" . }}
         {{- include "regional-addressing.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -88,8 +95,10 @@ spec:
               value: "false"
             - name: REF_DATA_API_KEY
               value: helmRefDataKey
+            {{- if .Values.global.otelExporterEndpoint }}
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: {{ .Values.global.otelExporterEndpoint }}
+            {{- end }}
       {{- with .Values.global.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

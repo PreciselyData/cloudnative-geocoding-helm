@@ -48,7 +48,7 @@ provided by this chart:
 | Parameter          | Description                                         | Default                       |
 |--------------------|-----------------------------------------------------|-------------------------------|
 | `image.repository` | the regional-addressing container image repository  | `regional-addressing-service` |
-| `image.tag`        | the regional-addressing container image version tag | `0.3.0`                       |
+| `image.tag`        | the regional-addressing container image version tag | `0.4.0`                       |
 
 <hr>
 </details>
@@ -73,7 +73,7 @@ provided by this chart:
 | `global.countries`                                | this parameter enables the provided country for an addressing functionality. A comma separated value can be provided to enable a particular set of countries from: `usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world` | `{usa,gbr,aus,nzl,can}` |
 | `global.awsRegion`                                | the region for where elastic file system is present.                                                                                                                                                                               | `us-east-1`             |
 | `global.addressingImage.repository`               | the addressing-service container image repository                                                                                                                                                                                  | `addressing-service`    |
-| `global.addressingImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `0.3.0`                 |
+| `global.addressingImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `0.4.0`                 |
 | `global.efs.fileSystemId`                         | the fileSystemId of the elastic file system (e.g. fs-0d49e756a)                                                                                                                                                                    | `fileSystemId`          |
 | `global.efs.addressingBasePath`                   | the base path of the folder where verify-geocode data is present                                                                                                                                                                   | `verify-geocode`        |
 | `global.efs.autoCompleteBasePath`                 | the base path of the folder where autocomplete data is present                                                                                                                                                                     | `autocomplete`          |
@@ -87,6 +87,17 @@ provided by this chart:
 | `global.lookup-svc.countryConfigurations.*`       | the country-specific configurations like resource requests, nodeSelector and threadPoolSize                                                                                                                                        | `<see values.yaml>`     |
 | `global.reverse-svc.enabled`                      | the flag to indicate whether `reverse-geocode` functionality is enabled or not                                                                                                                                                     | `false`                 |
 | `global.reverse-svc.countryConfigurations.*`      | the country-specific configurations like resource requests, nodeSelector and threadPoolSize                                                                                                                                        | `<see values.yaml>`     |
+| `global.manualDataConfig.*`                       | the config to enable the manual configuration for country-specific vintage data config-map. `addressing-hook.enabled` should be set to false, else `global.manualDataConfig` will be given higher precedence.                      | `false`                 |
+
+<hr>
+</details>
+
+<details>
+<summary><code>addressing-hook.*</code></summary>
+
+| Parameter                 | Description                                                                                                                                                             | Default |
+|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| `addressing-hook.enabled` | flag to enable or disable the hook jobs for identifying the latest vintage. If you want to disable the hook, you should provide `global.manualDataConfigs` information. | `true`  |
 
 <hr>
 </details>

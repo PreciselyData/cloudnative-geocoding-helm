@@ -38,7 +38,3 @@ autoscaling:
 
 tolerations: [ ]
 affinity: { }
-
-dataVintage:
-  configMap:
-    name: addressing-data-mnt-config

@@ -162,7 +162,14 @@ reverse-geocode you have to set the parameters in helm command as follows.
 --set "lookup-svc.enabled=true"
 --set "reverse-svc.enabled=true"
 ```
-
+> NOTE: By default, the geo-addressing helm chart runs a hook job, which identifies the latest reference-data vintage mount path.
+> 
+> To override this behaviour, you can disable the addressing-hook by `addressing-hook.enabled` and provide manual reference data configuration using `global.manualDataConfig`.
+> 
+> Refer [helm values](../../../charts/geo-addressing/README.md#helm-values) for the parameters related to `global.manualDataConfig.*` and `addressing-hook.*`.
+> 
+> Also, for more information, refer to the comments in [values.yaml](../../../charts/geo-addressing/values.yaml)
+> 
 #### Mandatory Parameters
 
 * ``global.awsRegion``: AWS Region

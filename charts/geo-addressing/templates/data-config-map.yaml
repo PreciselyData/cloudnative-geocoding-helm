@@ -1,0 +1,8 @@
+{{- if .Values.global.manualDataConfig.enabled }}
+apiVersion: v1
+kind: ConfigMap
+data:
+  {{- .Values.global.manualDataConfig.configMapData | toYaml | nindent 2 }}
+metadata:
+  name: {{ printf "%s-%s" .Values.global.manualDataConfig.nameOverride .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- end }}
