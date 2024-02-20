@@ -90,7 +90,7 @@ Following is the helm version chart against geo-addressing PDX docker image vers
 | Docker Image PDX Version & GA-SDK Version     | Helm Chart Version |
 |-----------------------------------------------|--------------------|
 | `999.638.718/2023.9/Sept 12,2023` & `5.1.488` | `0.1.0` - `0.4.0`️ |
-| `999.638.718/2023.9/Feb 20,2024` & `5.1.488` | `0.5.0`️ |
+| `118.301.3391/2024.2/Feb 20,2024` & `5.1.644` | `0.5.0`️ |
 
 > NOTE: The docker images pushed to the image repository should be tagged with the current helm chart version. Refer [Downloading Geo-Addressing Docker Images](docs/guides/eks/QuickStartEKS.md#step-3-download-geo-addressing-docker-images) for more information.
  
