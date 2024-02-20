@@ -128,7 +128,7 @@ Refer to [this file](templates/deployment.yaml) for overriding the environment v
 | `*SUPPORTED_COUNTRIES_AUTOCOMPLETE`    | The countries that are supported for autocomplete.                                                                                                                                                                                                                                                 | `<referred from global.countries>`                                             |
 | `*SUPPORTED_COUNTRIES_REVERSE_GEOCODE` | The regions that are supported for lookup.                                                                                                                                                                                                                                                         |                                                                                |
 | `*AUTH_ENABLED`                        | Flag to indicate whether authorization is enabled for the endpoints or not.                                                                                                                                                                                                                        | `false`                                                                        |
-| `REF_DATA_API_KEY`                     | The key for which reference data endpoint is configured.                                                                                                                                                                                                                                           | `helmRefDataKey`                                                               |
+| `*IS_HELM_SOLUTION`                     | Flag to indicate if on-premise helm solution is deployed.                                                                                                                                                                                                                                           | `true`                                                               |
 <hr>
 </details>
 
@@ -140,12 +140,15 @@ Refer to the [deployment.yml](charts/addressing-svc/templates/deployment.yaml) o
 | Parameter                         | Description                                                                                                                                              | Default                                                                                                       |
 |-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
 | `*DATA_PATH`                      | Default path of the installed reference data. Please refer to the recommended path for the installation of data.                                         | `<referenced from configMap>`                                                                                 |
-| `*ENABLED_ENDPOINTS`              | Value of the endpoints enabled. This is different for different sub-chart                                                                                | `<depends on the sub-chart e.g. verify,geocode/lookup/autocomplete>`                                          |
 | `*DATA_REGION`                    | The value of the referenced country or region.                                                                                                           | `<depends on the provided country e.g. usa/aus/can>`                                                          |
 | `BLOCK_DISPATCHER_POOL_SIZE`      | The no. of threads to control the parallel interactions with the internal SDK. This should vary per country, please follow country-wise recommendations. | `4`                                                                                                           |
 | `RESPONSE_DISPATCHER_MIN_THREADS` | The no. of non-blocking I/O threads. This should vary per country, please follow country-wise recommendations.                                           | `4`                                                                                                           |
-| `*JAVA_TOOL_OPTIONS`              | The default Java tool opts for addressing service.                                                                                                       | `-Xverify:none -XX:TieredStopAtLevel=1 -javaagent:/opt/addressing-service/opentelemetry-javaagent-1.27.0.jar` |
 | `OTEL_EXPORTER_OTLP_ENDPOINT`     | If tracing is enabled, this is the endpoint for tracer host.                                                                                             | `http://jaeger-collector.default.svc.cluster.local:4317`                                                      |
+| `*AUTH_ENABLED`                        | Flag to indicate whether authorization is enabled for the endpoints or not.                                                                                                                                                                                                                        | `false`                                                                        |
+| `*GEOCODE_VERIFY_ENABLED`                        | Flag to enable geocode and verify endpoints.                                                                                                                                                                                                                        | `true for addressing service`                                                                        |
+| `*AUTOCOMPLETE_ENABLED`                        | Flag to enable autocomplete endpoint.                                                                                                                                                                                                                        | `true for autocomplete service`                                                                        |
+| `*LOOKUP_ENABLED`                        | Flag to enable lookup endpoint.                                                                                                                                                                                                                        | `true for lookup service`                                                                        |
+| `*REVERSEGEOCODE_ENABLED`                        | Flag to enable reverse-geocode endpoint.                                                                                                                                                                                                                        | `true for reverse-geocode service`                                                                        |
 <hr>
 </details>
 
@@ -327,6 +330,23 @@ curl --location 'https://[EXTERNAL-URL]/li/v1/oas/autocomplete' --header 'Conten
     "country": "USA"
   }
 }'
+```
+
+
+### `/v1/addressing/reference-data/info`:
+
+API to get details of reference data deployed for a country and api
+
+Sample Request:
+
+```
+curl --location 'http://[EXTERNAL-URL]/v1/addressing/reference-data/info?country=<country-name>&api=<api>'
+```
+
+Example:
+
+```
+curl --location 'http://[EXTERNAL-URL]/v1/addressing/reference-data/info?country=usa&api=geocode'
 ```
 
 [🔗 Return to `Table of Contents` 🔗](../../README.md#components)

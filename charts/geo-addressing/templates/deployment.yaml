@@ -93,11 +93,14 @@ spec:
               value: {{ join "," .Values.global.countries }}
             - name: AUTH_ENABLED
               value: "false"
-            - name: REF_DATA_API_KEY
-              value: helmRefDataKey
+            - name: IS_HELM_SOLUTION
+              value: "true"
             {{- if .Values.global.otelExporterEndpoint }}
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: {{ .Values.global.otelExporterEndpoint }}
+            {{- else }}
+            - name: OTEL_TRACES_EXPORTER
+              value: none
             {{- end }}
       {{- with .Values.global.nodeSelector }}
       nodeSelector:
