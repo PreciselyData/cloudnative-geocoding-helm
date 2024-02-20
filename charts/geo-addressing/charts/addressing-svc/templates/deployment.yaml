@@ -79,8 +79,8 @@ spec:
                 configMapKeyRef:
                   name: {{ include "addressing-data-config.name" $top }}
                   key: {{ (printf "verify-geocode.%s.vintage" .) }}
-            - name: ENABLED_ENDPOINTS
-              value: verify,geocode
+            - name: GEOCODE_VERIFY_ENABLED
+              value: "true"
             - name: DATA_REGION
               value: {{ . | upper }}
             - name: BLOCK_DISPATCHER_POOL_SIZE
@@ -88,15 +88,14 @@ spec:
             - name: RESPONSE_DISPATCHER_MIN_THREADS
               value: {{ include "common-svc.configuration" (list $top.Values.countryConfigurations . "responseDispatcherMinThreads") | quote }}
             {{- if $top.Values.global.otelExporterEndpoint }}
-            - name: JAVA_TOOL_OPTIONS
-              value: -Xverify:none -XX:TieredStopAtLevel=1 -javaagent:/opt/addressing-service/opentelemetry-javaagent-1.27.0.jar
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: {{ $top.Values.global.otelExporterEndpoint }}
             {{- else }}
-            - name: JAVA_TOOL_OPTIONS
-              value: -Xverify:none -XX:TieredStopAtLevel=1
+            - name: OTEL_TRACES_EXPORTER
+              value: none
             {{- end }}
-
+            - name: AUTH_ENABLED
+              value: "false"
       nodeSelector:
         {{- include "common-svc.global" (list $top.Values . "nodeSelector") | nindent 8 }}
       {{- with $top.Values.affinity }}

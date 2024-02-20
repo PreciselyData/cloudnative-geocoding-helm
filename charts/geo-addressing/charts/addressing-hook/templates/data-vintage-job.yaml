@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "{{ .Release.Name }}-data-vintage"
+  name: "{{ .Release.Name }}-data-vintage-{{ (.Release.Revision | int) }}"
   labels:
     {{- include "addressing-hook.labels" . | nindent 4 }}
   annotations:
@@ -11,10 +11,11 @@ metadata:
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     "helm.sh/resource-policy": delete
 spec:
+  ttlSecondsAfterFinished: 100
   backoffLimit: 0
   template:
     metadata:
-      name: "{{ .Release.Name }}-data-vintage"
+      name: "{{ .Release.Name }}-data-vintage-{{ (.Release.Revision | int) }}"
       labels:
         {{- include "addressing-hook.labels" . | nindent 8 }}
     spec:

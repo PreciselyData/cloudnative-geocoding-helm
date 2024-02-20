@@ -15,71 +15,31 @@ Following are the metrics exposed by Regional-Addressing Application:
 > click the `▶` symbol to expand
 
 <details>
-<summary><code>jvm_*</code></summary>
 
-| Metric Name                          | Type    | Description                                                                                            |
-|--------------------------------------|---------|--------------------------------------------------------------------------------------------------------|
-| `jvm_threads_daemon_threads`         | gauge   | The current number of live daemon threads in the Java Virtual Machine.                                 |
-| `jvm_classes_loaded_classes`         | gauge   | The number of classes that are currently loaded in the Java Virtual Machine.                           |
-| `jvm_threads_peak_threads`           | gauge   | The peak live thread count since the Java Virtual Machine started or the peak was reset.               |
-| `jvm_classes_unloaded_classes_total` | counter | The total number of classes unloaded since the Java Virtual Machine started execution.                 |
-| `jvm_threads_live_threads`           | gauge   | The current number of live threads, including both daemon and non-daemon threads.                      |
-
-<hr>
-</details>
-
-<details>
-<summary><code>executor_*</code></summary>
-
-|  Metric Name                         | Type    | Description                                                                                            |
-|--------------------------------------|---------|--------------------------------------------------------------------------------------------------------|
-| `executor_completed_tasks_total`     | counter | The total number of tasks completed in different thread pools.                                         |
-| `executor_seconds`                   | summary | Summary metrics for task execution time in different thread pools, including counts and sums.          |
-| `executor_seconds_max`               | gauge   | Maximum task execution time in different thread pools.                                                 |
-| `executor_active_threads`            | gauge   | The approximate number of threads actively executing tasks in different thread pools.                  |
-| `executor_pool_max_threads`          | gauge   | The maximum allowed number of threads in different thread pools (e.g., "io" and "scheduled").          |
-| `executor_queued_tasks`              | gauge   | The number of tasks currently queued for execution in different thread pools.                          |
-| `executor_pool_size_threads`         | gauge   | The current number of threads in different thread pools.                                               |
-| `executor_pool_core_threads`         | gauge   | The core number of threads in different thread pools.                                                  |
-| `executor_queue_remaining_tasks`     | gauge   | The number of tasks that can be added to the queue without blocking in different thread pools.         |
-
-<hr>
-</details>
-
-<details>
-<summary><code>process_*</code></summary>
-
-|  Metric Name                         | Type    | Description                                                                                            |
-|--------------------------------------|---------|--------------------------------------------------------------------------------------------------------|
-| `process_files_max_files`            | gauge   | The maximum file descriptor count.                                                                     |
-| `process_files_open_files`           | gauge   | The open file descriptor count.                                                                        |
-| `process_uptime_seconds`             | gauge   | The uptime of the Java Virtual Machine process.                                                        |
-| `process_cpu_usage`                  | gauge   | The "recent cpu usage" of the Java Virtual Machine process.                                            |
-| `process_start_time_seconds`         | gauge   | The start time of the Java Virtual Machine process since the Unix epoch.                               |
-
-<hr>
-</details>
-
-<details>
-<summary><code>system_*</code></summary>
-
-|  Metric Name                         | Type    | Description                                                                                            |
-|--------------------------------------|---------|--------------------------------------------------------------------------------------------------------|
-| `system_cpu_count`                   | gauge   | The number of processors available to the Java Virtual Machine.                                        |
-| `system_cpu_usage`                   | gauge   | The "recent cpu usage" of the system the application is running in.                                    |
-| `system_load_average_1m`             | gauge   | The 1-minute load average of the system.                                                               |
-
-<hr>
-</details>
-
-<details>
-<summary><code>http_*</code></summary>
-
-|  Metric Name                         | Type    | Description                                                                                            |
-|--------------------------------------|---------|--------------------------------------------------------------------------------------------------------|
-| `http_server_requests_seconds`       | summary | Metrics related to HTTP server requests, including counts, sums, and max response times.               |
-| `http_client_requests_seconds`       | summary | Summary metrics for HTTP client requests, including counts and sums.                                   |
-| `http_client_requests_seconds_max`   | gauge   | Maximum execution time for HTTP client requests.                                                       |
+| Metric Name                      | Type    | Description                                                                                      |
+|----------------------------------|---------|--------------------------------------------------------------------------------------------------|
+| executor.active                  | Counter | Number of active tasks in the executor.                                                          |
+| executor.completed               | Counter | Number of completed tasks in the executor.                                                       |
+| executor.pool.core               | Gauge   | Core size of the executor's thread pool.                                                         |
+| executor.pool.max                | Gauge   | Maximum size of the executor's thread pool.                                                      |
+| executor.pool.size               | Gauge   | Current size of the executor's thread pool.                                                      |
+| executor.queue.remaining         | Gauge   | Remaining capacity of the executor's task queue.                                                  |
+| executor.queued                  | Counter | Number of queued tasks in the executor.                                                          |
+| http.server.requests             | Counter | Number of HTTP requests received by the server.                                                   |
+| jvm.classes.loaded               | Gauge   | Number of classes loaded by the JVM.                                                             |
+| jvm.classes.unloaded             | Gauge   | Number of classes unloaded by the JVM.                                                           |
+| jvm.threads.daemon               | Gauge   | Number of daemon threads in the JVM.                                                             |
+| jvm.threads.live                 | Gauge   | Number of live threads in the JVM.                                                               |
+| jvm.threads.peak                 | Gauge   | Peak number of threads in the JVM.                                                              |
+| logback.events                   | Gauge   | Number of logback events.                                                                        |
+| process.cpu.usage                | Gauge   | CPU usage of the process.                                                                        |
+| process.files.max                | Gauge   | Maximum number of open files allowed for the process.                                            |
+| process.files.open               | Gauge   | Number of open files for the process.                                                            |
+| process.start.time               | Gauge   | Start time of the process.                                                                       |
+| process.uptime                   | Gauge   | Uptime of the process.                                                                           |
+| system.cpu.count                 | Gauge   | Number of CPU cores in the system.                                                               |
+| system.cpu.usage                 | Gauge   | Overall CPU usage of the system.                                                                 |
+| system.load.average.1m           | Gauge   | Load average of the system over the last minute.                                                 |
 
 <hr>
 </details>
@@ -90,70 +50,43 @@ Following are the metrics exposed by country-based addressing service:
 > click the `▶` symbol to expand
 
 <details>
-<summary><code>jvm_*</code></summary>
 
-
-| Metric Name                                | Type      | Description                                                                                |
-|--------------------------------------------|-----------|--------------------------------------------------------------------------------------------|
-| jvm_memory_objects_pending_finalization    | gauge     | Number of objects waiting in the finalizer queue.                                          |
-| jvm_memory_bytes_used                      | gauge     | Used bytes of a given JVM memory area (heap and non-heap).                                 |
-| jvm_memory_bytes_committed                 | gauge     | Committed bytes of a given JVM memory area.                                                |
-| jvm_memory_bytes_max                       | gauge     | Max bytes of a given JVM memory area.                                                      |
-| jvm_memory_bytes_init                      | gauge     | Initial bytes of a given JVM memory area.                                                  |
-| jvm_memory_pool_bytes_used                 | gauge     | Used bytes of a given JVM memory pool.                                                     |
-| jvm_memory_pool_bytes_committed            | gauge     | Committed bytes of a given JVM memory pool.                                                |
-| jvm_memory_pool_bytes_max                  | gauge     | Max bytes of a given JVM memory pool.                                                      |
-| jvm_memory_pool_bytes_init                 | gauge     | Initial bytes of a given JVM memory pool.                                                  |
-| jvm_memory_pool_collection_used_bytes      | gauge     | Used bytes after the last collection of a given JVM memory pool.                           |
-| jvm_memory_pool_collection_committed_bytes | gauge     | Committed bytes after the last collection of a given JVM memory pool.                      |
-| jvm_memory_pool_collection_max_bytes       | gauge     | Max bytes after the last collection of a given JVM memory pool.                            |
-| jvm_memory_pool_collection_init_bytes      | gauge     | Initial bytes after the last collection of a given JVM memory pool.                        |
-| jvm_threads_current                        | gauge     | Current thread count of the JVM.                                                           |
-| jvm_threads_daemon                         | gauge     | Daemon thread count of the JVM.                                                            |
-| jvm_threads_peak                           | gauge     | Peak thread count of the JVM.                                                              |
-| jvm_threads_started_total                  | counter   | Total number of threads started since JVM startup.                                         |
-| jvm_threads_deadlocked                     | gauge     | Cycles of JVM-threads that are in deadlock.                                                |
-| jvm_threads_deadlocked_monitor             | gauge     | Cycles of JVM-threads that are in deadlock waiting to acquire object monitors.             |
-| jvm_threads_state                          | gauge     | Current count of threads by state.                                                         |
-| jvm_memory_pool_allocated_bytes_total      | counter   | Total bytes allocated in a given JVM memory pool. Only updated after GC, not continuously. |
-| jvm_info                                   | gauge     | VM version info.                                                                           |
-| jvm_buffer_pool_used_bytes                 | gauge     | Used bytes of a given JVM buffer pool.                                                     |
-| jvm_buffer_pool_capacity_bytes             | gauge     | Bytes capacity of a given JVM buffer pool.                                                 |
-| jvm_buffer_pool_used_buffers               | gauge     | Used buffers of a given JVM buffer pool.                                                   |
-| jvm_classes_loaded                         | gauge     | Number of classes that are currently loaded in the JVM.                                    |
-| jvm_classes_loaded_total                   | counter   | Total number of classes that have been loaded since the JVM has started execution.         |
-| jvm_classes_unloaded_total                 | counter   | Total number of classes that have been unloaded since the JVM has started execution.       |
-| jvm_gc_collection_seconds                  | summary   | Time spent in a given JVM garbage collector in seconds.                                    |
-
-<hr>
-</details>
-
-
-<details>
-<summary><code>akka_http_*</code></summary>
-
-| Metric Name                                | Type      | Description                                                                                |
-|--------------------------------------------|-----------|--------------------------------------------------------------------------------------------|
-| akka_http_connections_total                | counter   | Total TCP connections.                                                                     |
-| akka_http_requests_total                   | counter   | Total HTTP requests.                                                                       |
-| akka_http_responses_duration_seconds       | histogram | HTTP response duration.                                                                    |
-| akka_http_requests_size_bytes              | summary   | HTTP request size.                                                                         |
-| akka_http_connections_active               | gauge     | Active TCP connections.                                                                    |
-
-<hr>
-</details>
-
-<details>
-<summary><code>process_*</code></summary>
-
-| Metric Name                                | Type      | Description                                                                                |
-|--------------------------------------------|-----------|--------------------------------------------------------------------------------------------|
-| process_cpu_seconds_total                  | counter   | Total user and system CPU time spent in seconds.                                           |
-| process_start_time_seconds                 | gauge     | Start time of the process since Unix epoch in seconds.                                     |
-| process_open_fds                           | gauge     | Number of open file descriptors.                                                           |
-| process_max_fds                            | gauge     | Maximum number of open file descriptors.                                                   |
-| process_virtual_memory_bytes               | gauge     | Virtual memory size in bytes.                                                              |
-| process_resident_memory_bytes              | gauge     | Resident memory size in bytes.                                                             |
+| Metric Name                      | Type    | Description                                                                                      |
+|----------------------------------|---------|--------------------------------------------------------------------------------------------------|
+| executor.active                  | Counter | Number of active tasks in the executor.                                                          |
+| executor.completed               | Counter | Number of completed tasks in the executor.                                                       |
+| executor.pool.core               | Gauge   | Core size of the executor's thread pool.                                                         |
+| executor.pool.max                | Gauge   | Maximum size of the executor's thread pool.                                                      |
+| executor.pool.size               | Gauge   | Current size of the executor's thread pool.                                                      |
+| executor.queue.remaining         | Gauge   | Remaining capacity of the executor's task queue.                                                  |
+| executor.queued                  | Counter | Number of queued tasks in the executor.                                                          |
+| http.server.requests             | Counter | Number of HTTP requests received by the server.                                                   |
+| jvm.buffer.count                 | Gauge   | Number of buffers used by the JVM.                                                               |
+| jvm.buffer.memory.used           | Gauge   | Memory used by buffers in the JVM.                                                               |
+| jvm.buffer.total.capacity        | Gauge   | Total capacity of buffers in the JVM.                                                            |
+| jvm.classes.loaded               | Gauge   | Number of classes loaded by the JVM.                                                             |
+| jvm.classes.unloaded             | Gauge   | Number of classes unloaded by the JVM.                                                           |
+| jvm.gc.live.data.size            | Gauge   | Size of live data in the garbage collector.                                                      |
+| jvm.gc.max.data.size             | Gauge   | Maximum size of data in the garbage collector.                                                   |
+| jvm.gc.memory.allocated          | Gauge   | Memory allocated by the garbage collector.                                                       |
+| jvm.gc.memory.promoted           | Gauge   | Memory promoted by the garbage collector.                                                        |
+| jvm.gc.pause                     | Counter | Garbage collector pause time.                                                                    |
+| jvm.memory.committed             | Gauge   | Memory committed by the JVM.                                                                    |
+| jvm.memory.max                   | Gauge   | Maximum memory available to the JVM.                                                             |
+| jvm.memory.used                  | Gauge   | Memory used by the JVM.                                                                         |
+| jvm.threads.daemon               | Gauge   | Number of daemon threads in the JVM.                                                             |
+| jvm.threads.live                 | Gauge   | Number of live threads in the JVM.                                                               |
+| jvm.threads.peak                 | Gauge   | Peak number of threads in the JVM.                                                              |
+| jvm.threads.states               | Gauge   | Number of threads in different states in the JVM.                                                |
+| logback.events                   | Gauge   | Number of logback events.                                                                        |
+| process.cpu.usage                | Gauge   | CPU usage of the process.                                                                        |
+| process.files.max                | Gauge   | Maximum number of open files allowed for the process.                                            |
+| process.files.open               | Gauge   | Number of open files for the process.                                                            |
+| process.start.time               | Gauge   | Start time of the process.                                                                       |
+| process.uptime                   | Gauge   | Uptime of the process.                                                                           |
+| system.cpu.count                 | Gauge   | Number of CPU cores in the system.                                                               |
+| system.cpu.usage                 | Gauge   | Overall CPU usage of the system.                                                                 |
+| system.load.average.1m           | Gauge   | Load average of the system over the last minute.                                                 |
 
 <hr>
 </details>
