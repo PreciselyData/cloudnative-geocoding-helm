@@ -18,9 +18,13 @@ _DATA_PATH -> path to the **extracted** data
 
 _SERVICE_PORT -> port at which service should be started (Example 8080)
 
-_ENABLED_API -> API endpoints to enable. Note:Only add those endpoints for which data is configured, else service
-startup will fail.
-(Possible values: verify,geocode,autocomplete,lookup,reverse-geocode)
+
+_GEOCODE_VERIFY_ENABLED -> Set to true to enable geocode and verify endpoints.
+_LOOKUP_ENABLED -> Set to true to enable lookup endpoint.
+_REVERSEGEOCODE_ENABLED -> Set to true to enable reverse geocode endpoint.
+_AUTOCOMPLETE_ENABLED -> Set to true to enable autocomplete endpoint.
+
+```Note: Only enable those endpoints for which data is configured, else service startup will fail.```
 
 ***Sample Values:***
 
@@ -29,7 +33,10 @@ startup will fail.
  ```shell
  _DATA_PATH=/data/autocomplete/usa/202307
  _SERVICE_PORT=8080
- _ENABLED_API=autocomplete
+ _GEOCODE_VERIFY_ENABLED=false
+ _LOOKUP_ENABLED=false
+ _REVERSEGEOCODE_ENABLED=false
+ _AUTOCOMPLETE_ENABLED=true
  ```
 
 *below values will enable verify/geocode API endpoints.*
@@ -37,7 +44,10 @@ startup will fail.
  ```shell
  _DATA_PATH=/data/verify-geocode/usa/202307
  _SERVICE_PORT=8080
- _ENABLED_API=verify,geocode
+ _GEOCODE_VERIFY_ENABLED=true
+ _LOOKUP_ENABLED=false
+ _REVERSEGEOCODE_ENABLED=false
+ _AUTOCOMPLETE_ENABLED=false
  ```
 
     ```shell

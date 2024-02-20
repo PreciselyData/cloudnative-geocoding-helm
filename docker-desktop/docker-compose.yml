@@ -24,6 +24,8 @@ services:
       - SUPPORTED_REGIONS_AUTOCOMPLETE=""
       - SUPPORTED_COUNTRIES_REVERSE_GEOCODE=usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world
       - AUTH_ENABLED=false
+      - IS_HELM_SOLUTION=true
+      - OTEL_TRACES_EXPORTER=none
     networks:
       - preciselyaddressing
     restart: always
@@ -39,7 +41,12 @@ services:
       - ${_DATA_PATH:-/data/extracted}:/mnt/data/extracted
     environment:
       - DATA_PATH=/mnt/data/extracted
-      - ENABLED_ENDPOINTS=${_ENABLED_API:-verify,geocode}
+      - GEOCODE_VERIFY_ENABLED=${_GEOCODE_VERIFY_ENABLED:-true}
+      - LOOKUP_ENABLED=${_LOOKUP_ENABLED:-false}
+      - REVERSEGEOCODE_ENABLED=${_REVERSEGEOCODE_ENABLED:-false}
+      - AUTOCOMPLETE_ENABLED=${_AUTOCOMPLETE_ENABLED:-false}
+      - OTEL_TRACES_EXPORTER=none
+      - AUTH_ENABLED=false
     networks:
       - preciselyaddressing
     restart: always
