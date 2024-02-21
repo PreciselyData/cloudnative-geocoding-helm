@@ -3,8 +3,8 @@ replicaCount: 1
 enabled: ~
 
 imagePullSecrets: [ ]
-nameOverride: "autocomplete-express"
-fullnameOverride: "autocomplete-express"
+nameOverride: "autocomplete"
+fullnameOverride: "autocomplete"
 
 serviceAccount:
   create: true

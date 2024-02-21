@@ -81,6 +81,12 @@ spec:
                   key: {{ (printf "verify-geocode.%s.vintage" .) }}
             - name: GEOCODE_VERIFY_ENABLED
               value: "true"
+            - name: LOOKUP_ENABLED
+              value: "false"
+            - name: REVERSEGEOCODE_ENABLED
+              value: "false"
+            - name: AUTOCOMPLETE_ENABLED
+              value: "false"
             - name: DATA_REGION
               value: {{ . | upper }}
             - name: BLOCK_DISPATCHER_POOL_SIZE

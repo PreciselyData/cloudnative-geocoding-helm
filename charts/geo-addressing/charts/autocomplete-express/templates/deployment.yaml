@@ -70,8 +70,18 @@ spec:
           env:
             - name: AUTOCOMPLETE_V2_ENABLED
               value: "true"
+            - name: GEOCODE_VERIFY_ENABLED
+              value: "false"
+            - name: LOOKUP_ENABLED
+              value: "false"
+            - name: REVERSEGEOCODE_ENABLED
+              value: "false"
+            - name: AUTOCOMPLETE_ENABLED
+              value: "false"
+            - name: COUNTRY_FINDER_ENABLED
+              value: "true"
             - name: EXPRESS_URL
-              value: https://express-engine-cluster-master:9200
+              value: "https://express-engine-cluster-master:9200"
             - name: BLOCK_DISPATCHER_POOL_SIZE
               value: {{ $top.Values.blockDispatcherPoolSize | quote }}
             - name: RESPONSE_DISPATCHER_MIN_THREADS

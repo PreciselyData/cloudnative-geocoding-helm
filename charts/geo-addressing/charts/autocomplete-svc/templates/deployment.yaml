@@ -79,6 +79,12 @@ spec:
                 configMapKeyRef:
                   name: {{ include "addressing-data-config.name" $top }}
                   key: {{ (printf "autocomplete.%s.vintage" .) }}
+            - name: GEOCODE_VERIFY_ENABLED
+              value: "false"
+            - name: LOOKUP_ENABLED
+              value: "false"
+            - name: REVERSEGEOCODE_ENABLED
+              value: "false"
             - name: AUTOCOMPLETE_ENABLED
               value: "true"
             - name: DATA_REGION
