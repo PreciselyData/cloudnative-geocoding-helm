@@ -286,15 +286,15 @@ autocomplete-express:
   resources:
     requests:
       cpu: 1
-      memory: 2Gi
+      memory: 1Gi
     limits:
-      memory: 4Gi
+      memory: 2Gi
   blockDispatcherPoolSize: 24
   responseDispatcherMinThreads: 8
 
-  ###################################
+  ###########################################
   ## CONFIG | Express Engine Data Restore Job
-  ###################################
+  ###########################################
   expressEngineDataRestore:
     enabled: true
     chownUser: 1000
@@ -354,7 +354,7 @@ autocomplete-express:
     expressEngineJavaOpts: "-Xmx16G -Xms16G"
     
     ##
-    ## This is the minimum of resources required
+    ## This is the minimum resources required
     ##
     resources:
       requests:
@@ -383,7 +383,7 @@ autocomplete-express:
     expressEngineJavaOpts: "-Xmx3G -Xms3G"
 
     ##
-    ## This is the minimum of resources required
+    ## This is the minimum resources required
     ##
     resources:
       requests:
