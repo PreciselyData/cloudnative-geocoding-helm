@@ -86,7 +86,7 @@ spec:
             - name: SUPPORTED_COUNTRIES_LOOKUP
               value: {{ join "," .Values.global.countries }}
             - name: SUPPORTED_COUNTRIES_AUTOCOMPLETE
-              value: {{ join "," .Values.global.countries }}
+              value: {{ printf "%s,express" (join "," .Values.global.countries) }}
             - name: SUPPORTED_REGIONS_AUTOCOMPLETE
               value: ""
             - name: SUPPORTED_COUNTRIES_REVERSE_GEOCODE
