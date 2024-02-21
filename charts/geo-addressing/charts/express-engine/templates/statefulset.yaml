@@ -223,7 +223,7 @@ spec:
 {{- if and .Values.persistence.enabled .Values.persistence.enableInitChown }}
       - name: fsgroup-volume
         image: "{{ .Values.persistence.image | default "busybox" }}:{{ .Values.persistence.imageTag | default "latest" }}"
-        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+        imagePullPolicy: "{{ .Values.global.expressEngineImage.pullPolicy }}"
         command: ['sh', '-c']
         args:
           - {{- printf "chown -R %d:%d %s/data" (.Values.securityContext.runAsUser | int) (.Values.securityContext.runAsUser | int) .Values.expressEngineHome | quote | indent 1}}
@@ -270,8 +270,8 @@ spec:
       - name: "{{ template "expressEngine.name" . }}"
         securityContext:
 {{ toYaml .Values.securityContext | indent 10 }}
-        image: "{{ $top.Values.global.expressEngineImage.repository }}:{{ $top.Values.global.expressEngineImage.tag | default $top.Chart.AppVersion }}"
-        imagePullPolicy: "{{ $top.Values.global.expressEngineImage.pullPolicy }}"
+        image: "{{ .Values.global.expressEngineImage.repository }}:{{ .Values.global.expressEngineImage.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: "{{ .Values.global.expressEngineImage.pullPolicy }}"
         readinessProbe:
 {{ toYaml .Values.readinessProbe | indent 10 }}
         {{- if .Values.livenessProbe }}
@@ -394,8 +394,8 @@ spec:
       {{- if has "master" .Values.roles }}
       # This sidecar will prevent slow master re-election
       - name: expressEngine-master-graceful-termination-handler
-        image: "{{ $top.Values.global.expressEngineImage.repository }}:{{ $top.Values.global.expressEngineImage.tag | default $top.Chart.AppVersion }}"
-        imagePullPolicy: "{{ $top.Values.global.expressEngineImage.pullPolicy }}"
+        image: "{{ .Values.global.expressEngineImage.repository }}:{{ .Values.global.expressEngineImage.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: "{{ .Values.global.expressEngineImage.pullPolicy }}"
         command:
         - "sh"
         - -c

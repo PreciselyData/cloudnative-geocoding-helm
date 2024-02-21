@@ -31,7 +31,7 @@ kind: Role
 metadata:
   name: {{include "autocomplete-exp-restore-job-role.name" .}}
   labels:
-    {{- include "autocomplete-exp.labels" . | nindent 4 }}
+    {{- include "regional-addressing.labels" . | nindent 4 }}
 rules:
   - apiGroups: [""]
     resources:
@@ -71,7 +71,7 @@ spec:
             runAsUser: 0
           image: "{{ .Values.expressEngineDataRestore.image.repository }}:{{ .Values.expressEngineDataRestore.image.tag }}"
           imagePullPolicy: {{ .Values.expressEngineDataRestore.image.pullPolicy }}
-          args: ["--data-path", {{- printf "%s/%s"  .Values.global.efs.expressEngineDataMountPath .Values.global.efs.expressEngineBasePath | quote }}, "--user", {{ .Values.expressEngineDataRestore.runAsUser | quote }}]
+          args: ["--data-path", {{- printf "%s/%s"  .Values.global.efs.expressEngineDataMountPath .Values.global.efs.expressEngineBasePath | quote }}, "--user", {{ .Values.expressEngineDataRestore.chownUser | quote }}]
           volumeMounts:
             - name: snapshot-volume
               mountPath: {{ .Values.global.efs.expressEngineDataMountPath }}
