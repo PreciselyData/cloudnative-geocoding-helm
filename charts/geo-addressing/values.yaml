@@ -247,6 +247,26 @@ expressEngineDataRestore:
   ## Note: This should be a arm based cluster node group
   nodeSelector: { }
 
+  ##
+  ## Manual data vintage configuration for express engine data
+  ## Note: Manual data vintage configuration overrides the automatic data vintage configuration
+  dataConfig:
+    # autocomplete.json: |
+    #   {
+    #     "nzl": {
+    #         "addressing": {
+    #             "path": {{printf "%s/%s/%s" .Values.global.efs.expressEngineDataMountPath .Values.global.efs.expressEngineBasePath "addressing/nzl/202312" | quote}},
+    #             "vintage": "202312"
+    #         }
+    #     },
+    #     "usa": {
+    #         "addressing": {
+    #             "path": {{printf "%s/%s/%s" .Values.global.efs.expressEngineDataMountPath .Values.global.efs.expressEngineBasePath "addressing/usa/202309" | quote}},
+    #             "vintage": "202309"
+    #         }
+    #     }
+    #   }
+
 expressenginedata:
   enabled: true
   
