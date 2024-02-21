@@ -1,0 +1,23 @@
+{{- if .Values.enabled }}
+{{- $top := . -}}
+{{- $country := "express" -}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "autocomplete-express.fullname" (list $top $country) }}
+  labels:
+    {{- include "autocomplete-express.labels" (list $top $country) | nindent 4 }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: /metrics
+spec:
+  type: {{ $top.Values.service.type }}
+  ports:
+    - port: {{ $top.Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "autocomplete-express.selectorLabels" (list $top $country) | nindent 4 }}
+{{- end }}

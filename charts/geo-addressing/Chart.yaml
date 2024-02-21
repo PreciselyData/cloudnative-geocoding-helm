@@ -26,13 +26,7 @@ dependencies:
     repository: file://charts/reverse-svc
     version: "1.0.0"
     condition: reverse-svc.enabled
-  - name: express-engine
-    repository: file://charts/express-engine
+  - name: autocomplete-express
+    repository: file://charts/autocomplete-express
     version: "1.0.0"
-    alias: expressenginemaster
-    condition: expressenginemaster.enabled
-  - name: express-engine
-    repository: file://charts/express-engine
-    version: "1.0.0"
-    alias: expressenginedata
-    condition: expressenginedata.enabled
+    condition: autocomplete-express.enabled

@@ -1,0 +1,20 @@
+{{- if .Values.enabled }}
+{{- $top := . -}}
+{{- $country := "express" -}}
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "autocomplete-express.fullname" (list $top $country) }}-test-connection"
+  labels:
+    {{- include "autocomplete-express.labels" (list $top $country) | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: [ 'wget' ]
+      args: [ '{{ include "autocomplete-express.fullname" (list $top $country) }}:{{ $top.Values.service.port }}' ]
+  restartPolicy: Never
+{{- end }}

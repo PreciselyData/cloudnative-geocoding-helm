@@ -1,0 +1,67 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{include "autocomplete-exp-gp3-storage-class.name" .}}
+  labels:
+    {{- include "autocomplete-express.labels" (list . "express") | nindent 4 }}
+provisioner: ebs.csi.aws.com
+parameters:
+  type: gp3
+  allowAutoIOPSPerGBIncrease: "true"
+  iops: "3000"
+  throughput: "250"
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: {{include "autocomplete-exp-efs-storage-class.name" .}}
+  labels:
+    {{- include "autocomplete-express.labels" (list . "express") | nindent 4 }}
+provisioner: efs.csi.aws.com
+parameters:
+  provisioningMode: efs-ap
+  fileSystemId: {{ .Values.global.efs.fileSystemId }}
+  directoryPerms: "775"
+  uid: "0"
+  gid: "0"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{include "autocomplete-exp-efs-snapshot-pv.name" .}}
+  finalizers: [ ]
+  labels:
+    {{- include "autocomplete-express.labels" (list . "express") | nindent 4 }}
+spec:
+  capacity:
+    storage: 200G
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: {{include "autocomplete-exp-efs-storage-class.name" .}}
+  mountOptions:
+    - tls
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: {{ .Values.global.efs.fileSystemId }}.efs.{{ .Values.global.awsRegion }}.amazonaws.com
+    volumeAttributes:
+      path: /
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{include "autocomplete-exp-efs-snapshot-pvc.name" .}}
+  labels:
+    {{- include "autocomplete-express.labels" (list . "express") | nindent 4 }}
+spec:
+  storageClassName: {{include "autocomplete-exp-efs-storage-class.name" .}}
+  volumeName: {{include "autocomplete-exp-efs-snapshot-pv.name" .}}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 200G
