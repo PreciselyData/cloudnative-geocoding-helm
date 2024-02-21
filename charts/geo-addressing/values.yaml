@@ -285,10 +285,10 @@ autocomplete-express:
   
   resources:
     requests:
-      cpu: 1
-      memory: 1Gi
+      cpu: 2
+      memory: 4Gi
     limits:
-      memory: 2Gi
+      memory: 8Gi
   blockDispatcherPoolSize: 24
   responseDispatcherMinThreads: 8
 
