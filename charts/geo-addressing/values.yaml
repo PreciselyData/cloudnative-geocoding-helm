@@ -12,7 +12,7 @@ replicaCount: 1
 image:
   repository: regional-addressing-service
   pullPolicy: Always
-  tag: 0.5.0
+  tag: 1.0.0
 imagePullSecrets: [ ]
 
 ## This will override the name of the installed regional-addressing deployment.
@@ -145,7 +145,7 @@ global:
   addressingImage:
     repository: addressing-service
     pullPolicy: Always
-    tag: 0.5.0
+    tag: 1.0.0
 
   ## Configuration for manually configuring the data mount path for addressing-service
   ## When doing the manual configuration for data mount path, disable the data-vintage
