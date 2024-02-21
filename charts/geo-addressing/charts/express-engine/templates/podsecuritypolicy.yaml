@@ -1,3 +1,4 @@
+{{- if .Values.enabled }}
 {{- if semverCompare "<1.25-0" .Capabilities.KubeVersion.GitVersion -}}
 {{- if .Values.podSecurityPolicy.create -}}
 {{- $fullName := include "expressEngine.uname" . -}}
@@ -12,6 +13,7 @@ spec:
 {{- if .Values.sysctl.enabled }}
   allowedUnsafeSysctls:
   - vm.max_map_count
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

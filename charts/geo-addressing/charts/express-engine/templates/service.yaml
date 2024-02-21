@@ -1,3 +1,4 @@
+{{- if .Values.enabled }}
 ---
 kind: Service
 apiVersion: v1
@@ -70,3 +71,4 @@ spec:
     port: {{ .Values.transportPort }}
   - name: {{ .Values.service.metricsPortName | default "metrics" }}
     port: {{ .Values.metricsPort }}
+{{- end }}

@@ -2,6 +2,8 @@
 clusterName: "express-engine-cluster"
 nodeGroup: "master"
 
+enabled: ~
+
 # The service that non master groups will try to connect to when joining the cluster
 # This should be set to clusterName + "-" + nodeGroup for your master group
 masterService: "express-engine-cluster-master"
@@ -35,11 +37,6 @@ envFrom: []
 #     name: env-secret
 # - configMapRef:
 #     name: config-map
-
-image:
-  repository: "603016229198.dkr.ecr.us-east-1.amazonaws.com/precisely-express-engine"
-  tag: "latest"
-  pullPolicy: "Always"
 
 podAnnotations: {}
   # iam.amazonaws.com/role: express-engine-cluster
@@ -125,7 +122,7 @@ extraVolumes: |
 
 extraVolumeMounts: |
   - name: snapshot-volume
-    mountPath: {{ .Values.global.efs.autocompleteExpressSnapshotMountPath }}
+    mountPath: {{ .Values.global.efs.expressEngineDataMountPath }}
 
 extraInitContainers: |
   - name: fsgroup-snapshot
@@ -133,14 +130,14 @@ extraInitContainers: |
     imagePullPolicy: "IfNotPresent"
     command: ['sh', '-c']
     args:
-      - {{- printf "chown -R %d:%d %s/%s"  (.Values.securityContext.runAsUser | int) (.Values.securityContext.runAsUser | int) .Values.global.efs.autocompleteExpressSnapshotMountPath .Values.global.efs.autocompleteExpressSnapshotBasePath | quote | indent 1 }}
+      - {{- printf "chown -R %d:%d %s/%s"  (.Values.securityContext.runAsUser | int) (.Values.securityContext.runAsUser | int) .Values.global.efs.expressEngineDataMountPath .Values.global.efs.expressEngineBasePath | quote | indent 1 }}
     securityContext:
       runAsUser: 0
     resources:
       {}
     volumeMounts:
       - name: "snapshot-volume"
-        mountPath: {{ .Values.global.efs.autocompleteExpressSnapshotMountPath }}
+        mountPath: {{ .Values.global.efs.expressEngineDataMountPath }}
 
 extraContainers: []
   # - name: do-something
@@ -333,7 +330,7 @@ expressEngineHome: /usr/share/opensearch
 config:
   opensearch.yml: |
     cluster.name: {{.Values.clusterName}}
-    path.repo: [{{- printf "%s/%s"  .Values.global.efs.autocompleteExpressSnapshotMountPath .Values.global.efs.autocompleteExpressSnapshotBasePath | quote }}]
+    path.repo: [{{- printf "%s/%s"  .Values.global.efs.expressEngineDataMountPath .Values.global.efs.expressEngineBasePath | quote }}]
 
     # Bind to all interfaces because we don't know what IP address Docker will assign to us.
     network.host: 0.0.0.0

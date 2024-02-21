@@ -1,3 +1,4 @@
+{{- if .Values.enabled }}
 {{- if .Values.securityConfig.config.data -}}
 apiVersion: v1
 kind: Secret
@@ -15,5 +16,6 @@ stringData:
     {{- else }}
     {{- tpl $val $ | nindent 4 }}
     {{- end }}
+{{- end }}
 {{- end }}
 {{- end }}

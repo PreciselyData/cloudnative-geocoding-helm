@@ -147,6 +147,15 @@ global:
     pullPolicy: Always
     tag: 1.0.0
 
+  ## Configurations for the express-engine container image.
+  ##
+  ## To download container images, please visit the official 'Precisely Data Experience' website:
+  ## https://data.precisely.com/products
+  expressEngineImage:
+    repository: express-engine
+    tag: 1.0.0
+    pullPolicy: Always
+
   ## Configuration for manually configuring the data mount path for addressing-service
   ## When doing the manual configuration for data mount path, disable the data-vintage
   ## job by setting addressing-hook.enabled=false
@@ -193,6 +202,11 @@ global:
     ##
     ## [NOTE]: the data used for reverse-geocode is the exactly same, that's why the default value is set to verify-geocode.
     reverseBasePath: verify-geocode
+
+    ## The base path where the data is present for express-engine.
+    expressEngineDataMountPath: /usr/share/express_snapshots
+    expressEngineBasePath: snapshots
+
   ##
   ## The nodeSelector configs for the regional-addressing pods
   ## - docs for nodeSelector:
@@ -213,7 +227,155 @@ addressing-hook:
 ## Config for enabling or disabling `data-vintage` job hook.
   enabled: true
 
+###################################
+## CONFIG | Express Engine Data Restore Job
+###################################
+##
+expressEngineDataRestore:
+  enabled: true
+  image:
+    repository: express-engine-data-restore
+    pullPolicy: Always
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: 1.0.0
+  runAsUser: 1000
+  ##
+  ## The nodeSelector configs for the express-engine-data-restore job
+  ## - docs for nodeSelector:
+  ##   https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
+  ##
+  ## Note: This should be a arm based cluster node group
+  nodeSelector: { }
+
+expressenginedata:
+  enabled: true
   
+  autoscaling:
+    ## Keep this enabled
+    enabled: true
+    ##
+    ## Warning: Do not reduce the count of minReplicas on helm upgrade. This will lead to data loss
+    ##
+    minReplicas: 3
+    maxReplicas: 12
+
+    targetCPUUtilizationPercentage: 50
+
+  ##
+  ## The nodeSelector configs for the express-engine-data-restore job
+  ## - docs for nodeSelector:
+  ##   https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
+  ##
+  ## Note: This should be a arm based cluster node group
+  nodeSelector: {}
+
+  ##
+  ## Express engine data node group
+  ## Note: Do not change
+  nodeGroup: "data"
+
+  ##
+  ## Note: Do not change
+  ##
+  persistence:
+    enabled: true
+    storageClass: '{{include "autocomplete-exp-gp3-storage-class.name" .}}'
+    enableInitChown: true
+    labels:
+      enabled: true
+    accessModes:
+      - ReadWriteOnce
+    size: 200Gi
+
+  ##
+  ## Note: Do not change
+  ##
+  roles:
+    - ingest
+    - data
+    - remote_cluster_client
+
+  ##
+  ## Should be 50% of the memory
+  ##
+  expressEngineJavaOpts: "-Xmx16G -Xms16G"
+  
+  ##
+  ## Note: Do not change
+  ##
+  antiAffinity: "hard"
+
+  ##
+  ## This is the minimum of resources required
+  ##
+  resources:
+    requests:
+      cpu: 16
+      memory: 32Gi
+
+expressenginemaster:
+  enabled: true
+  
+  ##
+  ## Warning: Do not reduce the count of replicas on helm upgrade. This will lead to data loss
+  ##
+  replicas: 3
+
+  ##
+  ## The nodeSelector configs for the express-engine-data-restore job
+  ## - docs for nodeSelector:
+  ##   https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
+  ##
+  ## Note: This should be a arm based cluster node group
+  nodeSelector: {}
+
+  ##
+  ## Express engine master node group
+  ## Note: Do not change
+  nodeGroup: "master"
+
+  ##
+  ## Note: Do not change
+  ##
+  persistence:
+    enabled: true
+    storageClass: '{{include "autocomplete-exp-gp3-storage-class.name" .}}'
+    enableInitChown: true
+    labels:
+      enabled: true
+    accessModes:
+      - ReadWriteOnce
+    size: 5Gi
+
+  ##
+  ## Note: Do not change
+  ##
+  roles:
+    - ingest
+    - master
+    - remote_cluster_client
+
+  ##
+  ## Note: Do not change
+  ##
+  antiAffinity: "custom"
+
+  ##
+  ## Should be 50% of the memory
+  ##
+  expressEngineJavaOpts: "-Xmx3G -Xms3G"
+
+  ##
+  ## This is the minimum of resources required
+  ##
+  resources:
+    requests:
+      cpu: 2
+      memory: 6Gi
+    limits:
+      cpu: 4
+      memory: 6Gi
+
 ###################################
 ## CONFIG | Addressing Functionalities
 ###################################

@@ -1,0 +1,100 @@
+{{- if .Values.expressEngineDataRestore.enabled }}
+---
+{{- $root := . }}
+{{- if .Values.expressEngineDataRestore.dataConfig }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "autocomplete-exp-restore-job-config.name" .}}
+  labels:
+    {{- include "regional-addressing.labels" . | nindent 4 }}
+data:
+  {{- range $configName, $configYaml := .Values.expressEngineDataRestore.dataConfig }}
+  {{ $configName }}: |
+    {{- if (eq (kindOf $configYaml) "map")}}
+    {{-   tpl (toYaml $configYaml) $root | nindent 4 }}
+    {{- else -}}
+    {{-   tpl $configYaml $root | nindent 4 }}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{include "autocomplete-exp-restore-job-sa.name" .}}
+  labels:
+    {{- include "regional-addressing.labels" . | nindent 4 }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{include "autocomplete-exp-restore-job-role.name" .}}
+  labels:
+    {{- include "autocomplete-exp.labels" . | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources:
+      - pods
+    verbs:
+      - get
+      - watch
+      - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{include "autocomplete-exp-restore-job-rb.name" .}}
+  labels:
+    {{- include "regional-addressing.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{include "autocomplete-exp-restore-job-sa.name" .}}
+roleRef:
+  kind: Role
+  name: {{include "autocomplete-exp-restore-job-role.name" .}}
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{include "autocomplete-exp-restore-job.name" .}}
+  labels:
+    {{- include "regional-addressing.labels" . | nindent 4 }}
+spec:
+  ttlSecondsAfterFinished: 200
+  template:
+    spec:
+      containers:
+        - name: exp-engine-restore-data
+          securityContext:
+            runAsUser: 0
+          image: "{{ .Values.expressEngineDataRestore.image.repository }}:{{ .Values.expressEngineDataRestore.image.tag }}"
+          imagePullPolicy: {{ .Values.expressEngineDataRestore.image.pullPolicy }}
+          args: ["--data-path", {{- printf "%s/%s"  .Values.global.efs.expressEngineDataMountPath .Values.global.efs.expressEngineBasePath | quote }}, "--user", {{ .Values.expressEngineDataRestore.runAsUser | quote }}]
+          volumeMounts:
+            - name: snapshot-volume
+              mountPath: {{ .Values.global.efs.expressEngineDataMountPath }}
+          {{- if .Values.expressEngineDataRestore.dataConfig }}
+            - name: config-volume
+              mountPath: /etc/config/autocomplete.json
+              subPath: autocomplete.json
+          {{- end}}
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 10
+      serviceAccountName: {{include "autocomplete-exp-restore-job-sa.name" .}}
+      volumes:
+        - name: snapshot-volume
+          persistentVolumeClaim:
+            claimName: {{include "autocomplete-exp-efs-snapshot-pvc.name" .}}
+        {{- if .Values.expressEngineDataRestore.dataConfig }}
+        - name: config-volume
+          configMap:
+            name: {{ include "autocomplete-exp-restore-job-config.name" .}}
+        {{- end}}
+      {{- with .Values.expressEngineDataRestore.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  backoffLimit: 0
+{{- end}}

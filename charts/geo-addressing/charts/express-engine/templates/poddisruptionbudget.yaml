@@ -1,3 +1,4 @@
+{{- if .Values.enabled }}
 {{- if .Values.maxUnavailable }}
 {{- if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: policy/v1
@@ -15,3 +16,5 @@ spec:
     matchLabels:
       {{- include "expressEngine.selectorLabels" . | nindent 6 }}
 {{- end }}
+{{- end }}
+

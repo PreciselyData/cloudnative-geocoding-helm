@@ -1,3 +1,4 @@
+{{- if .Values.enabled }}
 {{- $root := . }}
 {{- if .Values.config }}
 apiVersion: v1
@@ -16,3 +17,4 @@ data:
     {{- end -}}
 {{- end -}}
 {{- end -}}
+{{- end }}

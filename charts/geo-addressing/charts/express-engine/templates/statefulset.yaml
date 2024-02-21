@@ -1,3 +1,4 @@
+{{- if .Values.enabled }}
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -269,8 +270,8 @@ spec:
       - name: "{{ template "expressEngine.name" . }}"
         securityContext:
 {{ toYaml .Values.securityContext | indent 10 }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+        image: "{{ $top.Values.global.expressEngineImage.repository }}:{{ $top.Values.global.expressEngineImage.tag | default $top.Chart.AppVersion }}"
+        imagePullPolicy: "{{ $top.Values.global.expressEngineImage.pullPolicy }}"
         readinessProbe:
 {{ toYaml .Values.readinessProbe | indent 10 }}
         {{- if .Values.livenessProbe }}
@@ -393,8 +394,8 @@ spec:
       {{- if has "master" .Values.roles }}
       # This sidecar will prevent slow master re-election
       - name: expressEngine-master-graceful-termination-handler
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+        image: "{{ $top.Values.global.expressEngineImage.repository }}:{{ $top.Values.global.expressEngineImage.tag | default $top.Chart.AppVersion }}"
+        imagePullPolicy: "{{ $top.Values.global.expressEngineImage.pullPolicy }}"
         command:
         - "sh"
         - -c
@@ -456,3 +457,4 @@ spec:
 {{ toYaml .Values.extraContainers | indent 6 }}
       {{- end }}
       {{- end }}
+{{- end }}
