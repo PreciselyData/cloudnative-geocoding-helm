@@ -82,10 +82,6 @@ spec:
               value: "true"
             - name: EXPRESS_URL
               value: "https://express-engine-cluster-master:9200"
-            - name: BLOCK_DISPATCHER_POOL_SIZE
-              value: {{ $top.Values.blockDispatcherPoolSize | quote }}
-            - name: RESPONSE_DISPATCHER_MIN_THREADS
-              value: {{ $top.Values.responseDispatcherMinThreads | quote }}
             {{- if $top.Values.global.otelExporterEndpoint }}
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: {{ $top.Values.global.otelExporterEndpoint }}

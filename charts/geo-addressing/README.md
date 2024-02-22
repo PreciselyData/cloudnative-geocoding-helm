@@ -141,8 +141,6 @@ Refer to the [deployment.yml](charts/addressing-svc/templates/deployment.yaml) o
 |-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
 | `*DATA_PATH`                      | Default path of the installed reference data. Please refer to the recommended path for the installation of data.                                         | `<referenced from configMap>`                                                                                 |
 | `*DATA_REGION`                    | The value of the referenced country or region.                                                                                                           | `<depends on the provided country e.g. usa/aus/can>`                                                          |
-| `BLOCK_DISPATCHER_POOL_SIZE`      | The no. of threads to control the parallel interactions with the internal SDK. This should vary per country, please follow country-wise recommendations. | `4`                                                                                                           |
-| `RESPONSE_DISPATCHER_MIN_THREADS` | The no. of non-blocking I/O threads. This should vary per country, please follow country-wise recommendations.                                           | `4`                                                                                                           |
 | `OTEL_EXPORTER_OTLP_ENDPOINT`     | If tracing is enabled, this is the endpoint for tracer host.                                                                                             | `http://jaeger-collector.default.svc.cluster.local:4317`                                                      |
 | `*AUTH_ENABLED`                        | Flag to indicate whether authorization is enabled for the endpoints or not.                                                                                                                                                                                                                        | `false`                                                                        |
 | `*GEOCODE_VERIFY_ENABLED`                        | Flag to enable geocode and verify endpoints.                                                                                                                                                                                                                        | `true for addressing service`                                                                        |
@@ -158,18 +156,16 @@ The `regional-addressing` pod is responsible for managing requests and routing t
 country-based `addressing-service` pods. Since each country has its own unique reference data, we recommend allocating a
 minimum amount of pod memory for the addressing-services for each specific country, as outlined below:
 
-The values are in the format:<br>
-`[memory],[blockDispatcherPoolSize],[responseDispatcherMinThreads]`
 
 | Country | Addressing (Verify-Geocode) | Autocomplete | Lookup     | Reverse-Geocode |
 |---------|-----------------------------|--------------|------------|-----------------|
-| USA     | 8Gi, 24, 8                  | 6Gi, 24, 8   | 6Gi, 16, 4 | 8Gi, 4, 4       |
-| AUS     | 6Gi, 16, 4                  | 8Gi, 16, 4   | 6Gi, 4, 4  | 8Gi, 4, 4       |
-| CAN     | 6Gi, 16, 4                  | 4Gi, 16, 4   | 6Gi, 4, 4  | 8Gi, 4, 4       |
-| GBR     | 6Gi, 16, 4                  | 6Gi, 4, 4    | 6Gi, 4, 4  | 8Gi, 4, 4       |
-| DEU     | 6Gi, 16, 4                  | 6Gi, 4, 4    | 6Gi, 4, 4  | 8Gi, 4, 4       |
-| NZL     | 10Gi, 8, 4                  | 6Gi, 4, 4    | 6Gi, 4, 4  | 8Gi, 4, 4       |
-| FRA     | 7Gi, 16, 4                  | 6Gi, 4, 4    | 6Gi, 4, 4  | 8Gi, 4, 4       |
+| USA     | 8Gi                         | 6Gi          | 6Gi        | 8Gi             |
+| AUS     | 6Gi                         | 8Gi          | 6Gi        | 8Gi             |
+| CAN     | 6Gi                         | 4Gi          | 6Gi        | 8Gi             |
+| GBR     | 6Gi                         | 6Gi          | 6Gi        | 8Gi             |
+| DEU     | 6Gi                         | 6Gi          | 6Gi        | 8Gi             |
+| NZL     | 10Gi                        | 6Gi          | 6Gi        | 8Gi             |
+| FRA     | 7Gi                         | 6Gi          | 6Gi        | 8Gi             |
 
 You can adjust the values in [values.yaml](values.yaml), or you can set these parameters in the helm command itself during installation/up-gradation.
 
