@@ -287,10 +287,6 @@ autocomplete-express:
     requests:
       cpu: 2
       memory: 4Gi
-    limits:
-      memory: 8Gi
-  blockDispatcherPoolSize: 24
-  responseDispatcherMinThreads: 8
 
   ###########################################
   ## CONFIG | Express Engine Data Restore Job
@@ -358,7 +354,7 @@ autocomplete-express:
     ##
     resources:
       requests:
-        cpu: 16
+        cpu: 24
         memory: 32Gi
 
   expressenginemaster:
@@ -465,16 +461,12 @@ addressing-svc:
   ##        requests:
   ##          cpu: 1000m
   ##          memory: 6Gi
-  ##      blockDispatcherPoolSize: 16
-  ##      responseDispatcherMinThreads: 4
   ##      nodeSelector: {}
   ##
   ## You can also set the parameters for a country in the Helm chart like this:
   ##
   ##  --set "addressing-svc.countryConfigurations.can.resources.requests.cpu=1000m"
   ##  --set "addressing-svc.countryConfigurations.can.resources.requests.memory=6Gi"
-  ##  --set "addressing-svc.countryConfigurations.can.blockDispatcherPoolSize=16"
-  ##  --set "addressing-svc.countryConfigurations.can.responseDispatcherMinThreads=4"
   ##  --set "addressing-svc.countryConfigurations.can.nodeSelector.node-app=geo-addressing"
   countryConfigurations:
     default:
@@ -484,16 +476,6 @@ addressing-svc:
           memory: 6Gi
         limits:
           memory: 6Gi
-      ## We have implemented a bulk heading pattern in the addressing service.
-      ## You can refer to the following information:
-      ##   https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead
-      ## These threads control the number of parallel interactions with the internal SDK that can be performed for a specific country or group of countries.
-      ## This configuration is introduced because geocoding for different countries behaves differently.
-      ## These threads function similarly to a normal thread-per-request model.
-      blockDispatcherPoolSize: 16
-      ## These are the non-blocking I/O threads.
-      ## They continuously handle requests from the external world and forward them to the downstream blocking dispatcher.
-      responseDispatcherMinThreads: 4
     usa:
       resources:
         requests:
@@ -501,9 +483,6 @@ addressing-svc:
           memory: 8Gi
         limits:
           memory: 8Gi
-      blockDispatcherPoolSize: 24
-      responseDispatcherMinThreads: 8
-
 
 ###################################
 ## CONFIG | Autocomplete Functionalities
@@ -576,16 +555,12 @@ autocomplete-svc:
   ##        requests:
   ##          cpu: 1000m
   ##          memory: 6Gi
-  ##      blockDispatcherPoolSize: 16
-  ##      responseDispatcherMinThreads: 4
   ##      nodeSelector: {}
   ##
   ## You can also set the parameters for a country in the Helm chart like this:
   ##
   ##  --set "autocomplete-svc.countryConfigurations.can.resources.requests.cpu=1000m"
   ##  --set "autocomplete-svc.countryConfigurations.can.resources.requests.memory=6Gi"
-  ##  --set "autocomplete-svc.countryConfigurations.can.blockDispatcherPoolSize=16"
-  ##  --set "autocomplete-svc.countryConfigurations.can.responseDispatcherMinThreads=4"
   ##  --set "autocomplete-svc.countryConfigurations.can.nodeSelector.node-app=geo-addressing"
   ##
   countryConfigurations:
@@ -596,16 +571,6 @@ autocomplete-svc:
           memory: 6Gi
         limits:
           memory: 6Gi
-      ## We have implemented a bulk heading pattern in the addressing service.
-      ## You can refer to the following information:
-      ##   https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead
-      ## These threads control the number of parallel interactions with the internal SDK that can be performed for a specific country or group of countries.
-      ## This configuration is introduced because geocoding for different countries behaves differently.
-      ## These threads function similarly to a normal thread-per-request model.
-      blockDispatcherPoolSize: 4
-      ## These are the non-blocking I/O threads.
-      ## They continuously handle requests from the external world and forward them to the downstream blocking dispatcher.
-      responseDispatcherMinThreads: 4
     usa:
       resources:
         requests:
@@ -613,8 +578,6 @@ autocomplete-svc:
           memory: 6Gi
         limits:
           memory: 6Gi
-      blockDispatcherPoolSize: 24
-      responseDispatcherMinThreads: 8
 
 ###################################
 ## CONFIG | Look Functionalities
@@ -687,16 +650,12 @@ lookup-svc:
   ##        requests:
   ##          cpu: 1000m
   ##          memory: 6Gi
-  ##      blockDispatcherPoolSize: 16
-  ##      responseDispatcherMinThreads: 4
   ##      nodeSelector: {}
   ##
   ## You can also set the parameters for a country in the Helm chart like this:
   ##
   ##  --set "lookup-svc.countryConfigurations.can.resources.requests.cpu=1000m"
   ##  --set "lookup-svc.countryConfigurations.can.resources.requests.memory=6Gi"
-  ##  --set "lookup-svc.countryConfigurations.can.blockDispatcherPoolSize=16"
-  ##  --set "lookup-svc.countryConfigurations.can.responseDispatcherMinThreads=4"
   ##  --set "lookup-svc.countryConfigurations.can.nodeSelector.node-app=geo-addressing"
   ##
   countryConfigurations:
@@ -707,16 +666,6 @@ lookup-svc:
           memory: 6Gi
         limits:
           memory: 6Gi
-      ## We have implemented a bulk heading pattern in the addressing service.
-      ## You can refer to the following information:
-      ##   https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead
-      ## These threads control the number of parallel interactions with the internal SDK that can be performed for a specific country or group of countries.
-      ## This configuration is introduced because geocoding for different countries behaves differently.
-      ## These threads function similarly to a normal thread-per-request model.
-      blockDispatcherPoolSize: 4
-      ## These are the non-blocking I/O threads.
-      ## They continuously handle requests from the external world and forward them to the downstream blocking dispatcher.
-      responseDispatcherMinThreads: 4
     usa:
       resources:
         requests:
@@ -724,8 +673,6 @@ lookup-svc:
           memory: 6Gi
         limits:
           memory: 6Gi
-      blockDispatcherPoolSize: 24
-      responseDispatcherMinThreads: 8
 
 
 ###################################
@@ -799,16 +746,12 @@ reverse-svc:
   ##        requests:
   ##          cpu: 1000m
   ##          memory: 6Gi
-  ##      blockDispatcherPoolSize: 16
-  ##      responseDispatcherMinThreads: 4
   ##      nodeSelector: {}
   ##
   ## You can also set the parameters for a country in the Helm chart like this:
   ##
   ##  --set "reverse-svc.countryConfigurations.can.resources.requests.cpu=1000m"
   ##  --set "reverse-svc.countryConfigurations.can.resources.requests.memory=6Gi"
-  ##  --set "reverse-svc.countryConfigurations.can.blockDispatcherPoolSize=16"
-  ##  --set "reverse-svc.countryConfigurations.can.responseDispatcherMinThreads=4"
   ##  --set "reverse-svc.countryConfigurations.can.nodeSelector.node-app=geo-addressing"
   countryConfigurations:
     default:
@@ -818,16 +761,6 @@ reverse-svc:
           memory: 8Gi
         limits:
           memory: 8Gi
-      ## We have implemented a bulk heading pattern in the addressing service.
-      ## You can refer to the following information:
-      ##   https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead
-      ## These threads control the number of parallel interactions with the internal SDK that can be performed for a specific country or group of countries.
-      ## This configuration is introduced because geocoding for different countries behaves differently.
-      ## These threads function similarly to a normal thread-per-request model.
-      blockDispatcherPoolSize: 4
-      ## These are the non-blocking I/O threads.
-      ## They continuously handle requests from the external world and forward them to the downstream blocking dispatcher.
-      responseDispatcherMinThreads: 4
     usa:
       resources:
         requests:
@@ -835,5 +768,3 @@ reverse-svc:
           memory: 8Gi
         limits:
           memory: 8Gi
-      blockDispatcherPoolSize: 4
-      responseDispatcherMinThreads: 4
