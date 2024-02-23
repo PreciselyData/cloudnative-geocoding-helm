@@ -80,6 +80,8 @@ spec:
               value: "false"
             - name: COUNTRY_FINDER_ENABLED
               value: "true"
+            - name: WARMUP_ENABLED
+              value: "false"
             - name: EXPRESS_URL
               value: "https://express-engine-cluster-master:9200"
             {{- if $top.Values.global.otelExporterEndpoint }}
