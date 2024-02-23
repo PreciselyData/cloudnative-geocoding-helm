@@ -39,7 +39,7 @@ managedNodeGroups:
         albIngress: true
         cloudWatch: true
     minSize: 1
-    maxSize: 10
+    maxSize: 20
     volumeSize: 200
     labels: { node-app: geo-addressing }
     tags:
@@ -70,8 +70,8 @@ managedNodeGroups:
         albIngress: true
         cloudWatch: true
     minSize: 3
-    maxSize: 10
-    volumeSize: 200
+    maxSize: 20
+    volumeSize: 100
     labels: { node-app: express-data }
     tags:
       CreatedBy: Precisely
@@ -101,8 +101,8 @@ managedNodeGroups:
         albIngress: true
         cloudWatch: true
     minSize: 3
-    maxSize: 10
-    volumeSize: 200
+    maxSize: 20
+    volumeSize: 100
     labels: { node-app: express-master }
     tags:
       CreatedBy: Precisely
