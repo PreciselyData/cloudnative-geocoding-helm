@@ -100,6 +100,10 @@ app.kubernetes.io/part-of: express-engine
   {{- $version.Major }}
 {{- end }}
 
+{{- define "expressEngine.home" -}}
+/usr/share/opensearch
+{{- end -}}
+
 {{- define "expressEngine.roles" -}}
 {{- range $.Values.roles -}}
 {{ . }},

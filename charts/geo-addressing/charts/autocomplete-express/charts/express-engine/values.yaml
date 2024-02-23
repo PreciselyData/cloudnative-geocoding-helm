@@ -1,20 +1,7 @@
 ---
 clusterName: "express-engine-cluster"
-nodeGroup: "master"
 
 enabled: ~
-
-# The service that non master groups will try to connect to when joining the cluster
-# This should be set to clusterName + "-" + nodeGroup for your master group
-masterService: "express-engine-cluster-master"
-
-# roles that will be applied to this nodeGroup
-# These will be set as environment variable "node.roles". E.g. node.roles=master,ingest,data,remote_cluster_client
-roles:
-  - master
-  - ingest
-  - data
-  - remote_cluster_client
 
 replicas: 3
 
@@ -228,42 +215,8 @@ securityContext:
   capabilities:
     drop:
       - ALL
-  # readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 1000
-
-securityConfig:
-  enabled: true
-  path: "/usr/share/opensearch/config/opensearch-security"
-  actionGroupsSecret:
-  configSecret:
-  internalUsersSecret:
-  rolesSecret:
-  rolesMappingSecret:
-  tenantsSecret:
-  # The following option simplifies securityConfig by using a single secret and
-  # specifying the config files as keys in the secret instead of creating
-  # different secrets for for each config file.
-  # Note that this is an alternative to the individual secret configuration
-  # above and shouldn't be used if the above secrets are used.
-  config:
-    # There are multiple ways to define the configuration here:
-    # * If you define anything under data, the chart will automatically create
-    #   a secret and mount it. This is best option to choose if you want to override all the
-    #   existing yml files at once.
-    # * If you define securityConfigSecret, the chart will assume this secret is
-    #   created externally and mount it. This is best option to choose if your intention is to
-    #   only update a single yml file.
-    # * It is an error to define both data and securityConfigSecret.
-    securityConfigSecret: ""
-    dataComplete: true
-    data: {}
-      # config.yml: |-
-      # internal_users.yml: |-
-      # roles.yml: |-
-      # roles_mapping.yml: |-
-      # action_groups.yml: |-
-      # tenants.yml: |-
 
 # How long to wait to stop gracefully
 terminationGracePeriod: 120
@@ -325,20 +278,27 @@ sysctlInit:
 # -- Array of extra K8s manifests to deploy
 extraObjects: []
 
-expressEngineHome: /usr/share/opensearch
+nodeGroup: "master"
+
+
+masterService: "express-engine-cluster-master"
+
+roles:
+  - master
+  - ingest
+  - data
+  - remote_cluster_client
 
 config:
-  opensearch.yml: |
+  expressEngine.yml: |
     cluster.name: {{.Values.clusterName}}
     path.repo: [{{- printf "%s/%s"  .Values.global.efs.expressEngineDataMountPath .Values.global.efs.expressEngineBasePath | quote }}]
-
-    # Bind to all interfaces because we don't know what IP address Docker will assign to us.
-    network.host: 0.0.0.0
 
     {{ if ne .Values.nodeGroup "master" }}
     node.attr.temp: hot
     {{ end }}
 
+    network.host: 0.0.0.0
     bootstrap.memory_lock: true
 
     plugins:

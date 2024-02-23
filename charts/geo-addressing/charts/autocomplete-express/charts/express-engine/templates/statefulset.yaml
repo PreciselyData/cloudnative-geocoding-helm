@@ -66,9 +66,6 @@ spec:
         {{- if .Values.config }}
         configchecksum: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum | trunc 63 }}
         {{- end }}
-        {{- if .Values.securityConfig.config.data }}
-        securityconfigchecksum: {{ include (print .Template.BasePath "/securityconfig.yaml") . | sha256sum | trunc 63 }}
-        {{- end }}
     spec:
       {{- if .Values.schedulerName }}
       schedulerName: "{{ .Values.schedulerName }}"
@@ -151,49 +148,8 @@ spec:
       - name: config
         configMap:
           name: {{ template "expressEngine.uname" . }}-config
-      {{- end }}
-      {{- if and .Values.securityConfig.config.data .Values.securityConfig.config.securityConfigSecret }}
-      {{ fail "Only one of .Values.securityConfig.config.data and .Values.securityConfig.config.securityConfigSecret may be defined. Please see the comment in values.yaml describing usage." }}
-      {{- end }}
-      {{- if .Values.securityConfig.config.data }}
-      - name: security-config-data
-        secret:
-          secretName: {{ include "expressEngine.uname" . }}-securityconfig
-      {{- end }}
-      {{- with .Values.securityConfig.config.securityConfigSecret }}
-      - name: security-config-complete
-        secret:
-          secretName: {{ . | quote }}
-      {{- end }}
-      {{- if .Values.securityConfig.actionGroupsSecret }}
-      - name: action-groups
-        secret:
-          secretName: {{ .Values.securityConfig.actionGroupsSecret }}
-      {{- end }}
-      {{- if .Values.securityConfig.configSecret }}
-      - name: security-config
-        secret:
-          secretName: {{ .Values.securityConfig.configSecret }}
-      {{- end }}
-      {{- if .Values.securityConfig.internalUsersSecret }}
-      - name: internal-users-config
-        secret:
-          secretName: {{ .Values.securityConfig.internalUsersSecret }}
-      {{- end }}
-      {{- if .Values.securityConfig.rolesSecret }}
-      - name: roles
-        secret:
-          secretName: {{ .Values.securityConfig.rolesSecret }}
-      {{- end }}
-      {{- if .Values.securityConfig.rolesMappingSecret }}
-      - name: role-mapping
-        secret:
-          secretName: {{ .Values.securityConfig.rolesMappingSecret }}
-      {{- end -}}
-      {{- if .Values.securityConfig.tenantsSecret }}
-      - name: tenants
-        secret:
-          secretName: {{ .Values.securityConfig.tenantsSecret }}
+      - emptyDir: {}
+        name: config-emptydir
       {{- end }}
 {{- if .Values.keystore }}
       - name: keystore
@@ -226,14 +182,14 @@ spec:
         imagePullPolicy: "{{ .Values.global.expressEngineImage.pullPolicy }}"
         command: ['sh', '-c']
         args:
-          - {{- printf "chown -R %d:%d %s/data" (.Values.securityContext.runAsUser | int) (.Values.securityContext.runAsUser | int) .Values.expressEngineHome | quote | indent 1}}
+          - {{- printf "chown -R %d:%d %s/data" (.Values.securityContext.runAsUser | int) (.Values.securityContext.runAsUser | int) (include "expressEngine.home" .) | quote | indent 1}}
         securityContext:
           runAsUser: 0
         resources:
           {{- toYaml .Values.initResources | nindent 10 }}
         volumeMounts:
           - name: "{{ template "expressEngine.uname" . }}"
-            mountPath: {{ .Values.expressEngineHome }}/data
+            mountPath: {{ (include "expressEngine.home" .) }}/data
 {{- end }}
 {{- if .Values.sysctlInit.enabled }}
       - name: sysctl
@@ -254,6 +210,27 @@ spec:
           privileged: true
         resources:
           {{- toYaml .Values.initResources | nindent 10 }}
+{{- end }}
+{{- if .Values.config }}
+      - name: configfile
+        image: "{{ .Values.global.expressEngineImage.repository }}:{{ .Values.global.expressEngineImage.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: "{{ .Values.global.expressEngineImage.pullPolicy }}"
+        command:
+        - sh
+        - -c
+        - |
+          #!/usr/bin/env bash
+          cp -r /tmp/configfolder/*  /tmp/config/
+        resources:
+          {{- toYaml .Values.initResources | nindent 10 }}
+        volumeMounts:
+          - mountPath: /tmp/config/
+            name: config-emptydir
+        {{- range $path, $config := .Values.config }}
+          - name: config
+            mountPath: /tmp/configfolder/{{ $path }}
+            subPath: {{ $path }}
+        {{- end -}}
 {{- end }}
       {{- if .Values.extraInitContainers }}
       # Currently some extra blocks accept strings
@@ -312,7 +289,7 @@ spec:
           value: "{{ .Values.clusterName }}"
         - name: network.host
           value: "{{ .Values.networkHost }}"
-        - name: OPENSEARCH_JAVA_OPTS
+        - name: EXPRESSENGINE_JAVA_OPTS
           value: "{{ .Values.expressEngineJavaOpts }}"
         - name: node.roles
           value: "{{ template "expressEngine.roles" . }}"
@@ -326,58 +303,11 @@ spec:
         volumeMounts:
         {{- if .Values.persistence.enabled }}
         - name: "{{ template "expressEngine.uname" . }}"
-          mountPath: {{ .Values.expressEngineHome }}/data
-        {{- end }}
-        {{- if .Values.securityConfig.enabled }}
-        {{- if .Values.securityConfig.actionGroupsSecret }}
-        - mountPath: {{ .Values.securityConfig.path }}/action_groups.yml
-          name: action-groups
-          subPath: action_groups.yml
-        {{- end }}
-        {{- if .Values.securityConfig.configSecret }}
-        - mountPath: {{ .Values.securityConfig.path }}/config.yml
-          name: security-config
-          subPath: config.yml
-        {{- end }}
-        {{- if .Values.securityConfig.internalUsersSecret }}
-        - mountPath: {{ .Values.securityConfig.path }}/internal_users.yml
-          name: internal-users-config
-          subPath: internal_users.yml
-        {{- end }}
-        {{- if .Values.securityConfig.rolesSecret }}
-        - mountPath: {{ .Values.securityConfig.path }}/roles.yml
-          name: roles
-          subPath: roles.yml
-        {{- end }}
-        {{- if .Values.securityConfig.rolesMappingSecret }}
-        - mountPath: {{ .Values.securityConfig.path }}/roles_mapping.yml
-          name: role-mapping
-          subPath: roles_mapping.yml
-        {{- end }}
-        {{- if .Values.securityConfig.tenantsSecret }}
-        - mountPath: {{ .Values.securityConfig.path }}/tenants.yml
-          name: tenants
-          subPath: tenants.yml
-        {{- end }}
-        {{- if .Values.securityConfig.config.data }}
-        {{-   if .Values.securityConfig.config.dataComplete }}
-        - mountPath: {{ .Values.securityConfig.path }}
-          name: security-config-data
-        {{-   else }}
-        {{-     range $key, $_ := .Values.securityConfig.config.data  }}
-        - mountPath: {{ $.Values.securityConfig.path }}/{{ $key }}
-          name: security-config-data
-          subPath: {{ $key }}
-        {{-     end }}
-        {{-   end }}
-        {{- else if .Values.securityConfig.config.securityConfigSecret }}
-        - mountPath: {{ .Values.securityConfig.path }}
-          name: security-config-complete
-        {{- end }}
+          mountPath: {{ (include "expressEngine.home" .) }}/data
         {{- end }}
         {{- range $path, $config := .Values.config }}
-        - name: config
-          mountPath: {{ $.Values.expressEngineHome }}/config/{{ $path }}
+        - name: config-emptydir
+          mountPath: {{ (include "expressEngine.home" .) }}/config/{{ $path }}
           subPath: {{ $path }}
         {{- end -}}
         {{- if .Values.extraVolumeMounts }}
