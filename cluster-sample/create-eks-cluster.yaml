@@ -77,7 +77,7 @@ managedNodeGroups:
       CreatedBy: Precisely
 
   - name: express-master-worker
-    instanceType: c7g.xlarge
+    instanceType: c7g.2xlarge
     iam:
       attachPolicyARNs:
         - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy

@@ -178,7 +178,7 @@ expressenginemaster:
       enabled: true
     accessModes:
       - ReadWriteOnce
-    size: 5Gi
+    size: 32Gi
 
   ##
   ## Note: Do not change
