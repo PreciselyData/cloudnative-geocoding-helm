@@ -9,7 +9,7 @@ provisioner: ebs.csi.aws.com
 parameters:
   type: gp3
   allowAutoIOPSPerGBIncrease: "true"
-  iops: "5000"
+  iops: "6000"
   throughput: "500"
 reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer

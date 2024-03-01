@@ -15,7 +15,7 @@ addons:
 
 managedNodeGroups:
   - name: geo-addressing-worker
-    instanceType: m5.2xlarge
+    instanceType: m5ad.2xlarge
     iam:
       attachPolicyARNs:
         - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
@@ -40,7 +40,7 @@ managedNodeGroups:
         cloudWatch: true
     minSize: 1
     maxSize: 20
-    volumeSize: 200
+    volumeSize: 300
     labels: { node-app: geo-addressing }
     tags:
       CreatedBy: Precisely
@@ -108,7 +108,7 @@ managedNodeGroups:
       CreatedBy: Precisely
 
   - name: geo-addressing-ingress
-    instanceType: m5.2xlarge
+    instanceType: m5n.2xlarge
     iam:
       attachPolicyARNs:
         - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
@@ -116,6 +116,9 @@ managedNodeGroups:
         - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
         - arn:aws:iam::aws:policy/AmazonEC2FullAccess
         - arn:aws:iam::aws:policy/AutoScalingFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AmazonElasticFileSystemFullAccess
+        - arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy
       withAddonPolicies:
         externalDNS: true
         certManager: true
