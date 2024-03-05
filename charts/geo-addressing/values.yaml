@@ -215,7 +215,7 @@ global:
 
     ## The base path where the data is present for express-engine.
     expressEngineDataMountPath: /usr/share/express_snapshots
-    expressEngineBasePath: snapshots
+    expressEngineBasePath: express_data
 
   ##
   ## The nodeSelector configs for the regional-addressing pods
@@ -334,7 +334,7 @@ autocomplete-express:
       minReplicas: 4
       maxReplicas: 20
 
-      targetCPUUtilizationPercentage: 40
+      targetCPUUtilizationPercentage: 60
 
     ##
     ## The nodeSelector configs for the express-engine-data-restore job
