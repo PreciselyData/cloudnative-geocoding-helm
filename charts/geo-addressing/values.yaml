@@ -77,13 +77,13 @@ ingress:
 ## The default recommended resources requests for regional-addressing service is:
 ##    requests:
 ##      cpu: 1
-##      memory: 1.5Gi
+##      memory: 2Gi
 resources:
   requests:
     cpu: 1
-    memory: 1500Mi
+    memory: 2Gi
   limits:
-    memory: 1500Mi
+    memory: 2Gi
 
 ## Configurations for the HorizontalPodAutoscaler of the regional-addressing pods
 ##
@@ -96,7 +96,7 @@ resources:
 ## For the regional-addressing service, autoscaling is enabled by default to handle large workloads.
 autoscaling:
   enabled: true
-  minReplicas: 2
+  minReplicas: 3
   maxReplicas: 20
   targetCPUUtilizationPercentage: 60
 
@@ -432,7 +432,7 @@ addressing-svc:
   # --set "addressing-svc.autoscaling.minReplicas=10"
   autoscaling:
     enabled: true
-    minReplicas: 2
+    minReplicas: 3
     maxReplicas: 20
     targetCPUUtilizationPercentage: 70
   ##
