@@ -334,7 +334,7 @@ autocomplete-express:
       minReplicas: 4
       maxReplicas: 20
 
-      targetCPUUtilizationPercentage: 60
+      targetCPUUtilizationPercentage: 50
 
     ##
     ## The nodeSelector configs for the express-engine-data-restore job
