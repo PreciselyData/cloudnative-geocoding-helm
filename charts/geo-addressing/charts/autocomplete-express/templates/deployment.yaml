@@ -30,6 +30,7 @@ spec:
         app: {{ include "autocomplete-express.fullname" (list $top $country) }}
         {{- include "autocomplete-express.selectorLabels" (list $top $country) | nindent 8 }}
     spec:
+      terminationGracePeriodSeconds: 60
       {{- with $top.Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -52,7 +53,7 @@ spec:
               path: /health
               port: http
             initialDelaySeconds: 10
-            failureThreshold: 3
+            failureThreshold: 2
             successThreshold: 1
             timeoutSeconds: 1
             periodSeconds: 10
@@ -61,7 +62,7 @@ spec:
               path: /health
               port: http
             initialDelaySeconds: 10
-            failureThreshold: 3
+            failureThreshold: 2
             successThreshold: 1
             timeoutSeconds: 1
             periodSeconds: 10
