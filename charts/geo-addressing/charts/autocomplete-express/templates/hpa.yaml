@@ -14,6 +14,13 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "autocomplete-express.fullname" (list $top $country) }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 120
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 120
   minReplicas: {{ $top.Values.autoscaling.minReplicas }}
   maxReplicas: {{ $top.Values.autoscaling.maxReplicas }}
   metrics:
