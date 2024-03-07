@@ -33,6 +33,9 @@ The geo-addressing helm chart compromises of following components:
        - If enabled, it deploys V2 autocomplete-express service for `autocomplete` capability.
        - This new autocomplete functionality is based on express engine and needs some specific configuration in cluster.
        - Nodes to deploy the express-engine which is part of the autocomplete-express chart shoud be ARM based CPU optimized instances like the `c7g.8xlarge` instance types in AWS
+       - autocomplete-express engine as two components, with different behaviors of scheduling
+         - express-engine-data : One-to-One POD to Node scheduling
+         - express-engine-master: Many-to-One POD to Node scheduling
   
 - Ingress
 - Horizontal Autoscaler (HPA)

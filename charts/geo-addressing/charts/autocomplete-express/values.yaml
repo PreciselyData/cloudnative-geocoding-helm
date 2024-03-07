@@ -136,6 +136,7 @@ expressenginedata:
   ##
   ## Note: Do not change
   ##
+  ## Express data pods have a hard antiAffinity. One-to-one POD to node scheduling
   antiAffinity: "hard"
 
   ##
@@ -191,6 +192,7 @@ expressenginemaster:
   ##
   ## Note: Do not change
   ##
+  ## Express master pods have a hard antiAffinity. Many-to-one POD to node scheduling
   antiAffinity: "custom"
 
   ##
