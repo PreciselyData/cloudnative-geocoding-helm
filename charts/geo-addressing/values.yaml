@@ -279,7 +279,7 @@ autocomplete-express:
   # --set "autocomplete-express.autoscaling.minReplicas=10"
   autoscaling:
     enabled: true
-    minReplicas: 4
+    minReplicas: 5
     maxReplicas: 20
     targetCPUUtilizationPercentage: 50
   
