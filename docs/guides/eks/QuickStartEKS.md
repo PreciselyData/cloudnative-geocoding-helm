@@ -181,6 +181,8 @@ reverse-geocode you have to set the parameters in helm command as follows.
 * ``ingress.hosts[0].paths[0].pathType``: The pathType of the Ingress Path
 * ``image.repository``: The ECR image repository for the regional-addressing image
 * ``global.addressingImage.repository``: The ECR image repository for the addressing-service image
+* ``global.expressEngineImage.repository``: The ECR image repository for the express-engine image
+* ``global.expressEngineDataRestoreImage.repository``: The ECR image repository for the express-engine-data-restore image
 * ``global.nodeSelector``: The node selector to run the geo-addressing solutions on nodes of the cluster
 
 For more information on helm values, follow [this link](../../../charts/geo-addressing/README.md#helm-values).

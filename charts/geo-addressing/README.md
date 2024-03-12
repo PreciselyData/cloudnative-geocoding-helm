@@ -33,7 +33,7 @@ The geo-addressing helm chart compromises of following components:
        - If enabled, it deploys V2 autocomplete-express service for `autocomplete` capability.
        - This new autocomplete functionality is based on express engine and needs some specific configuration in cluster.
        - Nodes to deploy the express-engine which is part of the autocomplete-express chart shoud be ARM based CPU optimized instances like the `c7g.8xlarge` instance types in AWS
-       - autocomplete-express engine as two components, with different behaviors of scheduling
+       - autocomplete-express engine has two components, with different behaviors of scheduling
          - express-engine-data : One-to-One POD to Node scheduling
          - express-engine-master: Many-to-One POD to Node scheduling
   
@@ -95,7 +95,12 @@ provided by this chart:
 | `global.reverse-svc.enabled`                      | the flag to indicate whether `reverse-geocode` functionality is enabled or not                                                                                                                                                     | `false`                 |
 | `global.reverse-svc.countryConfigurations.*`      | the country-specific configurations like resource requests, nodeSelector and threadPoolSize                                                                                                                                        | `<see values.yaml>`     |
 | `global.manualDataConfig.*`                       | the config to enable the manual configuration for country-specific vintage data config-map. `addressing-hook.enabled` should be set to false, else `global.manualDataConfig` will be given higher precedence.                      | `false`                 |
-
+| `global.expressEngineImage.repository`               | the express-engine container image repository                                                                                                                                                                                  | `express-engine`    |
+| `global.expressEngineImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `1.0.0`                 |
+| `global.expressEngineDataRestoreImage.repository`               | the express-engine-data-restore container image repository                                                                                                                                                                                  | `express-engine-data-restore`    |
+| `global.expressEngineDataRestoreImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `1.0.0`                 |
+| `global.efs.expressEngineDataMountPath`                       | the mount path of the folder where express-engine data is present                                                                                                                                                                           | `/usr/share/express_snapshots`                |
+| `global.efs.expressEngineBasePath`                      | the base path of the folder where express-engine data is present                                                                                                                                                                  | `verify-express_data`        |
 <hr>
 </details>
 
@@ -156,7 +161,20 @@ Refer to the [deployment.yml](charts/addressing-svc/templates/deployment.yaml) o
 | `*REVERSEGEOCODE_ENABLED`                        | Flag to enable reverse-geocode endpoint.                                                                                                                                                                                                                        | `true for reverse-geocode service`                                                                        |
 <hr>
 </details>
+<details>
+<summary><code>autocomplete-express</code></summary>
 
+Refer to the [deployment.yml](charts/autocomplete-express/templates/deployment.yaml) of respective service for override variables for addressing-service.
+
+| Parameter                         | Description                                                                                                                                              | Default                                                                                                       |
+|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| `OTEL_EXPORTER_OTLP_ENDPOINT`     | If tracing is enabled, this is the endpoint for tracer host.                                                                                             | `http://jaeger-collector.default.svc.cluster.local:4317`                                                      |
+| `*AUTH_ENABLED`                        | Flag to indicate whether authorization is enabled for the endpoints or not.                                                                                                                                                                                                                        | `false`                                                                        |
+| `*AUTOCOMPLETE_V2_ENABLED`                        | Flag to enable autocomplete V2 endpoint endpoint.                                                                                                                                                                                                                        | `true for autocomplete-express service`                                                                        |
+| `*COUNTRY_FINDER_ENABLED`                        | Flag to enable automatic country finder from single line address endpoint.                                                                                                                                                                                                                        | `true for autocomplete-express service`                                                                        |
+| `*EXPRESS_URL`                        | Url to express-engine-master service endpoint.                                                                                                                                                                                                                        | `https://express-engine-cluster-master:9200`                                                                        |
+<hr>
+</details>
 ## Memory Recommendations
 
 The `regional-addressing` pod is responsible for managing requests and routing them to
@@ -173,6 +191,8 @@ minimum amount of pod memory for the addressing-services for each specific count
 | DEU     | 6Gi                         | 6Gi          | 6Gi        | 8Gi             |
 | NZL     | 10Gi                        | 6Gi          | 6Gi        | 8Gi             |
 | FRA     | 7Gi                         | 6Gi          | 6Gi        | 8Gi             |
+
+> Note: For autocomplete-express recommended memory and cpu resource requirements are part of the chart [values.yaml](values.yaml) file.
 
 You can adjust the values in [values.yaml](values.yaml), or you can set these parameters in the helm command itself during installation/up-gradation.
 
@@ -325,6 +345,36 @@ curl --location 'https://[EXTERNAL-URL]/li/v1/oas/autocomplete' --header 'Conten
         "customPreferences": {
             "FALLBACK_TO_WORLD": "false"
         }
+    },
+  "address": {
+    "addressLines": [
+      "350 jordan"
+    ],
+    "country": "USA"
+  }
+}'
+```
+
+### `/v2/autocomplete`:
+
+API to autocomplete the addresses
+
+Sample Request:
+
+```curl
+curl --location 'https://[EXTERNAL-URL]/v2/autocomplete' --header 'Content-Type: application/json' --data '{
+  "preferences": {
+        "maxResults": 2,
+        "returnAllInfo": true,
+        "customPreferences": {
+            "SEARCH_TYPE": "ADDRESS",
+            "INITIAL_SEARCH_DISTANCE": "5.0",
+            "INITIAL_DISTANCE_UNIT": "MILE"
+        },
+        "originXY": [
+            -76.925146,
+            41.247993
+        ]
     },
   "address": {
     "addressLines": [
