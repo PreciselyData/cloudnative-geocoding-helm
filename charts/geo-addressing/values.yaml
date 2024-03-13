@@ -293,7 +293,6 @@ autocomplete-express:
   ###########################################
   expressEngineDataRestore:
     enabled: true
-    chownUser: 1000
     ##
     ## The nodeSelector configs for the express-engine-data-restore job
     ## - docs for nodeSelector:
@@ -301,6 +300,11 @@ autocomplete-express:
     ##
     ## Note: This should be a arm based cluster node group
     nodeSelector: { }
+
+    ##
+    ## Flag to allow reload of express engine data
+    ## Note: This will delete all existing data from the cluster and reload it
+    allowDataReload: true
 
     ##
     ## Manual data vintage configuration for express engine data

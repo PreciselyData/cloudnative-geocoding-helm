@@ -51,7 +51,15 @@ spec:
             runAsUser: 0
           image: "{{ .Values.global.expressEngineDataRestoreImage.repository }}:{{ .Values.global.expressEngineDataRestoreImage.tag }}"
           imagePullPolicy: {{ .Values.global.expressEngineDataRestoreImage.pullPolicy }}
-          args: ["--data-path", {{- printf "%s/%s"  .Values.global.efs.expressEngineDataMountPath .Values.global.efs.expressEngineBasePath | quote }}, "--user", {{ .Values.expressEngineDataRestore.chownUser | quote }}]
+          args: 
+            - --data-path
+            - "{{- printf "%s/%s"  .Values.global.efs.expressEngineDataMountPath .Values.global.efs.expressEngineBasePath }}"
+            - --user
+            - "{{ .Values.expressEngineDataRestore.chownUser }}"
+            {{- if .Values.expressEngineDataRestore.allowDataReload }}
+            - --allow-data-reload
+            - "true"
+            {{- end}}
           volumeMounts:
             - name: snapshot-volume
               mountPath: {{ .Values.global.efs.expressEngineDataMountPath }}

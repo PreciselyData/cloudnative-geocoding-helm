@@ -95,6 +95,8 @@ spec:
               value: "false"
             - name: IS_HELM_SOLUTION
               value: "true"
+            - name: IS_NO_COUNTRY_ENABLED_V2
+              value: "true"
             {{- if .Values.global.otelExporterEndpoint }}
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: {{ .Values.global.otelExporterEndpoint }}
