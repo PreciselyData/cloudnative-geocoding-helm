@@ -304,7 +304,7 @@ autocomplete-express:
     ##
     ## Flag to allow reload of express engine data
     ## Note: This will delete all existing data from the cluster and reload it
-    allowDataReload: true
+    allowDataReload: false
 
     ##
     ## Manual data vintage configuration for express engine data
