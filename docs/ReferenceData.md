@@ -67,6 +67,17 @@ basePath/
 │   │       └── 202308/
 │   │           ├── data-folder-1/
 │   │           └── ...
+├── express_data/
+│   │── usa/
+│   │   └── 202311081159/
+│   │       └── 202309/
+│   │           ├── addressing/
+│   │           └── poi/
+│   │── fra/
+│   │   └── 202311081159/
+│   │       └── 202308/
+│   │           ├── addressing/
+│   │           └── poi/
 ```
 
 # Reference Data Installation

@@ -114,6 +114,16 @@ provided by this chart:
 <hr>
 </details>
 
+<details>
+<summary><code>autocomplete-express.expressEngineDataRestore.*</code></summary>
+
+| Parameter                 | Description                                                                                                                                                             | Default |
+|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| `autocomplete-express.expressEngineDataRestore.enabled` | flag to enable or disable the express engine data restore job. Refer to the comments in [values.yaml](../../../charts/geo-addressing/values.yaml) for express engine manual data configuration. | `true`  |
+
+<hr>
+</details>
+
 ## Environment Variables
 
 > click the `▶` symbol to expand.

@@ -88,6 +88,8 @@ There are two docker container images which will be pushed to ECR with the tag o
 
 1. regional-addressing-service
 2. addressing-service
+3. express-engine
+4. express-engine-data-restore
 
 For more details related to docker images download script, follow the
 instructions [here](../../../scripts/images-to-ecr-uploader/README.md)
@@ -154,11 +156,12 @@ helm upgrade --install geo-addressing ./charts/geo-addressing \
 ```
 
 By default, only verify/geocode functionality is enabled. 
-To enable other functionalities like autocomplete, lookup and
+To enable other functionalities like autocomplete, autocompleteV2, lookup and
 reverse-geocode you have to set the parameters in helm command as follows.
 
 ```shell
 --set "autocomplete-svc.enabled=true"
+--set "autocomplete-express.enabled=true"
 --set "lookup-svc.enabled=true"
 --set "reverse-svc.enabled=true"
 ```
@@ -168,8 +171,10 @@ reverse-geocode you have to set the parameters in helm command as follows.
 > 
 > Refer [helm values](../../../charts/geo-addressing/README.md#helm-values) for the parameters related to `global.manualDataConfig.*` and `addressing-hook.*`.
 > 
+>
+> NOTE: `addressing-hook` job not applicable to autocompleteV2 service.
+>
 > Also, for more information, refer to the comments in [values.yaml](../../../charts/geo-addressing/values.yaml)
-> 
 #### Mandatory Parameters
 
 * ``global.awsRegion``: AWS Region
@@ -184,6 +189,9 @@ reverse-geocode you have to set the parameters in helm command as follows.
 * ``global.expressEngineImage.repository``: The ECR image repository for the express-engine image
 * ``global.expressEngineDataRestoreImage.repository``: The ECR image repository for the express-engine-data-restore image
 * ``global.nodeSelector``: The node selector to run the geo-addressing solutions on nodes of the cluster
+* ``autocomplete-express.expressEngineDataRestore.nodeSelector``: The node selector to run the express-engine data restore job.  Should be a arm based Node group.
+* ``autocomplete-express.expressenginedata.nodeSelector``: The node selector to run the express-engine data service. Should be a arm based Node group.
+* ``autocomplete-express.expressenginemaster.nodeSelector``: The node selector to run the express-engine master service. Should be a arm based Node group.
 
 For more information on helm values, follow [this link](../../../charts/geo-addressing/README.md#helm-values).
 
