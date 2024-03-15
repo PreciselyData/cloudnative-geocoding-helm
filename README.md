@@ -63,6 +63,7 @@ Within this architecture, there are two key types of microservices:
 - _Addressing Service_ (Country-Specific): These microservices are specialized for individual countries, allowing us to
   cater to unique addressing requirements and regulations in different regions. Each country-based addressing service is
   optimized for accuracy within its specific jurisdiction.
+- _Autocomplete Express_: This microservice allow us provide new Address AutocompleteV2 service with enhanced quality and performance.
 
 ## Components
 
