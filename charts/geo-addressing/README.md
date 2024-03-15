@@ -378,10 +378,12 @@ curl --location 'https://[EXTERNAL-URL]/v2/autocomplete' --header 'Content-Type:
         "maxResults": 2,
         "returnAllInfo": true,
         "customPreferences": {
-            "SEARCH_TYPE": "ADDRESS",
-            "INITIAL_SEARCH_DISTANCE": "5.0",
-            "INITIAL_DISTANCE_UNIT": "MILE"
+            "SEARCH_TYPE": "ADDRESS"
         },
+        "distance": {
+            "value": 10,
+            "distanceUnit": "MILE"
+        }
         "originXY": [
             -76.925146,
             41.247993
