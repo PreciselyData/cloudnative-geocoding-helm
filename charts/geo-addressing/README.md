@@ -30,12 +30,12 @@ The geo-addressing helm chart compromises of following components:
    - reverse-svc:
        - If enabled, it deploys country-specific addressing services for `reverse-geocode` capability.
    - autocomplete-express:
-       - If enabled, it deploys V2 autocomplete-express service for `autocomplete` capability.
-       - This new autocomplete functionality is based on express engine and needs some specific configuration in cluster.
+       - If enabled, it deploys autocomplete-express service for `v2/autocomplete` capability.
+       - This new autocomplete functionality is based on express-engine and needs some specific configuration in cluster.
        - Nodes to deploy the express-engine which is part of the autocomplete-express chart shoud be ARM based CPU optimized instances like the `c7g.8xlarge` instance types in AWS
        - autocomplete-express engine has two components, with different behaviors of scheduling
-         - express-engine-data : One-to-One POD to Node scheduling
-         - express-engine-master: Many-to-One POD to Node scheduling
+         - express-engine-data : One-to-One POD to Node scheduling. i.e. One Node will be running One POD of express-engine-data service.
+         - express-engine-master: Many-to-One POD to Node scheduling. i.e. One Node can host multiple PODs of express-engine-master service.
   
 - Ingress
 - Horizontal Autoscaler (HPA)
@@ -99,8 +99,8 @@ provided by this chart:
 | `global.expressEngineImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `1.0.0`                 |
 | `global.expressEngineDataRestoreImage.repository`               | the express-engine-data-restore container image repository                                                                                                                                                                                  | `express-engine-data-restore`    |
 | `global.expressEngineDataRestoreImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `1.0.0`                 |
-| `global.efs.expressEngineDataMountPath`                       | the mount path of the folder where express-engine data is present                                                                                                                                                                           | `/usr/share/express_snapshots`                |
-| `global.efs.expressEngineBasePath`                      | the base path of the folder where express-engine data is present                                                                                                                                                                  | `verify-express_data`        |
+| `global.efs.expressEngineDataMountPath`                       | the mount path of the folder where express-engine data is present.                                                                                                                                                                           | `/usr/share/express_snapshots`                |
+| `global.efs.expressEngineBasePath`                      | the base path of the folder where express-engine data is present                                                                                                                                                                  | `express_data`        |
 <hr>
 </details>
 
