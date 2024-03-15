@@ -148,10 +148,16 @@ helm upgrade --install geo-addressing ./charts/geo-addressing \
 --set "ingress.hosts[0].host=[ingress-host-name]" \ 
 --set "ingress.hosts[0].paths[0].path=/precisely/addressing" \
 --set "ingress.hosts[0].paths[0].pathType=ImplementationSpecific" \
---set "global.nodeSelector.node-app=geo-addressing" \
+--set "global.nodeSelector.node-app=[node-selector-label]" \
 --set "image.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/regional-addressing-service" \
 --set "global.addressingImage.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/addressing-service" \
---set "global.countries={usa,can,gbr}" \
+--set "global.expressEngineImage.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/express-engine" \
+--set "global.expressEngineDataRestoreImage.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/express-engine-data-restore" \
+--set "autocomplete-express.enabled=true" \
+--set "autocomplete-express.expressenginedata.nodeSelector.node-app=[node-selector-label-arm64-node]" \
+--set "autocomplete-express.expressenginemaster.nodeSelector.node-app=[node-selector-label-arm64-node]" \ 
+--set "autocomplete-express.expressEngineDataRestore.nodeSelector.node-app=[node-selector-label-arm64-node]" \
+--set "global.countries={usa,can,aus,nzl}" \
 --namespace geo-addressing --create-namespace
 ```
 
@@ -188,10 +194,10 @@ reverse-geocode you have to set the parameters in helm command as follows.
 * ``global.addressingImage.repository``: The ECR image repository for the addressing-service image
 * ``global.expressEngineImage.repository``: The ECR image repository for the express-engine image
 * ``global.expressEngineDataRestoreImage.repository``: The ECR image repository for the express-engine-data-restore image
-* ``global.nodeSelector``: The node selector to run the geo-addressing solutions on nodes of the cluster
-* ``autocomplete-express.expressEngineDataRestore.nodeSelector``: The node selector to run the express-engine data restore job.  Should be a arm based Node group.
-* ``autocomplete-express.expressenginedata.nodeSelector``: The node selector to run the express-engine data service. Should be a arm based Node group.
-* ``autocomplete-express.expressenginemaster.nodeSelector``: The node selector to run the express-engine master service. Should be a arm based Node group.
+* ``global.nodeSelector``: The node selector to run the geo-addressing solutions on nodes of the cluster. Should be a amd64 based Node group.
+* ``autocomplete-express.expressEngineDataRestore.nodeSelector``: The node selector to run the express-engine data restore job. Should be a arm64 based Node group.
+* ``autocomplete-express.expressenginedata.nodeSelector``: The node selector to run the express-engine data service. Should be a arm64 based Node group.
+* ``autocomplete-express.expressenginemaster.nodeSelector``: The node selector to run the express-engine master service. Should be a arm64 based Node group.
 
 For more information on helm values, follow [this link](../../../charts/geo-addressing/README.md#helm-values).
 

@@ -290,6 +290,8 @@ autocomplete-express:
 
   ###########################################
   ## CONFIG | Express Engine Data Restore Job
+  ## Use this job to allow loading the data
+  ## for autocompleteV2 service
   ###########################################
   expressEngineDataRestore:
     enabled: true
@@ -477,9 +479,9 @@ addressing-svc:
       resources:
         requests:
           cpu: 1
-          memory: 6Gi
+          memory: 8Gi
         limits:
-          memory: 6Gi
+          memory: 8Gi
     usa:
       resources:
         requests:
