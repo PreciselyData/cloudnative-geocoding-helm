@@ -7,6 +7,8 @@ which are conveniently obtainable from Precisely Data Experience. The required d
 
 1. Regional Addressing Service Docker Image
 2. Addressing Service Docker Image
+3. Express Engine Docker Image
+4. Express Engine Data Restore Docker Image
 
 > [!NOTE]:  
 > Contact Precisely for buying subscription to docker image
