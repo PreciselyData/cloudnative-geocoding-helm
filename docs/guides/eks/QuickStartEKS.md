@@ -84,7 +84,7 @@ pip install -r requirements.txt
 python upload_ecr.py --pdx-api-key [pdx-api-key] --pdx-api-secret [pdx-secret] --aws-access-key [aws-access-key] --aws-secret [aws-secret] --aws-region [aws-region]
 ```
 
-There are two docker container images which will be pushed to ECR with the tag of helm chart version.
+There are four docker container images which will be pushed to ECR with the tag of helm chart version.
 
 1. regional-addressing-service
 2. addressing-service
