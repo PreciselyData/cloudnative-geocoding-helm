@@ -2,7 +2,7 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: {{include "autocomplete-exp-gp3-storage-class.name" .}}
+  name: {{include "addressing-exp-gp3-storage-class.name" .}}
   labels:
     {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
 provisioner: ebs.csi.aws.com
@@ -17,7 +17,7 @@ volumeBindingMode: WaitForFirstConsumer
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: {{include "autocomplete-exp-efs-storage-class.name" .}}
+  name: {{include "addressing-exp-efs-storage-class.name" .}}
   labels:
     {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
 provisioner: efs.csi.aws.com
@@ -31,7 +31,7 @@ parameters:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{include "autocomplete-exp-efs-snapshot-pv.name" .}}
+  name: {{include "addressing-exp-efs-snapshot-pv.name" .}}
   finalizers: [ ]
   labels:
     {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
@@ -42,7 +42,7 @@ spec:
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Delete
-  storageClassName: {{include "autocomplete-exp-efs-storage-class.name" .}}
+  storageClassName: {{include "addressing-exp-efs-storage-class.name" .}}
   mountOptions:
     - tls
   csi:
@@ -54,12 +54,12 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{include "autocomplete-exp-efs-snapshot-pvc.name" .}}
+  name: {{include "addressing-exp-efs-snapshot-pvc.name" .}}
   labels:
     {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
 spec:
-  storageClassName: {{include "autocomplete-exp-efs-storage-class.name" .}}
-  volumeName: {{include "autocomplete-exp-efs-snapshot-pv.name" .}}
+  storageClassName: {{include "addressing-exp-efs-storage-class.name" .}}
+  volumeName: {{include "addressing-exp-efs-snapshot-pv.name" .}}
   accessModes:
     - ReadWriteMany
   resources:

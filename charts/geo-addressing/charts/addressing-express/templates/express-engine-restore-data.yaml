@@ -2,14 +2,14 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: {{include "autocomplete-exp-restore-job-sa.name" .}}
+  name: {{include "addressing-exp-restore-job-sa.name" .}}
   labels:
     {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{include "autocomplete-exp-restore-job-role.name" .}}
+  name: {{include "addressing-exp-restore-job-role.name" .}}
   labels:
     {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
 rules:
@@ -24,21 +24,21 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{include "autocomplete-exp-restore-job-rb.name" .}}
+  name: {{include "addressing-exp-restore-job-rb.name" .}}
   labels:
     {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: {{include "autocomplete-exp-restore-job-sa.name" .}}
+    name: {{include "addressing-exp-restore-job-sa.name" .}}
 roleRef:
   kind: Role
-  name: {{include "autocomplete-exp-restore-job-role.name" .}}
+  name: {{include "addressing-exp-restore-job-role.name" .}}
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{include "autocomplete-exp-restore-job.name" .}}
+  name: {{include "addressing-exp-restore-job.name" .}}
   labels:
     {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
 spec:
@@ -70,15 +70,15 @@ spec:
           {{- end}}
       restartPolicy: Never
       terminationGracePeriodSeconds: 10
-      serviceAccountName: {{include "autocomplete-exp-restore-job-sa.name" .}}
+      serviceAccountName: {{include "addressing-exp-restore-job-sa.name" .}}
       volumes:
         - name: snapshot-volume
           persistentVolumeClaim:
-            claimName: {{include "autocomplete-exp-efs-snapshot-pvc.name" .}}
+            claimName: {{include "addressing-exp-efs-snapshot-pvc.name" .}}
         {{- if .Values.expressEngineDataRestore.dataConfig }}
         - name: config-volume
           configMap:
-            name: {{ include "autocomplete-exp-restore-job-config.name" .}}
+            name: {{ include "addressing-exp-restore-job-config.name" .}}
         {{- end}}
       {{- with .Values.expressEngineDataRestore.nodeSelector }}
       nodeSelector:

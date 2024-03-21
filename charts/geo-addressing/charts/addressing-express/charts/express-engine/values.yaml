@@ -105,7 +105,7 @@ persistence:
 extraVolumes: |
   - name: snapshot-volume
     persistentVolumeClaim:
-      claimName: {{ include "autocomplete-exp-efs-snapshot-pvc.name" .}}
+      claimName: {{ include "addressing-exp-efs-snapshot-pvc.name" .}}
 
 extraVolumeMounts: |
   - name: snapshot-volume

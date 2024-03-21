@@ -3,8 +3,8 @@ replicaCount: 1
 enabled: true
 
 imagePullSecrets: [ ]
-nameOverride: "autocomplete"
-fullnameOverride: "autocomplete"
+nameOverride: "addressing"
+fullnameOverride: "addressing"
 
 serviceAccount:
   create: true
@@ -120,7 +120,7 @@ expressenginedata:
   ##
   persistence:
     enabled: true
-    storageClass: '{{include "autocomplete-exp-gp3-storage-class.name" .}}'
+    storageClass: '{{include "addressing-exp-gp3-storage-class.name" .}}'
     enableInitChown: true
     labels:
       enabled: true
@@ -181,7 +181,7 @@ expressenginemaster:
   ##
   persistence:
     enabled: true
-    storageClass: '{{include "autocomplete-exp-gp3-storage-class.name" .}}'
+    storageClass: '{{include "addressing-exp-gp3-storage-class.name" .}}'
     enableInitChown: true
     labels:
       enabled: true
