@@ -58,10 +58,12 @@ Within this architecture, there are two key types of microservices:
     - **_Reverse Geocode_**: performs reverse geocoding using input coordinates and returns address information that is
       the best match for that point.
     - **_Autocomplete_**: yields matched addresses and place for the given input addresses.
+    - **_AutocompleteV2_**: yields matched addresses and place for the given input addresses. This capability dependes on autocomplete-express service.
     - **_Lookup Service_**: returns geocoded candidates when given a unique key.
 - _Addressing Service_ (Country-Specific): These microservices are specialized for individual countries, allowing us to
   cater to unique addressing requirements and regulations in different regions. Each country-based addressing service is
   optimized for accuracy within its specific jurisdiction.
+- _Autocomplete Express_: This microservice allow us provide new Address AutocompleteV2 service with enhanced quality and performance.
 
 ## Components
 
