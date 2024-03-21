@@ -30,8 +30,8 @@ The geo-addressing helm chart compromises of following components:
    - reverse-svc:
        - If enabled, it deploys country-specific addressing services for `reverse-geocode` capability.
    - addressing-express:
-       - If enabled, it deploys V2 addressing-express service for `autocomplete` capability.
-       - This new autocomplete functionality is based on express engine and needs some specific configuration in cluster.
+       - If enabled, it deploys addressing-express service.
+       - addressing-express needs some specific configuration in cluster.
        - Nodes to deploy the express-engine which is part of the addressing-express chart shoud be ARM based CPU optimized instances like the `c7g.8xlarge` instance types in AWS
        - addressing-express engine has two components, with different behaviors of scheduling
          - express-engine-data : One-to-One POD to Node scheduling
@@ -138,6 +138,7 @@ Refer to [this file](templates/deployment.yaml) for overriding the environment v
 | Parameter                              | Description                                                                                                                                                                                                                                                                                        | Default                                                                        |
 |----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
 | `*ADDRESSING_BASE_URL`                 | The internal url of country-based verify/geocode service                                                                                                                                                                                                                                           | `http://addressing-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080`   |
+| `*ADDRESSING_EXPRESS_BASE_URL`                 | The internal url of addressing-express service service                                                                                                                                                                                                                                           | `http://addressing-express.{{ .Release.Namespace }}.svc.cluster.local:8080`   |
 | `LOOKUP_BASE_URL`                      | The internal url of country-based lookup service. If you prefer not to maintain separate infrastructure for the lookup service and would like all calls to be handled by the addressing service, you have the flexibility to modify this URL and point it to addressing service.                   | `http://lookup-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080`       |
 | `AUTOCOMPLETE_BASE_URL`                | The internal url of country-based autocomplete service. If you prefer not to maintain separate infrastructure for the autocomplete service and would like all calls to be handled by the addressing service, you have the flexibility to modify this URL and point it to addressing service.       | `http://autocomplete-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080` |
 | `REVERSE_GEOCODE_BASE_URL`             | The internal url of country-based reverse-geocode service. If you prefer not to maintain separate infrastructure for the reverse-geocode service and would like all calls to be handled by the addressing service, you have the flexibility to modify this URL and point it to addressing service. | `http://reverse-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080`      |
@@ -151,6 +152,7 @@ Refer to [this file](templates/deployment.yaml) for overriding the environment v
 | `*SUPPORTED_COUNTRIES_REVERSE_GEOCODE` | The regions that are supported for lookup.                                                                                                                                                                                                                                                         |                                                                                |
 | `*AUTH_ENABLED`                        | Flag to indicate whether authorization is enabled for the endpoints or not.                                                                                                                                                                                                                        | `false`                                                                        |
 | `*IS_HELM_SOLUTION`                     | Flag to indicate if on-premise helm solution is deployed.                                                                                                                                                                                                                                           | `true`                                                               |
+| `*IS_NO_COUNTRY_ENABLED_V2`                     | Flag to enable geocoding without country.                                                                                                                                                                                                                                           | `true`                                                               |
 <hr>
 </details>
 
@@ -241,6 +243,28 @@ curl -X 'POST' \
         "1700 district ave #300 burlington, ma"
       ],
       "country": "USA"
+    }
+  ]
+}'
+```
+
+```curl
+curl -X 'POST' \
+  'https://[EXTERNAL-URL]/li/v1/oas/geocode' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "preferences": {
+        "customPreferences": {
+            "FALLBACK_TO_WORLD": "false"
+        },
+        "returnAllInfo": true
+    },
+  "addresses": [
+    {
+      "addressLines": [
+        "1700 district ave #300 burlington, ma"
+      ]
     }
   ]
 }'

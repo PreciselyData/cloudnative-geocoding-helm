@@ -1,6 +1,6 @@
 replicaCount: 1
 
-enabled: ~
+enabled: true
 
 imagePullSecrets: [ ]
 nameOverride: "autocomplete"
@@ -72,7 +72,7 @@ expressEngineDataRestore:
   ## Manual data vintage configuration for express engine data
   ## Note: Manual data vintage configuration overrides the automatic data vintage configuration
   dataConfig:
-    # autocomplete.json: |
+    # expressConfig.json: |
     #   {
     #     "nzl": {
     #         "addressing": {

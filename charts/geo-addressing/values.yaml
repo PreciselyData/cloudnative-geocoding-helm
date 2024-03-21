@@ -293,7 +293,6 @@ addressing-express:
   ## for addressing-express service
   ###########################################
   expressEngineDataRestore:
-    enabled: true
     ##
     ## The nodeSelector configs for the express-engine-data-restore job
     ## - docs for nodeSelector:
@@ -328,7 +327,6 @@ addressing-express:
       #   }
 
   expressenginedata:
-    enabled: true
     
     autoscaling:
       ## Keep this enabled
@@ -336,13 +334,13 @@ addressing-express:
       ##
       ## Warning: Do not reduce the count of minReplicas on helm upgrade. This will lead to data loss
       ##
-      minReplicas: 4
+      minReplicas: 3
       maxReplicas: 20
 
       targetCPUUtilizationPercentage: 50
 
     ##
-    ## The nodeSelector configs for the express-engine-data-restore job
+    ## The nodeSelector configs for the express-engine-data service
     ## - docs for nodeSelector:
     ##   https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
     ##
@@ -359,11 +357,10 @@ addressing-express:
     ##
     resources:
       requests:
-        cpu: 24
+        cpu: 16
         memory: 32Gi
 
   expressenginemaster:
-    enabled: true
     
     ##
     ## Warning: Do not reduce the count of replicas on helm upgrade. This will lead to data loss
@@ -371,7 +368,7 @@ addressing-express:
     replicas: 3
 
     ##
-    ## The nodeSelector configs for the express-engine-data-restore job
+    ## The nodeSelector configs for the express-engine-master service
     ## - docs for nodeSelector:
     ##   https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
     ##
