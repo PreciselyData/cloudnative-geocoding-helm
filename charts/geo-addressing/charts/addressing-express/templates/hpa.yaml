@@ -6,14 +6,14 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "autocomplete-express.fullname" (list $top $country) }}
+  name: {{ include "addressing-express.fullname" (list $top $country) }}
   labels:
-    {{- include "autocomplete-express.labels" (list $top $country) | nindent 4 }}
+    {{- include "addressing-express.labels" (list $top $country) | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "autocomplete-express.fullname" (list $top $country) }}
+    name: {{ include "addressing-express.fullname" (list $top $country) }}
   behavior:
     scaleDown:
       stabilizationWindowSeconds: 120

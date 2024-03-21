@@ -4,7 +4,7 @@ kind: StorageClass
 metadata:
   name: {{include "autocomplete-exp-gp3-storage-class.name" .}}
   labels:
-    {{- include "autocomplete-express.labels" (list . "express") | nindent 4 }}
+    {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
 provisioner: ebs.csi.aws.com
 parameters:
   type: gp3
@@ -19,7 +19,7 @@ apiVersion: storage.k8s.io/v1
 metadata:
   name: {{include "autocomplete-exp-efs-storage-class.name" .}}
   labels:
-    {{- include "autocomplete-express.labels" (list . "express") | nindent 4 }}
+    {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
 provisioner: efs.csi.aws.com
 parameters:
   provisioningMode: efs-ap
@@ -34,7 +34,7 @@ metadata:
   name: {{include "autocomplete-exp-efs-snapshot-pv.name" .}}
   finalizers: [ ]
   labels:
-    {{- include "autocomplete-express.labels" (list . "express") | nindent 4 }}
+    {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
 spec:
   capacity:
     storage: 200G
@@ -56,7 +56,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{include "autocomplete-exp-efs-snapshot-pvc.name" .}}
   labels:
-    {{- include "autocomplete-express.labels" (list . "express") | nindent 4 }}
+    {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
 spec:
   storageClassName: {{include "autocomplete-exp-efs-storage-class.name" .}}
   volumeName: {{include "autocomplete-exp-efs-snapshot-pv.name" .}}

@@ -241,28 +241,27 @@ addressing-hook:
 ## CONFIG | Autocomplete Express Functionalities
 ################################################
 ##
-## config related to autocomplete-express helm chart.
-## this helm chart is required if you want to enable autocomplete express capabilities in your addressing infrastructure.
-autocomplete-express:
-  ## config for enabling or disabling `autocomplete-express` capabilities.
-  enabled: true
-  ## number of replicas for autocomplete-express pods.
+## config related to addressing-express helm chart.
+## This helm chart is required if you want to enable addressing express capabilities in your addressing infrastructure.
+## This service is needed for enabling Geocoding without country.
+addressing-express:
+  ## number of replicas for addressing-express pods.
   replicaCount: 1
   imagePullSecrets: [ ]
-  ## service account will be created by default for autocomplete-express deployment.
+  ## service account will be created by default for addressing-express deployment.
   serviceAccount:
     create: true
     annotations: { }
     name: ""
-  ## pod annotations for autocomplete-express pods
+  ## pod annotations for addressing-express pods
   podAnnotations: { }
-  ## the security context for the autocomplete-express Pods
+  ## the security context for the addressing-express Pods
   ## - spec for PodSecurityContext:
   ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core
   ##
   podSecurityContext: { }
   securityContext: { }
-  ## the toleration configs for the autocomplete-express pods
+  ## the toleration configs for the addressing-express pods
   ## - spec for Toleration:
   ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#toleration-v1-core
   ##
@@ -276,10 +275,10 @@ autocomplete-express:
   ## Autoscaling configs
   ## By default, minimum replicas are set to 1 and maximum to 10
   ## You can override this parameter as follows:
-  # --set "autocomplete-express.autoscaling.minReplicas=10"
+  # --set "addressing-express.autoscaling.minReplicas=10"
   autoscaling:
     enabled: true
-    minReplicas: 5
+    minReplicas: 3
     maxReplicas: 20
     targetCPUUtilizationPercentage: 50
   
@@ -291,7 +290,7 @@ autocomplete-express:
   ###########################################
   ## CONFIG | Express Engine Data Restore Job
   ## Use this job to allow loading the data
-  ## for autocompleteV2 service
+  ## for addressing-express service
   ###########################################
   expressEngineDataRestore:
     enabled: true
@@ -312,7 +311,7 @@ autocomplete-express:
     ## Manual data vintage configuration for express engine data
     ## Note: Manual data vintage configuration overrides the automatic data vintage configuration
     dataConfig:
-      # autocomplete.json: |
+      # expressConfig.json: |
       #   {
       #     "nzl": {
       #         "addressing": {

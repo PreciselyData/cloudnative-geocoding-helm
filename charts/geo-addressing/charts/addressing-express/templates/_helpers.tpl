@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "autocomplete-express.name" -}}
+{{- define "addressing-express.name" -}}
 {{- $top := index . 0 -}}
 {{- $var := index . 1 -}}
 {{- default $top.Chart.Name (printf "%s-%s" $top.Values.nameOverride $var) | trunc 63 | trimSuffix "-" }}
@@ -12,7 +12,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "autocomplete-express.fullname" -}}
+{{- define "addressing-express.fullname" -}}
 {{- $top := index . 0 -}}
 {{- $var := index . 1 -}}
 {{- if $top.Values.fullnameOverride }}
@@ -30,7 +30,7 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "autocomplete-express.chart" -}}
+{{- define "addressing-express.chart" -}}
 {{- $top := index . 0 -}}
 {{- $var := index . 1 -}}
 {{- printf "%s-%s-%s" $top.Chart.Name $var $top.Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
@@ -39,11 +39,11 @@ Create chart name and version as used by the chart label.
 {{/*
 Common labels
 */}}
-{{- define "autocomplete-express.labels" -}}
+{{- define "addressing-express.labels" -}}
 {{- $top := index . 0 -}}
 {{- $var := index . 1 -}}
-helm.sh/chart: {{ include "autocomplete-express.chart" .}}
-{{ include "autocomplete-express.selectorLabels" . }}
+helm.sh/chart: {{ include "addressing-express.chart" .}}
+{{ include "addressing-express.selectorLabels" . }}
 {{- if $top.Chart.AppVersion }}
 app.kubernetes.io/version: {{ $top.Chart.AppVersion | quote }}
 {{- end }}
@@ -53,21 +53,21 @@ app.kubernetes.io/managed-by: {{ $top.Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "autocomplete-express.selectorLabels" -}}
+{{- define "addressing-express.selectorLabels" -}}
 {{- $top := index . 0 -}}
 {{- $var := index . 1 -}}
-app.kubernetes.io/name: {{ include "autocomplete-express.name" . }}
+app.kubernetes.io/name: {{ include "addressing-express.name" . }}
 app.kubernetes.io/instance: {{ printf "%s-%s" $top.Release.Name $var | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "autocomplete-express.serviceAccountName" -}}
+{{- define "addressing-express.serviceAccountName" -}}
 {{- $top := index . 0 -}}
 {{- $var := index . 1 -}}
 {{- if $top.Values.serviceAccount.create }}
-{{- default (include "autocomplete-express.fullname" .) $top.Values.serviceAccount.name }}
+{{- default (include "addressing-express.fullname" .) $top.Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" (printf "%s-%s" $top.Values.serviceAccount.name $var | trimSuffix "-") }}
 {{- end }}

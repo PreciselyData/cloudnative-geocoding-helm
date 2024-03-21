@@ -5,11 +5,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "autocomplete-express.fullname" (list $top $country) }}
+  name: {{ include "addressing-express.fullname" (list $top $country) }}
   labels:
     service: precisely
-    app: {{ include "autocomplete-express.fullname" (list $top $country) }}
-    {{- include "autocomplete-express.labels" (list $top $country) | nindent 4 }}
+    app: {{ include "addressing-express.fullname" (list $top $country) }}
+    {{- include "addressing-express.labels" (list $top $country) | nindent 4 }}
 spec:
   {{- if not $top.Values.autoscaling.enabled }}
   replicas: {{ $top.Values.replicaCount }}
@@ -17,8 +17,8 @@ spec:
   selector:
     matchLabels:
       service: precisely
-      app: {{ include "autocomplete-express.fullname" (list $top $country) }}
-      {{- include "autocomplete-express.selectorLabels" (list $top $country) | nindent 6 }}
+      app: {{ include "addressing-express.fullname" (list $top $country) }}
+      {{- include "addressing-express.selectorLabels" (list $top $country) | nindent 6 }}
   template:
     metadata:
       {{- with $top.Values.podAnnotations }}
@@ -27,15 +27,15 @@ spec:
       {{- end }}
       labels:
         service: precisely
-        app: {{ include "autocomplete-express.fullname" (list $top $country) }}
-        {{- include "autocomplete-express.selectorLabels" (list $top $country) | nindent 8 }}
+        app: {{ include "addressing-express.fullname" (list $top $country) }}
+        {{- include "addressing-express.selectorLabels" (list $top $country) | nindent 8 }}
     spec:
       terminationGracePeriodSeconds: 60
       {{- with $top.Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "autocomplete-express.serviceAccountName" (list $top $country) }}
+      serviceAccountName: {{ include "addressing-express.serviceAccountName" (list $top $country) }}
       securityContext:
         {{- toYaml $top.Values.podSecurityContext | nindent 8 }}
       containers:

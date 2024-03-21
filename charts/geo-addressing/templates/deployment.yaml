@@ -73,6 +73,8 @@ spec:
               value: http://lookup-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080
             - name: AUTOCOMPLETE_BASE_URL
               value: http://autocomplete-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080
+            - name: ADDRESSING_EXPRESS_BASE_URL
+              value: http://addressing-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080
             - name: REVERSE_GEOCODE_BASE_URL
               value: http://reverse-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080
             - name: SUPPORTED_COUNTRIES_GEOCODE

@@ -1,5 +1,5 @@
 apiVersion: v2
-name: autocomplete-express
+name: addressing-express
 description: A Helm chart for Autocomplete-express Services
 
 # A chart can be either an 'application' or a 'library' chart.

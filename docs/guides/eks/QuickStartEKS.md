@@ -153,21 +153,22 @@ helm upgrade --install geo-addressing ./charts/geo-addressing \
 --set "global.addressingImage.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/addressing-service" \
 --set "global.expressEngineImage.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/express-engine" \
 --set "global.expressEngineDataRestoreImage.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/express-engine-data-restore" \
---set "autocomplete-express.enabled=true" \
---set "autocomplete-express.expressenginedata.nodeSelector.node-app=[node-selector-label-arm64-node]" \
---set "autocomplete-express.expressenginemaster.nodeSelector.node-app=[node-selector-label-arm64-node]" \ 
---set "autocomplete-express.expressEngineDataRestore.nodeSelector.node-app=[node-selector-label-arm64-node]" \
+--set "addressing-express.expressenginedata.nodeSelector.node-app=[node-selector-label-arm64-node]" \
+--set "addressing-express.expressenginemaster.nodeSelector.node-app=[node-selector-label-arm64-node]" \ 
+--set "addressing-express.expressEngineDataRestore.nodeSelector.node-app=[node-selector-label-arm64-node]" \
 --set "global.countries={usa,can,aus,nzl}" \
 --namespace geo-addressing --create-namespace
 ```
 
-By default, only verify/geocode functionality is enabled. 
-To enable other functionalities like autocomplete, autocompleteV2, lookup and
+By default, only verify/geocode functionality is enabled.
+
+> Note: To addressing-express service is needed for Geocoding without country.
+
+To enable other functionalities like autocomplete, lookup and
 reverse-geocode you have to set the parameters in helm command as follows.
 
 ```shell
 --set "autocomplete-svc.enabled=true"
---set "autocomplete-express.enabled=true"
 --set "lookup-svc.enabled=true"
 --set "reverse-svc.enabled=true"
 ```
@@ -178,7 +179,7 @@ reverse-geocode you have to set the parameters in helm command as follows.
 > Refer [helm values](../../../charts/geo-addressing/README.md#helm-values) for the parameters related to `global.manualDataConfig.*` and `addressing-hook.*`.
 > 
 >
-> NOTE: `addressing-hook` job not applicable to autocompleteV2 service.
+> NOTE: `addressing-hook` job not applicable to addressing-express service.
 >
 > Also, for more information, refer to the comments in [values.yaml](../../../charts/geo-addressing/values.yaml)
 #### Mandatory Parameters
@@ -195,9 +196,9 @@ reverse-geocode you have to set the parameters in helm command as follows.
 * ``global.expressEngineImage.repository``: The ECR image repository for the express-engine image
 * ``global.expressEngineDataRestoreImage.repository``: The ECR image repository for the express-engine-data-restore image
 * ``global.nodeSelector``: The node selector to run the geo-addressing solutions on nodes of the cluster. Should be a amd64 based Node group.
-* ``autocomplete-express.expressEngineDataRestore.nodeSelector``: The node selector to run the express-engine data restore job. Should be a arm64 based Node group.
-* ``autocomplete-express.expressenginedata.nodeSelector``: The node selector to run the express-engine data service. Should be a arm64 based Node group.
-* ``autocomplete-express.expressenginemaster.nodeSelector``: The node selector to run the express-engine master service. Should be a arm64 based Node group.
+* ``addressing-express.expressEngineDataRestore.nodeSelector``: The node selector to run the express-engine data restore job. Should be a arm64 based Node group.
+* ``addressing-express.expressenginedata.nodeSelector``: The node selector to run the express-engine data service. Should be a arm64 based Node group.
+* ``addressing-express.expressenginemaster.nodeSelector``: The node selector to run the express-engine master service. Should be a arm64 based Node group.
 
 For more information on helm values, follow [this link](../../../charts/geo-addressing/README.md#helm-values).
 

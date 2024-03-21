@@ -5,9 +5,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "autocomplete-express.fullname" (list $top $country) }}
+  name: {{ include "addressing-express.fullname" (list $top $country) }}
   labels:
-    {{- include "autocomplete-express.labels" (list $top $country) | nindent 4 }}
+    {{- include "addressing-express.labels" (list $top $country) | nindent 4 }}
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/path: /metrics
@@ -19,5 +19,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "autocomplete-express.selectorLabels" (list $top $country) | nindent 4 }}
+    {{- include "addressing-express.selectorLabels" (list $top $country) | nindent 4 }}
 {{- end }}

@@ -12,7 +12,7 @@ To run the docker images locally, reference data and docker images should be dow
 
 ## Step 2: Running Service Locally
 
-> Note: autocomplete-express service should not be run locally.
+> Note: addressing-express service should not be run locally.
 
 Modify the below variables in ****.env**** file and run the mentioned command.
 

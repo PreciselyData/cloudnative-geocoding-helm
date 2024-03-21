@@ -29,11 +29,11 @@ The geo-addressing helm chart compromises of following components:
        - If enabled, it deploys country-specific addressing services for `lookup` capability.
    - reverse-svc:
        - If enabled, it deploys country-specific addressing services for `reverse-geocode` capability.
-   - autocomplete-express:
-       - If enabled, it deploys V2 autocomplete-express service for `autocomplete` capability.
+   - addressing-express:
+       - If enabled, it deploys V2 addressing-express service for `autocomplete` capability.
        - This new autocomplete functionality is based on express engine and needs some specific configuration in cluster.
-       - Nodes to deploy the express-engine which is part of the autocomplete-express chart shoud be ARM based CPU optimized instances like the `c7g.8xlarge` instance types in AWS
-       - autocomplete-express engine has two components, with different behaviors of scheduling
+       - Nodes to deploy the express-engine which is part of the addressing-express chart shoud be ARM based CPU optimized instances like the `c7g.8xlarge` instance types in AWS
+       - addressing-express engine has two components, with different behaviors of scheduling
          - express-engine-data : One-to-One POD to Node scheduling
          - express-engine-master: Many-to-One POD to Node scheduling
   
@@ -115,11 +115,11 @@ provided by this chart:
 </details>
 
 <details>
-<summary><code>autocomplete-express.expressEngineDataRestore.*</code></summary>
+<summary><code>addressing-express.expressEngineDataRestore.*</code></summary>
 
 | Parameter                 | Description                                                                                                                                                             | Default |
 |---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| `autocomplete-express.expressEngineDataRestore.enabled` | flag to enable or disable the express engine data restore job. Refer to the comments in [values.yaml](../../../charts/geo-addressing/values.yaml) for express engine manual data configuration. | `true`  |
+| `addressing-express.expressEngineDataRestore.enabled` | flag to enable or disable the express engine data restore job. Refer to the comments in [values.yaml](../../../charts/geo-addressing/values.yaml) for express engine manual data configuration. | `true`  |
 
 <hr>
 </details>
@@ -172,16 +172,16 @@ Refer to the [deployment.yml](charts/addressing-svc/templates/deployment.yaml) o
 <hr>
 </details>
 <details>
-<summary><code>autocomplete-express</code></summary>
+<summary><code>addressing-express</code></summary>
 
-Refer to the [deployment.yml](charts/autocomplete-express/templates/deployment.yaml) of respective service for override variables for addressing-service.
+Refer to the [deployment.yml](charts/addressing-express/templates/deployment.yaml) of respective service for override variables for addressing-service.
 
 | Parameter                         | Description                                                                                                                                              | Default                                                                                                       |
 |-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
 | `OTEL_EXPORTER_OTLP_ENDPOINT`     | If tracing is enabled, this is the endpoint for tracer host.                                                                                             | `http://jaeger-collector.default.svc.cluster.local:4317`                                                      |
 | `*AUTH_ENABLED`                        | Flag to indicate whether authorization is enabled for the endpoints or not.                                                                                                                                                                                                                        | `false`                                                                        |
-| `*AUTOCOMPLETE_V2_ENABLED`                        | Flag to enable autocomplete V2 endpoint endpoint.                                                                                                                                                                                                                        | `true for autocomplete-express service`                                                                        |
-| `*COUNTRY_FINDER_ENABLED`                        | Flag to enable automatic country finder from single line address endpoint.                                                                                                                                                                                                                        | `true for autocomplete-express service`                                                                        |
+| `*AUTOCOMPLETE_V2_ENABLED`                        | Flag to enable autocomplete V2 endpoint endpoint.                                                                                                                                                                                                                        | `true for addressing-express service`                                                                        |
+| `*COUNTRY_FINDER_ENABLED`                        | Flag to enable automatic country finder from single line address endpoint.                                                                                                                                                                                                                        | `true for addressing-express service`                                                                        |
 | `*EXPRESS_URL`                        | Url to express-engine-master service endpoint.                                                                                                                                                                                                                        | `https://express-engine-cluster-master:9200`                                                                        |
 <hr>
 </details>
@@ -202,7 +202,7 @@ minimum amount of pod memory for the addressing-services for each specific count
 | NZL     | 10Gi                        | 6Gi          | 6Gi        | 8Gi             |
 | FRA     | 7Gi                         | 6Gi          | 6Gi        | 8Gi             |
 
-> Note: For autocomplete-express recommended memory and cpu resource requirements are part of the chart [values.yaml](values.yaml) file.
+> Note: For addressing-express recommended memory and cpu resource requirements are part of the chart [values.yaml](values.yaml) file.
 
 You can adjust the values in [values.yaml](values.yaml), or you can set these parameters in the helm command itself during installation/up-gradation.
 

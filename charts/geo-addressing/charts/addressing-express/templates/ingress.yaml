@@ -3,7 +3,7 @@
 {{- $top := . -}}
 {{- $country := "express" -}}
 ---
-{{- $fullName := include "autocomplete-express.fullname" (list $top $country) -}}
+{{- $fullName := include "addressing-express.fullname" (list $top $country) -}}
 {{- $svcPort := $top.Values.service.port -}}
 {{- if and $top.Values.ingress.className (not (semverCompare ">=1.18-0" $top.Capabilities.KubeVersion.GitVersion)) }}
   {{- if not (hasKey $top.Values.ingress.annotations "kubernetes.io/ingress.class") }}
@@ -21,7 +21,7 @@ kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "autocomplete-express.labels" (list $top $country) | nindent 4 }}
+    {{- include "addressing-express.labels" (list $top $country) | nindent 4 }}
   {{- with $top.Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
