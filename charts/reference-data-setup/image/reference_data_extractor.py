@@ -46,10 +46,11 @@ COUNTRY_SPD_MAPPING = {
   },
   "express_data": {
     "usa": [
-      "Predictive Addressing Points#United States#All USA#Interactive"
+      "Address Express#United States#All USA#Spectrum Platform Data",
+      "POI Express#United States#All USA#Spectrum Platform Data"
     ],
     "aus": [
-      "Predictive Addressing Points#Australia#All AUS#Interactive"
+      "Address Express#Australia#All AUS#Spectrum Platform Data"
     ]
   }
 }
