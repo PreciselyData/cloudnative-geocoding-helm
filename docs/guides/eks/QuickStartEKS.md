@@ -162,7 +162,7 @@ helm upgrade --install geo-addressing ./charts/geo-addressing \
 
 By default, only verify/geocode functionality is enabled.
 
-> Note: To addressing-express service is needed for Geocoding without country.
+> Note: addressing-express service is needed for Geocoding without country.
 
 To enable other functionalities like autocomplete, lookup and
 reverse-geocode you have to set the parameters in helm command as follows.
