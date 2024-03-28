@@ -396,26 +396,29 @@ API to autocomplete the addresses
 Sample Request:
 
 ```curl
-curl --location 'https://[EXTERNAL-URL]/v2/autocomplete' --header 'Content-Type: application/json' --data '{
-  "preferences": {
-        "maxResults": 2,
-        "returnAllInfo": true,
-        "customPreferences": {
-            "SEARCH_TYPE": "ADDRESS",
-            "INITIAL_SEARCH_DISTANCE": "5.0",
-            "INITIAL_DISTANCE_UNIT": "MILE"
-        },
+curl --location 'http://[EXTERNAL-URL]/v2/autocomplete' \
+--header 'Content-Type: application/json' \
+--data '{
+    "preferences": {
+        "maxResults": 5,
         "originXY": [
-            -76.925146,
-            41.247993
-        ]
+            -71.207799,
+            42.483939
+        ],
+        "distance": {
+            "value": 10,
+            "distanceUnit": "MILE"
+        },
+        "customPreferences": {
+            "SEARCH_TYPE": "ADDRESS"
+        }
     },
-  "address": {
-    "addressLines": [
-      "350 jordan"
-    ],
-    "country": "USA"
-  }
+    "address": {
+        "addressLines": [
+            "1700 DISTRICT"
+        ],
+        "country": "USA"
+    }
 }'
 ```
 
