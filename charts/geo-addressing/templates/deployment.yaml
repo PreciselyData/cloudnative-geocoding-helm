@@ -73,20 +73,22 @@ spec:
               value: http://lookup-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080
             - name: AUTOCOMPLETE_BASE_URL
               value: http://autocomplete-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080
+            - name: ADDRESSING_EXPRESS_BASE_URL
+              value: http://addressing-express.{{ .Release.Namespace }}.svc.cluster.local:8080
             - name: REVERSE_GEOCODE_BASE_URL
               value: http://reverse-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080
             - name: SUPPORTED_COUNTRIES_GEOCODE
-              value: {{ join "," .Values.global.countries }}
+              value: {{ printf "%s,express" (join "," .Values.global.countries) }}
             - name: SUPPORTED_REGIONS_GEOCODE
               value: ""
             - name: SUPPORTED_COUNTRIES_VERIFY
-              value: {{ join "," .Values.global.countries }}
+              value: {{ printf "%s,express" (join "," .Values.global.countries) }}
             - name: SUPPORTED_REGIONS_VERIFY
               value: ""
             - name: SUPPORTED_COUNTRIES_LOOKUP
               value: {{ join "," .Values.global.countries }}
             - name: SUPPORTED_COUNTRIES_AUTOCOMPLETE
-              value: {{ join "," .Values.global.countries }}
+              value: {{ printf "%s,express" (join "," .Values.global.countries) }}
             - name: SUPPORTED_REGIONS_AUTOCOMPLETE
               value: ""
             - name: SUPPORTED_COUNTRIES_REVERSE_GEOCODE
@@ -94,6 +96,8 @@ spec:
             - name: AUTH_ENABLED
               value: "false"
             - name: IS_HELM_SOLUTION
+              value: "true"
+            - name: IS_NO_COUNTRY_ENABLED_V2
               value: "true"
             {{- if .Values.global.otelExporterEndpoint }}
             - name: OTEL_EXPORTER_OTLP_ENDPOINT

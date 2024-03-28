@@ -12,6 +12,7 @@ metadata:
     "helm.sh/resource-policy": delete
 spec:
   backoffLimit: 0
+  ttlSecondsAfterFinished: 100
   template:
     metadata:
       name: "{{ .Release.Name }}-download"

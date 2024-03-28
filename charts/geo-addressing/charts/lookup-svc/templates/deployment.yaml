@@ -79,14 +79,16 @@ spec:
                 configMapKeyRef:
                   name: {{ include "addressing-data-config.name" $top }}
                   key: {{ (printf "lookup.%s.vintage" .) }}
+            - name: GEOCODE_VERIFY_ENABLED
+              value: "false"
             - name: LOOKUP_ENABLED
               value: "true"
+            - name: REVERSEGEOCODE_ENABLED
+              value: "false"
+            - name: AUTOCOMPLETE_ENABLED
+              value: "false"
             - name: DATA_REGION
               value: {{ . | upper }}
-            - name: BLOCK_DISPATCHER_POOL_SIZE
-              value: {{ include "common-svc.configuration" (list $top.Values.countryConfigurations . "blockDispatcherPoolSize") | quote }}
-            - name: RESPONSE_DISPATCHER_MIN_THREADS
-              value: {{ include "common-svc.configuration" (list $top.Values.countryConfigurations . "responseDispatcherMinThreads") | quote }}
             {{- if $top.Values.global.otelExporterEndpoint }}
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: {{ $top.Values.global.otelExporterEndpoint }}

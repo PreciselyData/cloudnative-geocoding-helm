@@ -62,6 +62,7 @@ Within this architecture, there are two key types of microservices:
 - _Addressing Service_ (Country-Specific): These microservices are specialized for individual countries, allowing us to
   cater to unique addressing requirements and regulations in different regions. Each country-based addressing service is
   optimized for accuracy within its specific jurisdiction.
+- _Addressing Express_: This microservice provides support for Geocoding without Country and new Address AutocompleteV2 service with enhanced quality & performance.
 
 ## Components
 
@@ -91,6 +92,7 @@ Following is the helm version chart against geo-addressing PDX docker image vers
 |-----------------------------------------------|--------------------|
 | `0.4.0/2023.9/Sept 12,2023` & `5.1.488` | `0.1.0` - `0.4.0`️ |
 | `0.5.0/2024.2/Feb 20,2024` & `5.1.644` | `0.5.0`️ |
+| `1.0.0/2024.3/Mar 31,2024` & `5.1.682` | `1.0.0`️ |
 
 > NOTE: The docker images pushed to the image repository should be tagged with the current helm chart version. Refer [Downloading Geo-Addressing Docker Images](docs/guides/eks/QuickStartEKS.md#step-3-download-geo-addressing-docker-images) for more information.
  

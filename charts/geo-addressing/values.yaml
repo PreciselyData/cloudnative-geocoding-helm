@@ -12,7 +12,7 @@ replicaCount: 1
 image:
   repository: regional-addressing-service
   pullPolicy: Always
-  tag: 0.5.0
+  tag: 1.0.0
 imagePullSecrets: [ ]
 
 ## This will override the name of the installed regional-addressing deployment.
@@ -77,13 +77,13 @@ ingress:
 ## The default recommended resources requests for regional-addressing service is:
 ##    requests:
 ##      cpu: 1
-##      memory: 1.5Gi
+##      memory: 2Gi
 resources:
   requests:
     cpu: 1
-    memory: 1500Mi
+    memory: 2Gi
   limits:
-    memory: 1500Mi
+    memory: 2Gi
 
 ## Configurations for the HorizontalPodAutoscaler of the regional-addressing pods
 ##
@@ -96,7 +96,7 @@ resources:
 ## For the regional-addressing service, autoscaling is enabled by default to handle large workloads.
 autoscaling:
   enabled: true
-  minReplicas: 2
+  minReplicas: 3
   maxReplicas: 20
   targetCPUUtilizationPercentage: 60
 
@@ -145,7 +145,26 @@ global:
   addressingImage:
     repository: addressing-service
     pullPolicy: Always
-    tag: 0.5.0
+    tag: 1.0.0
+
+  ## Configurations for the express-engine container image.
+  ##
+  ## To download container images, please visit the official 'Precisely Data Experience' website:
+  ## https://data.precisely.com/products
+  expressEngineImage:
+    repository: express-engine
+    tag: 1.0.0
+    pullPolicy: Always
+
+  ## Configurations for the express-engine-data-restore container image.
+  ##
+  ## To download container images, please visit the official 'Precisely Data Experience' website:
+  ## https://data.precisely.com/products
+  expressEngineDataRestoreImage:
+    repository: express-engine-data-restore
+    pullPolicy: Always
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: 1.0.0
 
   ## Configuration for manually configuring the data mount path for addressing-service
   ## When doing the manual configuration for data mount path, disable the data-vintage
@@ -193,6 +212,11 @@ global:
     ##
     ## [NOTE]: the data used for reverse-geocode is the exactly same, that's why the default value is set to verify-geocode.
     reverseBasePath: verify-geocode
+
+    ## The base path where the data is present for express-engine.
+    expressEngineDataMountPath: /usr/share/express_snapshots
+    expressEngineBasePath: express_data
+
   ##
   ## The nodeSelector configs for the regional-addressing pods
   ## - docs for nodeSelector:
@@ -213,7 +237,161 @@ addressing-hook:
 ## Config for enabling or disabling `data-vintage` job hook.
   enabled: true
 
+################################################
+## CONFIG | Autocomplete Express Functionalities
+################################################
+##
+## config related to addressing-express helm chart.
+## This helm chart is required if you want to enable addressing express capabilities in your addressing infrastructure.
+## This service is needed for enabling Geocoding without country.
+addressing-express:
+  ## number of replicas for addressing-express pods.
+  replicaCount: 1
+  imagePullSecrets: [ ]
+  ## service account will be created by default for addressing-express deployment.
+  serviceAccount:
+    create: true
+    annotations: { }
+    name: ""
+  ## pod annotations for addressing-express pods
+  podAnnotations: { }
+  ## the security context for the addressing-express Pods
+  ## - spec for PodSecurityContext:
+  ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core
+  ##
+  podSecurityContext: { }
+  securityContext: { }
+  ## the toleration configs for the addressing-express pods
+  ## - spec for Toleration:
+  ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#toleration-v1-core
+  ##
+  tolerations: [ ]
+  ## the affinity configs for the autocomplete pods
+  ## - spec for Affinity:
+  ##    https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#affinity-v1-core
+  ##
+  affinity: { }
+  ##
+  ## Autoscaling configs
+  ## By default, minimum replicas are set to 1 and maximum to 10
+  ## You can override this parameter as follows:
+  # --set "addressing-express.autoscaling.minReplicas=10"
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 20
+    targetCPUUtilizationPercentage: 50
   
+  resources:
+    requests:
+      cpu: 2
+      memory: 4Gi
+
+  ###########################################
+  ## CONFIG | Express Engine Data Restore Job
+  ## Use this job to allow loading the data
+  ## for addressing-express service
+  ###########################################
+  expressEngineDataRestore:
+    ##
+    ## The nodeSelector configs for the express-engine-data-restore job
+    ## - docs for nodeSelector:
+    ##   https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
+    ##
+    ## Note: This should be a arm based cluster node group
+    nodeSelector: { }
+
+    ##
+    ## Flag to allow reload of express engine data
+    ## Note: This will delete all existing data from the cluster and reload it
+    allowDataReload: false
+
+    ##
+    ## Manual data vintage configuration for express engine data
+    ## Note: Manual data vintage configuration overrides the automatic data vintage configuration
+    dataConfig:
+      # expressConfig.json: |
+      #   {
+      #     "nzl": {
+      #         "addressing": {
+      #             "path": {{printf "%s/%s/%s" .Values.global.efs.expressEngineDataMountPath .Values.global.efs.expressEngineBasePath "addressing/nzl/202312" | quote}},
+      #             "vintage": "202312"
+      #         }
+      #     },
+      #     "usa": {
+      #         "addressing": {
+      #             "path": {{printf "%s/%s/%s" .Values.global.efs.expressEngineDataMountPath .Values.global.efs.expressEngineBasePath "addressing/usa/202309" | quote}},
+      #             "vintage": "202309"
+      #         }
+      #     }
+      #   }
+
+  expressenginedata:
+    
+    autoscaling:
+      ## Keep this enabled
+      enabled: true
+      ##
+      ## Warning: Do not reduce the count of minReplicas on helm upgrade. This will lead to data loss
+      ##
+      minReplicas: 3
+      maxReplicas: 20
+
+      targetCPUUtilizationPercentage: 50
+
+    ##
+    ## The nodeSelector configs for the express-engine-data service
+    ## - docs for nodeSelector:
+    ##   https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
+    ##
+    ## Note: This should be a arm based cluster node group
+    nodeSelector: {}
+
+    ##
+    ## Should be 50% of the memory
+    ##
+    expressEngineJavaOpts: "-Xmx16G -Xms16G"
+    
+    ##
+    ## This is the minimum resources required
+    ##
+    resources:
+      requests:
+        cpu: 16
+        memory: 32Gi
+
+  expressenginemaster:
+    
+    ##
+    ## Warning: Do not reduce the count of replicas on helm upgrade. This will lead to data loss
+    ##
+    replicas: 3
+
+    ##
+    ## The nodeSelector configs for the express-engine-master service
+    ## - docs for nodeSelector:
+    ##   https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
+    ##
+    ## Note: This should be a arm based cluster node group
+    nodeSelector: {}
+
+    ##
+    ## Should be 50% of the memory
+    ##
+    expressEngineJavaOpts: "-Xmx3G -Xms3G"
+
+    ##
+    ## This is the minimum resources required
+    ##
+    resources:
+      requests:
+        cpu: 2
+        memory: 6Gi
+      limits:
+        cpu: 4
+        memory: 6Gi
+
+
 ###################################
 ## CONFIG | Addressing Functionalities
 ###################################
@@ -256,7 +434,7 @@ addressing-svc:
   # --set "addressing-svc.autoscaling.minReplicas=10"
   autoscaling:
     enabled: true
-    minReplicas: 2
+    minReplicas: 3
     maxReplicas: 20
     targetCPUUtilizationPercentage: 70
   ##
@@ -285,35 +463,21 @@ addressing-svc:
   ##        requests:
   ##          cpu: 1000m
   ##          memory: 6Gi
-  ##      blockDispatcherPoolSize: 16
-  ##      responseDispatcherMinThreads: 4
   ##      nodeSelector: {}
   ##
   ## You can also set the parameters for a country in the Helm chart like this:
   ##
   ##  --set "addressing-svc.countryConfigurations.can.resources.requests.cpu=1000m"
   ##  --set "addressing-svc.countryConfigurations.can.resources.requests.memory=6Gi"
-  ##  --set "addressing-svc.countryConfigurations.can.blockDispatcherPoolSize=16"
-  ##  --set "addressing-svc.countryConfigurations.can.responseDispatcherMinThreads=4"
   ##  --set "addressing-svc.countryConfigurations.can.nodeSelector.node-app=geo-addressing"
   countryConfigurations:
     default:
       resources:
         requests:
           cpu: 1
-          memory: 6Gi
+          memory: 8Gi
         limits:
-          memory: 6Gi
-      ## We have implemented a bulk heading pattern in the addressing service.
-      ## You can refer to the following information:
-      ##   https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead
-      ## These threads control the number of parallel interactions with the internal SDK that can be performed for a specific country or group of countries.
-      ## This configuration is introduced because geocoding for different countries behaves differently.
-      ## These threads function similarly to a normal thread-per-request model.
-      blockDispatcherPoolSize: 16
-      ## These are the non-blocking I/O threads.
-      ## They continuously handle requests from the external world and forward them to the downstream blocking dispatcher.
-      responseDispatcherMinThreads: 4
+          memory: 8Gi
     usa:
       resources:
         requests:
@@ -321,9 +485,6 @@ addressing-svc:
           memory: 8Gi
         limits:
           memory: 8Gi
-      blockDispatcherPoolSize: 24
-      responseDispatcherMinThreads: 8
-
 
 ###################################
 ## CONFIG | Autocomplete Functionalities
@@ -396,16 +557,12 @@ autocomplete-svc:
   ##        requests:
   ##          cpu: 1000m
   ##          memory: 6Gi
-  ##      blockDispatcherPoolSize: 16
-  ##      responseDispatcherMinThreads: 4
   ##      nodeSelector: {}
   ##
   ## You can also set the parameters for a country in the Helm chart like this:
   ##
   ##  --set "autocomplete-svc.countryConfigurations.can.resources.requests.cpu=1000m"
   ##  --set "autocomplete-svc.countryConfigurations.can.resources.requests.memory=6Gi"
-  ##  --set "autocomplete-svc.countryConfigurations.can.blockDispatcherPoolSize=16"
-  ##  --set "autocomplete-svc.countryConfigurations.can.responseDispatcherMinThreads=4"
   ##  --set "autocomplete-svc.countryConfigurations.can.nodeSelector.node-app=geo-addressing"
   ##
   countryConfigurations:
@@ -416,16 +573,6 @@ autocomplete-svc:
           memory: 6Gi
         limits:
           memory: 6Gi
-      ## We have implemented a bulk heading pattern in the addressing service.
-      ## You can refer to the following information:
-      ##   https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead
-      ## These threads control the number of parallel interactions with the internal SDK that can be performed for a specific country or group of countries.
-      ## This configuration is introduced because geocoding for different countries behaves differently.
-      ## These threads function similarly to a normal thread-per-request model.
-      blockDispatcherPoolSize: 4
-      ## These are the non-blocking I/O threads.
-      ## They continuously handle requests from the external world and forward them to the downstream blocking dispatcher.
-      responseDispatcherMinThreads: 4
     usa:
       resources:
         requests:
@@ -433,8 +580,6 @@ autocomplete-svc:
           memory: 6Gi
         limits:
           memory: 6Gi
-      blockDispatcherPoolSize: 24
-      responseDispatcherMinThreads: 8
 
 ###################################
 ## CONFIG | Look Functionalities
@@ -507,16 +652,12 @@ lookup-svc:
   ##        requests:
   ##          cpu: 1000m
   ##          memory: 6Gi
-  ##      blockDispatcherPoolSize: 16
-  ##      responseDispatcherMinThreads: 4
   ##      nodeSelector: {}
   ##
   ## You can also set the parameters for a country in the Helm chart like this:
   ##
   ##  --set "lookup-svc.countryConfigurations.can.resources.requests.cpu=1000m"
   ##  --set "lookup-svc.countryConfigurations.can.resources.requests.memory=6Gi"
-  ##  --set "lookup-svc.countryConfigurations.can.blockDispatcherPoolSize=16"
-  ##  --set "lookup-svc.countryConfigurations.can.responseDispatcherMinThreads=4"
   ##  --set "lookup-svc.countryConfigurations.can.nodeSelector.node-app=geo-addressing"
   ##
   countryConfigurations:
@@ -527,16 +668,6 @@ lookup-svc:
           memory: 6Gi
         limits:
           memory: 6Gi
-      ## We have implemented a bulk heading pattern in the addressing service.
-      ## You can refer to the following information:
-      ##   https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead
-      ## These threads control the number of parallel interactions with the internal SDK that can be performed for a specific country or group of countries.
-      ## This configuration is introduced because geocoding for different countries behaves differently.
-      ## These threads function similarly to a normal thread-per-request model.
-      blockDispatcherPoolSize: 4
-      ## These are the non-blocking I/O threads.
-      ## They continuously handle requests from the external world and forward them to the downstream blocking dispatcher.
-      responseDispatcherMinThreads: 4
     usa:
       resources:
         requests:
@@ -544,8 +675,6 @@ lookup-svc:
           memory: 6Gi
         limits:
           memory: 6Gi
-      blockDispatcherPoolSize: 24
-      responseDispatcherMinThreads: 8
 
 
 ###################################
@@ -619,16 +748,12 @@ reverse-svc:
   ##        requests:
   ##          cpu: 1000m
   ##          memory: 6Gi
-  ##      blockDispatcherPoolSize: 16
-  ##      responseDispatcherMinThreads: 4
   ##      nodeSelector: {}
   ##
   ## You can also set the parameters for a country in the Helm chart like this:
   ##
   ##  --set "reverse-svc.countryConfigurations.can.resources.requests.cpu=1000m"
   ##  --set "reverse-svc.countryConfigurations.can.resources.requests.memory=6Gi"
-  ##  --set "reverse-svc.countryConfigurations.can.blockDispatcherPoolSize=16"
-  ##  --set "reverse-svc.countryConfigurations.can.responseDispatcherMinThreads=4"
   ##  --set "reverse-svc.countryConfigurations.can.nodeSelector.node-app=geo-addressing"
   countryConfigurations:
     default:
@@ -638,16 +763,6 @@ reverse-svc:
           memory: 8Gi
         limits:
           memory: 8Gi
-      ## We have implemented a bulk heading pattern in the addressing service.
-      ## You can refer to the following information:
-      ##   https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead
-      ## These threads control the number of parallel interactions with the internal SDK that can be performed for a specific country or group of countries.
-      ## This configuration is introduced because geocoding for different countries behaves differently.
-      ## These threads function similarly to a normal thread-per-request model.
-      blockDispatcherPoolSize: 4
-      ## These are the non-blocking I/O threads.
-      ## They continuously handle requests from the external world and forward them to the downstream blocking dispatcher.
-      responseDispatcherMinThreads: 4
     usa:
       resources:
         requests:
@@ -655,5 +770,3 @@ reverse-svc:
           memory: 8Gi
         limits:
           memory: 8Gi
-      blockDispatcherPoolSize: 4
-      responseDispatcherMinThreads: 4

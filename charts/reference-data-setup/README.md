@@ -24,7 +24,7 @@ Follow the below steps to create and push the docker image to ECR:
 
 ```shell
 cd ./charts/reference-data-setup/image
-docker build . -t reference-data-extractor:0.5.0
+docker build . -t reference-data-extractor:1.0.0
 ```
 
 ```shell
@@ -32,9 +32,9 @@ aws ecr get-login-password --region us-east-1 | docker login --username AWS --pa
 
 aws ecr create-repository --repository-name reference-data-extractor --image-scanning-configuration scanOnPush=true --region [AWS-REGION]
 
-docker tag reference-data-extractor:0.5.0 [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:0.5.0
+docker tag reference-data-extractor:1.0.0 [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:1.0.0
 
-docker push [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:0.5.0
+docker push [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:1.0.0
 ```
 
 ## Step 3: Creating EFS
@@ -53,7 +53,7 @@ helm install reference-data ./charts/reference-data-setup/ \
 --set "global.efs.fileSystemId=[fileSystemId]" \
 --set "dataDownload.image.repository=[reference-data-image-repository]" \
 --set "global.countries={usa,aus}" \
---set "global.dataConfigMap={\"verify-geocode\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"lookup\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"autocomplete\":{\"usa\":[\"Predictive Addressing Points#United States#All USA#Interactive\"],\"aus\":[\"Predictive Addressing Points#Australia#All AUS#Interactive\"]}}" \
+--set "global.dataConfigMap={\"verify-geocode\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"lookup\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"autocomplete\":{\"usa\":[\"Predictive Addressing Points#United States#All USA#Interactive\"],\"aus\":[\"Predictive Addressing Points#Australia#All AUS#Interactive\"]},\"express_data\":{\"usa\":[\"Address Express#United States#All USA#Spectrum Platform Data\",\"POI Express#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Address Express#Australia#All AUS#Spectrum Platform Data\"]}}" \
 --dependency-update --timeout 60m
 ```
 
@@ -70,7 +70,7 @@ provided by this chart:
 | Parameter          | Description                                              | Default                    |
 |--------------------|----------------------------------------------------------|----------------------------|
 | `image.repository` | the reference-data-extractor container image repository  | `reference-data-extractor` |
-| `image.tag`        | the reference-data-extractor container image version tag | `0.5.0`                    |
+| `image.tag`        | the reference-data-extractor container image version tag | `1.0.0`                    |
 
 <hr>
 </details>
@@ -85,7 +85,7 @@ provided by this chart:
 | `global.awsRegion`         | the aws region of created EFS                              | `us-east-1`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `global.countries`         | the countries for which you want to install reference data | `{usa,aus,can,gbr,nzl}`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | *`global.efs.fileSystemId` | the EFS Id                                                 | `fileSystemId`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `global.dataConfigMap`     | a Map of reference data to be downloaded against countries | `{\"verify-geocode\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"lookup\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"autocomplete\":{\"usa\":[\"Predictive Addressing Points#United States#All USA#Interactive\"],\"aus\":[\"Predictive Addressing Points#Australia#All AUS#Interactive\"]}}` |
+| `global.dataConfigMap`     | a Map of reference data to be downloaded against countries | `{\"verify-geocode\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"lookup\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"autocomplete\":{\"usa\":[\"Predictive Addressing Points#United States#All USA#Interactive\"],\"aus\":[\"Predictive Addressing Points#Australia#All AUS#Interactive\"]},\"express_data\":{\"usa\":[\"Address Express#United States#All USA#Spectrum Platform Data\",\"POI Express#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Address Express#Australia#All AUS#Spectrum Platform Data\"]}}` |
 
 <hr>
 </details>
@@ -124,6 +124,15 @@ example of default reference data map:
     "aus": [
       "Predictive Addressing Points#Australia#All AUS#Interactive"
     ]
+  },
+  "express_data": {
+    "usa": [
+      "Address Express#United States#All USA#Spectrum Platform Data",
+      "POI Express#United States#All USA#Spectrum Platform Data"
+    ],
+    "aus": [
+      "Address Express#Australia#All AUS#Spectrum Platform Data"
+    ]
   }
 }
 ```
@@ -148,7 +157,7 @@ installing the helm chart as follows:
 > e.g. `Geocoding NT Street US#United States#All USA#Spectrum Platform Data#2023.11`
 
 ```shell
---set "global.dataConfigMap={\"verify-geocode\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"lookup\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"autocomplete\":{\"usa\":[\"Predictive Addressing Points#United States#All USA#Interactive\"],\"aus\":[\"Predictive Addressing Points#Australia#All AUS#Interactive\"]}}"
+--set "global.dataConfigMap={\"verify-geocode\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"lookup\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"autocomplete\":{\"usa\":[\"Predictive Addressing Points#United States#All USA#Interactive\"],\"aus\":[\"Predictive Addressing Points#Australia#All AUS#Interactive\"]},\"express_data\":{\"usa\":[\"Address Express#United States#All USA#Spectrum Platform Data\",\"POI Express#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Address Express#Australia#All AUS#Spectrum Platform Data\"]}}"
 ```
 
 ## Monitoring the Helm Chart

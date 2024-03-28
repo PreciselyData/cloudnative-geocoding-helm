@@ -1,0 +1,20 @@
+{{- if .Values.expressEngineDataRestore.enabled }}
+{{- $root := . }}
+{{- if .Values.expressEngineDataRestore.dataConfig }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "addressing-exp-restore-job-config.name" .}}
+  labels:
+    {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
+data:
+  {{- range $configName, $configYaml := .Values.expressEngineDataRestore.dataConfig }}
+  {{ $configName }}: |
+    {{- if (eq (kindOf $configYaml) "map")}}
+    {{-   tpl (toYaml $configYaml) $root | nindent 4 }}
+    {{- else -}}
+    {{-   tpl $configYaml $root | nindent 4 }}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}

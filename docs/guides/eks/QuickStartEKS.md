@@ -84,10 +84,12 @@ pip install -r requirements.txt
 python upload_ecr.py --pdx-api-key [pdx-api-key] --pdx-api-secret [pdx-secret] --aws-access-key [aws-access-key] --aws-secret [aws-secret] --aws-region [aws-region]
 ```
 
-There are two docker container images which will be pushed to ECR with the tag of helm chart version.
+There are four docker container images which will be pushed to ECR with the tag of helm chart version.
 
 1. regional-addressing-service
 2. addressing-service
+3. express-engine
+4. express-engine-data-restore
 
 For more details related to docker images download script, follow the
 instructions [here](../../../scripts/images-to-ecr-uploader/README.md)
@@ -146,14 +148,22 @@ helm upgrade --install geo-addressing ./charts/geo-addressing \
 --set "ingress.hosts[0].host=[ingress-host-name]" \ 
 --set "ingress.hosts[0].paths[0].path=/precisely/addressing" \
 --set "ingress.hosts[0].paths[0].pathType=ImplementationSpecific" \
---set "global.nodeSelector.node-app=geo-addressing" \
+--set "global.nodeSelector.node-app=[node-selector-label]" \
 --set "image.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/regional-addressing-service" \
 --set "global.addressingImage.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/addressing-service" \
---set "global.countries={usa,can,gbr}" \
+--set "global.expressEngineImage.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/express-engine" \
+--set "global.expressEngineDataRestoreImage.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/express-engine-data-restore" \
+--set "addressing-express.expressenginedata.nodeSelector.node-app=[node-selector-label-arm64-node]" \
+--set "addressing-express.expressenginemaster.nodeSelector.node-app=[node-selector-label-arm64-node]" \ 
+--set "addressing-express.expressEngineDataRestore.nodeSelector.node-app=[node-selector-label-arm64-node]" \
+--set "global.countries={usa,can,aus,nzl}" \
 --namespace geo-addressing --create-namespace
 ```
 
-By default, only verify/geocode functionality is enabled. 
+By default, only verify/geocode functionality is enabled.
+
+> Note: addressing-express service is needed for Geocoding without country.
+
 To enable other functionalities like autocomplete, lookup and
 reverse-geocode you have to set the parameters in helm command as follows.
 
@@ -168,8 +178,10 @@ reverse-geocode you have to set the parameters in helm command as follows.
 > 
 > Refer [helm values](../../../charts/geo-addressing/README.md#helm-values) for the parameters related to `global.manualDataConfig.*` and `addressing-hook.*`.
 > 
+>
+> NOTE: `addressing-hook` job not applicable to addressing-express service.
+>
 > Also, for more information, refer to the comments in [values.yaml](../../../charts/geo-addressing/values.yaml)
-> 
 #### Mandatory Parameters
 
 * ``global.awsRegion``: AWS Region
@@ -181,7 +193,12 @@ reverse-geocode you have to set the parameters in helm command as follows.
 * ``ingress.hosts[0].paths[0].pathType``: The pathType of the Ingress Path
 * ``image.repository``: The ECR image repository for the regional-addressing image
 * ``global.addressingImage.repository``: The ECR image repository for the addressing-service image
-* ``global.nodeSelector``: The node selector to run the geo-addressing solutions on nodes of the cluster
+* ``global.expressEngineImage.repository``: The ECR image repository for the express-engine image
+* ``global.expressEngineDataRestoreImage.repository``: The ECR image repository for the express-engine-data-restore image
+* ``global.nodeSelector``: The node selector to run the geo-addressing solutions on nodes of the cluster. Should be a amd64 based Node group.
+* ``addressing-express.expressEngineDataRestore.nodeSelector``: The node selector to run the express-engine data restore job. Should be a arm64 based Node group.
+* ``addressing-express.expressenginedata.nodeSelector``: The node selector to run the express-engine data service. Should be a arm64 based Node group.
+* ``addressing-express.expressenginemaster.nodeSelector``: The node selector to run the express-engine master service. Should be a arm64 based Node group.
 
 For more information on helm values, follow [this link](../../../charts/geo-addressing/README.md#helm-values).
 

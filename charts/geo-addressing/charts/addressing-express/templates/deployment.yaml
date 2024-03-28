@@ -1,19 +1,15 @@
 {{- if .Values.enabled }}
 {{- $top := . -}}
-{{- range $.Values.global.countries }}
+{{- $country := "express" -}}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "addressing-svc.fullname" (list $top .) }}
-  {{- if $top.Values.global.manualDataConfig.enabled }}
-  annotations:
-    preicsely.com/config-checksum: {{ $top.Values.global.manualDataConfig.configMapData | toYaml | sha256sum }}
-  {{- end}}
+  name: {{ include "addressing-express.fullname" (list $top $country) }}
   labels:
     service: precisely
-    app: {{ include "addressing-svc.fullname" (list $top .) }}
-    {{- include "addressing-svc.labels" (list $top .) | nindent 4 }}
+    app: {{ include "addressing-express.fullname" (list $top $country) }}
+    {{- include "addressing-express.labels" (list $top $country) | nindent 4 }}
 spec:
   {{- if not $top.Values.autoscaling.enabled }}
   replicas: {{ $top.Values.replicaCount }}
@@ -21,8 +17,8 @@ spec:
   selector:
     matchLabels:
       service: precisely
-      app: {{ include "addressing-svc.fullname" (list $top .) }}
-      {{- include "addressing-svc.selectorLabels" (list $top .) | nindent 6 }}
+      app: {{ include "addressing-express.fullname" (list $top $country) }}
+      {{- include "addressing-express.selectorLabels" (list $top $country) | nindent 6 }}
   template:
     metadata:
       {{- with $top.Values.podAnnotations }}
@@ -31,14 +27,15 @@ spec:
       {{- end }}
       labels:
         service: precisely
-        app: {{ include "addressing-svc.fullname" (list $top .) }}
-        {{- include "addressing-svc.selectorLabels" (list $top .) | nindent 8 }}
+        app: {{ include "addressing-express.fullname" (list $top $country) }}
+        {{- include "addressing-express.selectorLabels" (list $top $country) | nindent 8 }}
     spec:
+      terminationGracePeriodSeconds: 60
       {{- with $top.Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "addressing-svc.serviceAccountName" (list $top .) }}
+      serviceAccountName: {{ include "addressing-express.serviceAccountName" (list $top $country) }}
       securityContext:
         {{- toYaml $top.Values.podSecurityContext | nindent 8 }}
       containers:
@@ -56,7 +53,7 @@ spec:
               path: /health
               port: http
             initialDelaySeconds: 10
-            failureThreshold: 3
+            failureThreshold: 2
             successThreshold: 1
             timeoutSeconds: 1
             periodSeconds: 10
@@ -65,30 +62,27 @@ spec:
               path: /health
               port: http
             initialDelaySeconds: 10
-            failureThreshold: 3
+            failureThreshold: 2
             successThreshold: 1
             timeoutSeconds: 1
             periodSeconds: 10
           resources:
-            {{- (include "common-svc.configuration" (list $top.Values.countryConfigurations . "resources")) | nindent 12 }}
-          volumeMounts:
-            {{- include "addressing-svc.volumeMounts" $top | nindent 12 }}
+            {{- toYaml $top.Values.resources | nindent 12 }}
           env:
-            - name: DATA_PATH
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "addressing-data-config.name" $top }}
-                  key: {{ (printf "verify-geocode.%s.vintage" .) }}
-            - name: GEOCODE_VERIFY_ENABLED
+            - name: AUTOCOMPLETE_V2_ENABLED
               value: "true"
+            - name: GEOCODE_VERIFY_ENABLED
+              value: "false"
             - name: LOOKUP_ENABLED
               value: "false"
             - name: REVERSEGEOCODE_ENABLED
               value: "false"
             - name: AUTOCOMPLETE_ENABLED
               value: "false"
-            - name: DATA_REGION
-              value: {{ . | upper }}
+            - name: COUNTRY_FINDER_ENABLED
+              value: "true"
+            - name: EXPRESS_URL
+              value: "https://express-engine-cluster-master:9200"
             {{- if $top.Values.global.otelExporterEndpoint }}
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: {{ $top.Values.global.otelExporterEndpoint }}
@@ -98,8 +92,10 @@ spec:
             {{- end }}
             - name: AUTH_ENABLED
               value: "false"
+      {{- with ((get $top.Values "nodeSelector") | default ($top.Values.global)).nodeSelector }}
       nodeSelector:
-        {{- include "common-svc.global" (list $top.Values . "nodeSelector") | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- with $top.Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
@@ -108,9 +104,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      volumes:
-        - name: geoaddressing-host-volume
-          persistentVolumeClaim:
-            claimName: {{ include "common-svc-pvc.name" $top }}
-{{- end }}
 {{- end }}

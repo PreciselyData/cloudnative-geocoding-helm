@@ -12,6 +12,8 @@ To run the docker images locally, reference data and docker images should be dow
 
 ## Step 2: Running Service Locally
 
+> Note: addressing-express service should not be run locally.
+
 Modify the below variables in ****.env**** file and run the mentioned command.
 
 _DATA_PATH -> path to the **extracted** data

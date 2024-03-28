@@ -29,7 +29,14 @@ The geo-addressing helm chart compromises of following components:
        - If enabled, it deploys country-specific addressing services for `lookup` capability.
    - reverse-svc:
        - If enabled, it deploys country-specific addressing services for `reverse-geocode` capability.
-
+   - addressing-express:
+       - If enabled, it deploys addressing-express service.
+       - addressing-express needs some specific configuration in cluster.
+       - Nodes to deploy the express-engine which is part of the addressing-express chart shoud be ARM based CPU optimized instances like the `c7g.8xlarge` instance types in AWS
+       - addressing-express engine has two components, with different behaviors of scheduling
+         - express-engine-data : One-to-One POD to Node scheduling
+         - express-engine-master: Many-to-One POD to Node scheduling
+  
 - Ingress
 - Horizontal Autoscaler (HPA)
 - Persistent Volume
@@ -48,7 +55,7 @@ provided by this chart:
 | Parameter          | Description                                         | Default                       |
 |--------------------|-----------------------------------------------------|-------------------------------|
 | `image.repository` | the regional-addressing container image repository  | `regional-addressing-service` |
-| `image.tag`        | the regional-addressing container image version tag | `0.5.0`                       |
+| `image.tag`        | the regional-addressing container image version tag | `1.0.0`                       |
 
 <hr>
 </details>
@@ -73,7 +80,7 @@ provided by this chart:
 | `global.countries`                                | this parameter enables the provided country for an addressing functionality. A comma separated value can be provided to enable a particular set of countries from: `usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world` | `{usa,gbr,aus,nzl,can}` |
 | `global.awsRegion`                                | the region for where elastic file system is present.                                                                                                                                                                               | `us-east-1`             |
 | `global.addressingImage.repository`               | the addressing-service container image repository                                                                                                                                                                                  | `addressing-service`    |
-| `global.addressingImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `0.5.0`                 |
+| `global.addressingImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `1.0.0`                 |
 | `global.efs.fileSystemId`                         | the fileSystemId of the elastic file system (e.g. fs-0d49e756a)                                                                                                                                                                    | `fileSystemId`          |
 | `global.efs.addressingBasePath`                   | the base path of the folder where verify-geocode data is present                                                                                                                                                                   | `verify-geocode`        |
 | `global.efs.autoCompleteBasePath`                 | the base path of the folder where autocomplete data is present                                                                                                                                                                     | `autocomplete`          |
@@ -88,7 +95,12 @@ provided by this chart:
 | `global.reverse-svc.enabled`                      | the flag to indicate whether `reverse-geocode` functionality is enabled or not                                                                                                                                                     | `false`                 |
 | `global.reverse-svc.countryConfigurations.*`      | the country-specific configurations like resource requests, nodeSelector and threadPoolSize                                                                                                                                        | `<see values.yaml>`     |
 | `global.manualDataConfig.*`                       | the config to enable the manual configuration for country-specific vintage data config-map. `addressing-hook.enabled` should be set to false, else `global.manualDataConfig` will be given higher precedence.                      | `false`                 |
-
+| `global.expressEngineImage.repository`               | the express-engine container image repository                                                                                                                                                                                  | `express-engine`    |
+| `global.expressEngineImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `1.0.0`                 |
+| `global.expressEngineDataRestoreImage.repository`               | the express-engine-data-restore container image repository                                                                                                                                                                                  | `express-engine-data-restore`    |
+| `global.expressEngineDataRestoreImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `1.0.0`                 |
+| `global.efs.expressEngineDataMountPath`                       | the mount path of the folder where express-engine data is present                                                                                                                                                                           | `/usr/share/express_snapshots`                |
+| `global.efs.expressEngineBasePath`                      | the base path of the folder where express-engine data is present                                                                                                                                                                  | `verify-express_data`        |
 <hr>
 </details>
 
@@ -98,6 +110,16 @@ provided by this chart:
 | Parameter                 | Description                                                                                                                                                             | Default |
 |---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
 | `addressing-hook.enabled` | flag to enable or disable the hook jobs for identifying the latest vintage. If you want to disable the hook, you should provide `global.manualDataConfigs` information. | `true`  |
+
+<hr>
+</details>
+
+<details>
+<summary><code>addressing-express.expressEngineDataRestore.*</code></summary>
+
+| Parameter                 | Description                                                                                                                                                             | Default |
+|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| `addressing-express.expressEngineDataRestore.enabled` | flag to enable or disable the express engine data restore job. Refer to the comments in [values.yaml](../../../charts/geo-addressing/values.yaml) for express engine manual data configuration. | `true`  |
 
 <hr>
 </details>
@@ -116,6 +138,7 @@ Refer to [this file](templates/deployment.yaml) for overriding the environment v
 | Parameter                              | Description                                                                                                                                                                                                                                                                                        | Default                                                                        |
 |----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
 | `*ADDRESSING_BASE_URL`                 | The internal url of country-based verify/geocode service                                                                                                                                                                                                                                           | `http://addressing-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080`   |
+| `*ADDRESSING_EXPRESS_BASE_URL`                 | The internal url of addressing-express service service                                                                                                                                                                                                                                           | `http://addressing-express.{{ .Release.Namespace }}.svc.cluster.local:8080`   |
 | `LOOKUP_BASE_URL`                      | The internal url of country-based lookup service. If you prefer not to maintain separate infrastructure for the lookup service and would like all calls to be handled by the addressing service, you have the flexibility to modify this URL and point it to addressing service.                   | `http://lookup-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080`       |
 | `AUTOCOMPLETE_BASE_URL`                | The internal url of country-based autocomplete service. If you prefer not to maintain separate infrastructure for the autocomplete service and would like all calls to be handled by the addressing service, you have the flexibility to modify this URL and point it to addressing service.       | `http://autocomplete-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080` |
 | `REVERSE_GEOCODE_BASE_URL`             | The internal url of country-based reverse-geocode service. If you prefer not to maintain separate infrastructure for the reverse-geocode service and would like all calls to be handled by the addressing service, you have the flexibility to modify this URL and point it to addressing service. | `http://reverse-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080`      |
@@ -129,6 +152,7 @@ Refer to [this file](templates/deployment.yaml) for overriding the environment v
 | `*SUPPORTED_COUNTRIES_REVERSE_GEOCODE` | The regions that are supported for lookup.                                                                                                                                                                                                                                                         |                                                                                |
 | `*AUTH_ENABLED`                        | Flag to indicate whether authorization is enabled for the endpoints or not.                                                                                                                                                                                                                        | `false`                                                                        |
 | `*IS_HELM_SOLUTION`                     | Flag to indicate if on-premise helm solution is deployed.                                                                                                                                                                                                                                           | `true`                                                               |
+| `*IS_NO_COUNTRY_ENABLED_V2`                     | Flag to enable geocoding without country.                                                                                                                                                                                                                                           | `true`                                                               |
 <hr>
 </details>
 
@@ -141,8 +165,6 @@ Refer to the [deployment.yml](charts/addressing-svc/templates/deployment.yaml) o
 |-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
 | `*DATA_PATH`                      | Default path of the installed reference data. Please refer to the recommended path for the installation of data.                                         | `<referenced from configMap>`                                                                                 |
 | `*DATA_REGION`                    | The value of the referenced country or region.                                                                                                           | `<depends on the provided country e.g. usa/aus/can>`                                                          |
-| `BLOCK_DISPATCHER_POOL_SIZE`      | The no. of threads to control the parallel interactions with the internal SDK. This should vary per country, please follow country-wise recommendations. | `4`                                                                                                           |
-| `RESPONSE_DISPATCHER_MIN_THREADS` | The no. of non-blocking I/O threads. This should vary per country, please follow country-wise recommendations.                                           | `4`                                                                                                           |
 | `OTEL_EXPORTER_OTLP_ENDPOINT`     | If tracing is enabled, this is the endpoint for tracer host.                                                                                             | `http://jaeger-collector.default.svc.cluster.local:4317`                                                      |
 | `*AUTH_ENABLED`                        | Flag to indicate whether authorization is enabled for the endpoints or not.                                                                                                                                                                                                                        | `false`                                                                        |
 | `*GEOCODE_VERIFY_ENABLED`                        | Flag to enable geocode and verify endpoints.                                                                                                                                                                                                                        | `true for addressing service`                                                                        |
@@ -151,25 +173,38 @@ Refer to the [deployment.yml](charts/addressing-svc/templates/deployment.yaml) o
 | `*REVERSEGEOCODE_ENABLED`                        | Flag to enable reverse-geocode endpoint.                                                                                                                                                                                                                        | `true for reverse-geocode service`                                                                        |
 <hr>
 </details>
+<details>
+<summary><code>addressing-express</code></summary>
 
+Refer to the [deployment.yml](charts/addressing-express/templates/deployment.yaml) of respective service for override variables for addressing-service.
+
+| Parameter                         | Description                                                                                                                                              | Default                                                                                                       |
+|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| `OTEL_EXPORTER_OTLP_ENDPOINT`     | If tracing is enabled, this is the endpoint for tracer host.                                                                                             | `http://jaeger-collector.default.svc.cluster.local:4317`                                                      |
+| `*AUTH_ENABLED`                        | Flag to indicate whether authorization is enabled for the endpoints or not.                                                                                                                                                                                                                        | `false`                                                                        |
+| `*AUTOCOMPLETE_V2_ENABLED`                        | Flag to enable autocomplete V2 endpoint endpoint.                                                                                                                                                                                                                        | `true for addressing-express service`                                                                        |
+| `*COUNTRY_FINDER_ENABLED`                        | Flag to enable automatic country finder from single line address endpoint.                                                                                                                                                                                                                        | `true for addressing-express service`                                                                        |
+| `*EXPRESS_URL`                        | Url to express-engine-master service endpoint.                                                                                                                                                                                                                        | `https://express-engine-cluster-master:9200`                                                                        |
+<hr>
+</details>
 ## Memory Recommendations
 
 The `regional-addressing` pod is responsible for managing requests and routing them to
 country-based `addressing-service` pods. Since each country has its own unique reference data, we recommend allocating a
 minimum amount of pod memory for the addressing-services for each specific country, as outlined below:
 
-The values are in the format:<br>
-`[memory],[blockDispatcherPoolSize],[responseDispatcherMinThreads]`
 
 | Country | Addressing (Verify-Geocode) | Autocomplete | Lookup     | Reverse-Geocode |
 |---------|-----------------------------|--------------|------------|-----------------|
-| USA     | 8Gi, 24, 8                  | 6Gi, 24, 8   | 6Gi, 16, 4 | 8Gi, 4, 4       |
-| AUS     | 6Gi, 16, 4                  | 8Gi, 16, 4   | 6Gi, 4, 4  | 8Gi, 4, 4       |
-| CAN     | 6Gi, 16, 4                  | 4Gi, 16, 4   | 6Gi, 4, 4  | 8Gi, 4, 4       |
-| GBR     | 6Gi, 16, 4                  | 6Gi, 4, 4    | 6Gi, 4, 4  | 8Gi, 4, 4       |
-| DEU     | 6Gi, 16, 4                  | 6Gi, 4, 4    | 6Gi, 4, 4  | 8Gi, 4, 4       |
-| NZL     | 10Gi, 8, 4                  | 6Gi, 4, 4    | 6Gi, 4, 4  | 8Gi, 4, 4       |
-| FRA     | 7Gi, 16, 4                  | 6Gi, 4, 4    | 6Gi, 4, 4  | 8Gi, 4, 4       |
+| USA     | 8Gi                         | 6Gi          | 6Gi        | 8Gi             |
+| AUS     | 6Gi                         | 8Gi          | 6Gi        | 8Gi             |
+| CAN     | 6Gi                         | 4Gi          | 6Gi        | 8Gi             |
+| GBR     | 6Gi                         | 6Gi          | 6Gi        | 8Gi             |
+| DEU     | 6Gi                         | 6Gi          | 6Gi        | 8Gi             |
+| NZL     | 10Gi                        | 6Gi          | 6Gi        | 8Gi             |
+| FRA     | 7Gi                         | 6Gi          | 6Gi        | 8Gi             |
+
+> Note: For addressing-express recommended memory and cpu resource requirements are part of the chart [values.yaml](values.yaml) file.
 
 You can adjust the values in [values.yaml](values.yaml), or you can set these parameters in the helm command itself during installation/up-gradation.
 
@@ -208,6 +243,28 @@ curl -X 'POST' \
         "1700 district ave #300 burlington, ma"
       ],
       "country": "USA"
+    }
+  ]
+}'
+```
+
+```curl
+curl -X 'POST' \
+  'https://[EXTERNAL-URL]/li/v1/oas/geocode' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "preferences": {
+        "customPreferences": {
+            "FALLBACK_TO_WORLD": "false"
+        },
+        "returnAllInfo": true
+    },
+  "addresses": [
+    {
+      "addressLines": [
+        "1700 district ave #300 burlington, ma"
+      ]
     }
   ]
 }'
@@ -329,6 +386,39 @@ curl --location 'https://[EXTERNAL-URL]/li/v1/oas/autocomplete' --header 'Conten
     ],
     "country": "USA"
   }
+}'
+```
+
+### `/v2/autocomplete`:
+
+API to autocomplete the addresses
+
+Sample Request:
+
+```curl
+curl --location 'http://[EXTERNAL-URL]/v2/autocomplete' \
+--header 'Content-Type: application/json' \
+--data '{
+    "preferences": {
+        "maxResults": 5,
+        "originXY": [
+            -71.207799,
+            42.483939
+        ],
+        "distance": {
+            "value": 10,
+            "distanceUnit": "MILE"
+        },
+        "customPreferences": {
+            "SEARCH_TYPE": "ADDRESS"
+        }
+    },
+    "address": {
+        "addressLines": [
+            "1700 DISTRICT"
+        ],
+        "country": "USA"
+    }
 }'
 ```
 

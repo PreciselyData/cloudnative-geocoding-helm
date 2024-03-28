@@ -1,0 +1,46 @@
+{{- if .Values.enabled }}
+{{- if .Values.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "expressEngine.uname" . }}-hpa
+  labels:
+    {{- include "expressEngine.labels" . | nindent 4 }}
+spec:
+    scaleTargetRef:
+        apiVersion: apps/v1
+        kind: StatefulSet
+        name: {{ template "expressEngine.uname" . }}
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 1800
+        policies:
+          - type: Pods
+            value: 1
+            periodSeconds: 1800
+      scaleUp:
+        policies:
+          - type: Pods
+            value: 2
+            periodSeconds: 30
+    minReplicas: {{ .Values.autoscaling.minReplicas }}
+    maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+    metrics:
+        {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}
+        - type: Resource
+          resource:
+            name: cpu
+            target:
+                type: Utilization
+                averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
+        {{- end }}
+        {{- if .Values.autoscaling.targetMemoryUtilizationPercentage }}
+        - type: Resource
+          resource:
+            name: memory
+            target:
+                type: Utilization
+                averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+{{- end }}
+{{- end }}
