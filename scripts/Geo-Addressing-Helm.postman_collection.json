@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "5e75beb6-0b70-47df-ab06-86a0ff20c919",
+		"_postman_id": "58783e7c-db32-443c-83a2-e7d02fc18c1d",
 		"name": "Geo-Addressing-Helm",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "29790689"
@@ -128,6 +128,36 @@
 						"li",
 						"v1",
 						"oas",
+						"autocomplete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AUTOCOMPLETEV2",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"preferences\": {\r\n        \"maxResults\": 5,\r\n        \"originXY\": [\r\n            -71.207799,\r\n            42.483939\r\n        ],\r\n        \"distance\": {\r\n            \"value\": 10,\r\n            \"distanceUnit\": \"MILE\"\r\n        },\r\n        \"customPreferences\": {\r\n            \"SEARCH_TYPE\": \"ADDRESS\"\r\n        }\r\n    },\r\n    \"address\": {\r\n        \"addressLines\": [\r\n            \"1700 DISTRICT\"\r\n        ],\r\n        \"country\": \"USA\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{EXTERNAL-IP}}/v2/autocomplete",
+					"host": [
+						"{{EXTERNAL-IP}}"
+					],
+					"path": [
+						"v2",
 						"autocomplete"
 					]
 				}
