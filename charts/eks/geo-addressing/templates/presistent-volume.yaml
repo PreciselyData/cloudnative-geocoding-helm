@@ -1,0 +1,67 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{include "addressing-exp-storage-class.name" .}}
+  labels:
+    {{- include "geo-addressing-eks.labels" . | nindent 4 }}
+provisioner: ebs.csi.aws.com
+parameters:
+  type: gp3
+  allowAutoIOPSPerGBIncrease: "true"
+  iops: "6000"
+  throughput: "500"
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: {{include "addressing-nfs-storage-class.name" .}}
+  labels:
+    {{- include "geo-addressing-eks.labels" . | nindent 4 }}
+provisioner: efs.csi.aws.com
+parameters:
+  provisioningMode: efs-ap
+  fileSystemId: {{ .Values.global.nfs.fileSystemId }}
+  directoryPerms: "775"
+  uid: "0"
+  gid: "0"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{include "addressing-nfs-pv.name" .}}
+  finalizers: [ ]
+  labels:
+    {{- include "geo-addressing-eks.labels" . | nindent 4 }}
+spec:
+  capacity:
+    storage: 200G
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: {{include "addressing-nfs-storage-class.name" .}}
+  mountOptions:
+    - tls
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: {{ .Values.global.nfs.fileSystemId }}.efs.{{ .Values.global.awsRegion }}.amazonaws.com
+    volumeAttributes:
+      path: /
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{include "addressing-nfs-pvc.name" .}}
+  labels:
+    {{- include "geo-addressing-eks.labels" . | nindent 4 }}
+spec:
+  storageClassName: {{include "addressing-nfs-storage-class.name" .}}
+  volumeName: {{include "addressing-nfs-pv.name" .}}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 200G
