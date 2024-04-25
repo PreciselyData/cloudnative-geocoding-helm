@@ -1,3 +1,4 @@
+{{- if index .Values "geo-addressing" "addressing-hook" "enabled" }}
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
@@ -57,3 +58,4 @@ spec:
   resources:
     requests:
       storage: 100G
+{{- end }}
