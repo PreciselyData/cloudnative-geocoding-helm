@@ -2,6 +2,7 @@
 ## CONFIG | Geo-Addressing Application | Regional Addressing Service
 ###################################################################
 
+enabled: true
 ## The number of regional-addressing pods to run
 replicaCount: 1
 

@@ -68,8 +68,8 @@ global:
       autocomplete.usa.vintage: /mnt/data/geoaddressing-data/autocomplete/usa/202312131538
       
 
-  ## Configurations related to AWS Elastic File System
-  efs:
+  ## Configurations related to Network File System
+  nfs:
     ##
     ## The `fileSystemId` this is a mandatory parameter as regional-addressing service used the reference data mounted in EFS.
     fileSystemId: fileSystemId

@@ -37,26 +37,63 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Express engine data Storage Class Name
 */}}
 {{- define "addressing-exp-storage-class.name" -}}
-{{- printf "%s-%s-%s" "exp-per-sc" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s-%s" "exp-sc" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Express engine restore data Storage Class Name
 */}}
 {{- define "addressing-nfs-storage-class.name" -}}
-{{- printf "%s-%s-%s" "exp-snap-sc" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s-%s" "nfs-sc" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Express engine restore data PV
 */}}
 {{- define "addressing-nfs-pv.name" -}}
-{{- printf "%s-pv-%s-%s" "exp-snapshot" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-pv-%s-%s" "exp-snap" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Express engine restore data PVC
 */}}
 {{- define "addressing-nfs-pvc.name" -}}
-{{- printf "%s-pvc-%s-%s" "exp-snapshot" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-pvc-%s-%s" "exp-snap" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Addressing Hook Storage Class
+*/}}
+{{- define "addressing-hook-storage-class.name" -}}
+{{- printf "%s-%s" "hook-efs" .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Addressing Hook Persistent Volume Name
+*/}}
+{{- define "addressing-hook-pv.name" -}}
+{{- printf "%s-%s-%s" "hook" .Release.Name "pv" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Addressing Hook Persistent Volume Claim Name
+*/}}
+{{- define "addressing-hook-pvc.name" -}}
+{{- printf "%s-%s-%s" "hook" .Release.Name "pvc" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Addressing Hook PV labels
+*/}}
+{{- define "addressing-hook-pv.labels" -}}
+app.kubernetes.io/name: {{ include "addressing-hook-pv.name" . }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Addressing Hook PVC labels
+*/}}
+{{- define "addressing-hook-pvc.labels" -}}
+app.kubernetes.io/name: {{ include "addressing-hook-pvc.name" . }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}

@@ -6,43 +6,6 @@ Expand the name of the chart.
 {{- end }}
 
 {{/*
-Storage Class Name
-*/}}
-{{- define "addressing-hook-storage-class.name" -}}
-{{- printf "%s-%s" "hook-efs" .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Persistent Volume Name
-*/}}
-{{- define "addressing-hook-pv.name" -}}
-{{- printf "%s-%s-%s" "hook" .Release.Name "pv" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Persistent Volume Claim Name
-*/}}
-{{- define "addressing-hook-pvc.name" -}}
-{{- printf "%s-%s-%s" "hook" .Release.Name "pvc" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Common PV labels
-*/}}
-{{- define "addressing-hook-pv.labels" -}}
-app.kubernetes.io/name: {{ include "addressing-hook-pv.name" . }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-
-{{/*
-Common PVC labels
-*/}}
-{{- define "addressing-hook-pvc.labels" -}}
-app.kubernetes.io/name: {{ include "addressing-hook-pvc.name" . }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-
-{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "addressing-hook.chart" -}}
