@@ -73,38 +73,6 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-
-
-
-{{/*
-Express engine data Storage Class Name
-*/}}
-{{- define "addressing-exp-gp3-storage-class.name" -}}
-{{- printf "%s-%s-%s" "exp-gp3-sc" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Express engine restore data Storage Class Name
-*/}}
-{{- define "addressing-exp-efs-storage-class.name" -}}
-{{- printf "%s-%s-%s" "exp-efs-sc" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Express engine restore data PV
-*/}}
-{{- define "addressing-exp-efs-snapshot-pv.name" -}}
-{{- printf "%s-pv-%s-%s" "exp-snapshot" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Express engine restore data PVC
-*/}}
-{{- define "addressing-exp-efs-snapshot-pvc.name" -}}
-{{- printf "%s-pvc-%s-%s" "exp-snapshot" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-
 {{/*
 RBAC Express engine restore data job Service Account
 */}}

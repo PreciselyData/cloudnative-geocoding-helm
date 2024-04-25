@@ -63,43 +63,6 @@ Create the name of the service account to use
 
 
 {{/*
-Storage Class Name
-*/}}
-{{- define "common-svc-storage-class.name" -}}
-{{- printf "%s-%s" "svc-efs" .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Persistent Volume Name
-*/}}
-{{- define "common-svc-pv.name" -}}
-{{- printf "%s-%s-%s" "svc" .Release.Name "pv" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Persistent Volume Claim Name
-*/}}
-{{- define "common-svc-pvc.name" -}}
-{{- printf "%s-%s-%s" "svc" .Release.Name "pvc" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Common PV labels
-*/}}
-{{- define "common-svc-pv.labels" -}}
-app.kubernetes.io/name: {{ include "common-svc-pv.name" . }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-
-{{/*
-Common PVC labels
-*/}}
-{{- define "common-svc-pvc.labels" -}}
-app.kubernetes.io/name: {{ include "common-svc-pvc.name" . }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-
-{{/*
 Gets the configuration from the provided country
 */}}
 {{- define "common-svc.configuration" -}}

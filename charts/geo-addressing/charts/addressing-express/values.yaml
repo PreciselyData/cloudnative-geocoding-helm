@@ -120,7 +120,7 @@ expressenginedata:
   ##
   persistence:
     enabled: true
-    storageClass: '{{include "addressing-exp-gp3-storage-class.name" .}}'
+    storageClass: '{{include "addressing-exp-storage-class.name" .}}'
     enableInitChown: true
     labels:
       enabled: true
@@ -181,7 +181,7 @@ expressenginemaster:
   ##
   persistence:
     enabled: true
-    storageClass: '{{include "addressing-exp-gp3-storage-class.name" .}}'
+    storageClass: '{{include "addressing-exp-storage-class.name" .}}'
     enableInitChown: true
     labels:
       enabled: true

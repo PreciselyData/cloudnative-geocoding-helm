@@ -113,6 +113,6 @@ spec:
       volumes:
         - name: geoaddressing-host-volume
           persistentVolumeClaim:
-            claimName: {{ include "common-svc-pvc.name" $top }}
+            claimName: {{ include "addressing-nfs-pvc.name" $top }}
 {{- end }}
 {{- end }}

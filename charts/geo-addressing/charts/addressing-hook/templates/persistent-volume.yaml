@@ -9,9 +9,7 @@ metadata:
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
     "helm.sh/resource-policy": delete
 provisioner: efs.csi.aws.com
-{{- end }}
 ---
-{{- if .Values.enabled }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -39,9 +37,7 @@ spec:
     volumeHandle: {{ .Values.global.efs.fileSystemId }}.efs.{{ .Values.global.awsRegion }}.amazonaws.com
     volumeAttributes:
       path: /
-{{- end }}
 ---
-{{- if .Values.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

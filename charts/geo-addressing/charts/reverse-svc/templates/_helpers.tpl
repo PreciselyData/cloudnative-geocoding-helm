@@ -81,11 +81,3 @@ volumeMounts
 - name: geoaddressing-host-volume
   mountPath: {{ .Values.global.efs.volumeMountPath }}
 {{- end }}
-
-
-{{/*
-Persistent Volume Claim Name
-*/}}
-{{- define "common-svc-pvc.name" -}}
-{{- printf "%s-%s-%s" "svc" .Release.Name "pvc" | trunc 63 | trimSuffix "-" }}
-{{- end }}
