@@ -49,12 +49,3 @@ Selector labels
 app.kubernetes.io/name: {{ include "reference-data.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-
-
-{{/*
-volumeMounts
-*/}}
-{{- define "reference-data.volumeMounts" -}}
-- name: geoaddressing-host-volume
-  mountPath: {{ .Values.global.mountBasePath }}
-{{- end }}

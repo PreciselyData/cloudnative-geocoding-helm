@@ -25,7 +25,9 @@ spec:
       {{- end }}
       restartPolicy: Never
       volumes:
-        {{- toYaml .Values.volumes | nindent 8 }}
+        - name: geoaddressing-host-volume
+          persistentVolumeClaim:
+            claimName:  {{include "addressing-ref-pvc.name" .}}
       containers:
         - name: data-download-job
           image: "{{ .Values.dataDownload.image.repository }}:{{ .Values.dataDownload.image.tag | default .Chart.AppVersion }}"
@@ -42,7 +44,8 @@ spec:
             - "--data-mapping"
             - {{ .Values.global.dataConfigMap | quote }}
           volumeMounts:
-            {{- include "reference-data.volumeMounts" . | nindent 12 }}
+            - name: geoaddressing-host-volume
+              mountPath: {{ .Values.global.mountBasePath }}
       terminationGracePeriodSeconds: 0
       {{- with .Values.nodeSelector }}
       nodeSelector:
