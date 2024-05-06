@@ -17,7 +17,7 @@ To deploy the Geo-Addressing application in AWS EKS, install the following clien
 You can create the EKS cluster or use existing EKS cluster.
 
 - If you DON'T have EKS cluster, we have provided you with a
-  sample [cluster installation script](../../../cluster-sample/create-eks-cluster.yaml). Run the following command from
+  sample [cluster installation script](../../../cluster-sample/eks/create-eks-cluster.yaml). Run the following command from
   parent directory to create the cluster using the script:
     ```shell
     eksctl create cluster -f ./cluster-sample/create-eks-cluster.yaml

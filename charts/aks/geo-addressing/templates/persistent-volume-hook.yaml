@@ -1,0 +1,50 @@
+{{- if index .Values "geo-addressing" "addressing-hook" "enabled" }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "addressing-hook-pv.name" . }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "2"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/resource-policy": delete
+  labels:
+    {{- include "addressing-hook-pv.labels" . | nindent 4 }}
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain  # if set as "Delete" file share would be removed in pvc deletion
+  csi:
+    driver: file.csi.azure.com
+    readOnly: false
+    volumeHandle: {{include "addressing-nfs-pv.name" .}}  # make sure it's a unique id in the cluster
+    volumeAttributes:
+      #resourceGroup: {{ .Values.global.nfs.resourceGroup }}  # optional, only set this when storage account is not in the same resource group as agent node
+      storageAccount: {{ .Values.global.nfs.storageAccount }}
+      shareName: {{ .Values.global.nfs.shareName }}  # only file share name, don't use full path
+      protocol: nfs
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "addressing-hook-pvc.name" . }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/resource-policy": delete
+  finalizers: [ ]
+  labels:
+    {{- include "addressing-hook-pvc.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  volumeName: {{ include "addressing-hook-pv.name" . }}
+  storageClassName: ""
+{{- end }}

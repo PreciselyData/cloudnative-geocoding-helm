@@ -1,0 +1,119 @@
+## Global configurations will be applicable and referred in every dependent helm chart
+## - for more information on global parameter of helm, refer to:
+##    https://helm.sh/docs/chart_template_guide/subcharts_and_globals/
+global:
+  ## Configurations for setting up supported countries.
+  ##
+  ## This value is referenced in addressing-service sub-charts to create infrastructure for specific countries.
+  ##
+  ## The value should adhere to the ISO specified format: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3#Officially_assigned_code_elements
+  ##
+  ## Additionally, the value should match the data-path installed in the network storage. For example: /verify-geocode/[iso-country]/202307/*
+  ##
+  ## Following countries are supported as of now:
+  ## usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world
+  ##
+  ## You can set this parameter to specify the required countries as follows:
+  ##    --set "global.countries={usa,aus,fra}"
+  countries:
+    - usa
+    - gbr
+    - aus
+    - nzl
+    - can
+
+  ## Configurations for the addressing-service container image.
+  ##
+  ## To download container images, please visit the official 'Precisely Data Experience' website:
+  ## https://data.precisely.com/products
+  addressingImage:
+    repository: addressing-service
+    pullPolicy: Always
+    tag: 1.0.0
+
+  ## Configurations for the express-engine container image.
+  ##
+  ## To download container images, please visit the official 'Precisely Data Experience' website:
+  ## https://data.precisely.com/products
+  expressEngineImage:
+    repository: express-engine
+    tag: 1.0.0
+    pullPolicy: Always
+
+  ## Configurations for the express-engine-data-restore container image.
+  ##
+  ## To download container images, please visit the official 'Precisely Data Experience' website:
+  ## https://data.precisely.com/products
+  expressEngineDataRestoreImage:
+    repository: express-engine-data-restore
+    pullPolicy: Always
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: 1.0.0
+
+  ## Configuration for manually configuring the data mount path for addressing-service
+  ## When doing the manual configuration for data mount path, disable the data-vintage
+  ## job by setting addressing-hook.enabled=false
+  ##
+  ## This configuration will be useful if you want to mount a specific data folder for addressing.
+  ## Please update the configMapData parameters as required.
+  manualDataConfig:
+    enabled: false
+    nameOverride: addressing-data-mnl-config
+    configMapData:
+      verify-geocode.usa.vintage: /mnt/data/geoaddressing-data/verify-geocode/usa/202312131538
+      reverse.usa.vintage: /mnt/data/geoaddressing-data/verify-geocode/usa/202312131538
+      lookup.usa.vintage: /mnt/data/geoaddressing-data/lookup/usa/202312131538
+      autocomplete.usa.vintage: /mnt/data/geoaddressing-data/autocomplete/usa/202312131538
+      
+
+  ## Configurations related to Network File System
+  nfs:
+    ##
+    ## The Azure Storage Name
+    shareName: geoaddressingshare
+    ##
+    ## The Azure Storage Account Id
+    storageAccount: geoaddressing
+    ##
+    ## The base path where the volume should be mounted inside the container.
+    volumeMountPath: /mnt/data/geoaddressing-data
+    ##
+    ## The base path where the data is present for verify-geocode functionalities.
+    ##
+    ## [NOTE]: if your data for verify-geocode is not present in the format `verify-geocode/[country]/[timestamp]/[vintage]`, this parameter needs to be overridden.
+    addressingBasePath: verify-geocode
+    ##
+    ## The base path where the data is present for verify-geocode functionality.
+    ##
+    ## [NOTE]: if your data for autocomplete is not present in the format `autocomplete/[country]/[timestamp]/[vintage]`, this parameter needs to be overridden.
+    autoCompleteBasePath: autocomplete
+    ##
+    ## The base path where the data is present for lookup functionality.
+    ##
+    ## [NOTE]: if your data for lookup is not present in the format lookup/[country]/[timestamp]/[vintage], this parameter needs to be overridden.
+    lookupBasePath: lookup
+    ##
+    ## The base path where the data is present for reverse-geocode functionality.
+    ##
+    ## [NOTE]: if your data for reverse-geocode is not present in the format verify-geocode/[country]/[timestamp]/[vintage], this parameter needs to be overridden.
+    ##
+    ## [NOTE]: the data used for reverse-geocode is the exactly same, that's why the default value is set to verify-geocode.
+    reverseBasePath: verify-geocode
+
+    ## The base path where the data is present for express-engine.
+    expressEngineDataMountPath: /usr/share/express_snapshots
+    expressEngineBasePath: express_data
+
+  ##
+  ## The nodeSelector configs for the regional-addressing pods
+  ## - docs for nodeSelector:
+  ##   https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
+  ##
+  nodeSelector: { }
+  ##
+  ## OTEL_EXPORTER_OTLP_ENDPOINT is the endpoint from which otlp traces are collected.
+  ## You can replace the value, if jaeger is not being used as trace collector.
+  ## For more information, refer to https://opentelemetry.io/docs/concepts/sdk-configuration/otlp-exporter-configuration/
+  ## For information related to Jaeger installation, refer to https://github.com/jaegertracing/helm-charts/tree/main/charts/jaeger
+  ## Example endpoind http://jaeger-collector.default.svc.cluster.local:4317
+  otelExporterEndpoint: ""
