@@ -1,5 +1,5 @@
 controller:
-  replicaCount: 1
+  replicaCount: 3
   nodeSelector:
     node-app: geo-addressing-ingress
   autoscaling:
@@ -14,8 +14,9 @@ controller:
     enabled: true
     port: 10254
   service:
-    externalTrafficPolicy: Cluster
+    externalTrafficPolicy: Local
     annotations:
+      service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: "/healthz"
       prometheus.io/scrape: "true"
       prometheus.io/port: "10254"
   config:

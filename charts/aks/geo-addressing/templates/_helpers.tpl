@@ -1,23 +1,23 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "geo-addressing-eks.name" -}}
+{{- define "geo-addressing-aks.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "geo-addressing-eks.chart" -}}
+{{- define "geo-addressing-aks.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "geo-addressing-eks.labels" -}}
-helm.sh/chart: {{ include "geo-addressing-eks.chart" . }}
-{{ include "geo-addressing-eks.selectorLabels" . }}
+{{- define "geo-addressing-aks.labels" -}}
+helm.sh/chart: {{ include "geo-addressing-aks.chart" . }}
+{{ include "geo-addressing-aks.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -27,8 +27,8 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "geo-addressing-eks.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "geo-addressing-eks.name" . }}
+{{- define "geo-addressing-aks.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "geo-addressing-aks.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 

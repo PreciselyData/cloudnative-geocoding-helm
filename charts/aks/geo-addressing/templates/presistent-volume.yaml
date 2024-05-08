@@ -1,10 +1,23 @@
 ---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{include "addressing-exp-storage-class.name" .}}
+  labels:
+    {{- include "geo-addressing-aks.labels" . | nindent 4 }}
+provisioner: disk.csi.azure.com
+parameters:
+  skuName: PremiumV2_LRS
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: {{include "addressing-nfs-pv.name" .}}
   labels:
-    {{- include "geo-addressing-eks.labels" . | nindent 4 }}
+    {{- include "geo-addressing-aks.labels" . | nindent 4 }}
 spec:
   capacity:
     storage: 100Gi
@@ -26,7 +39,7 @@ apiVersion: v1
 metadata:
   name: {{include "addressing-nfs-pvc.name" .}}
   labels:
-    {{- include "geo-addressing-eks.labels" . | nindent 4 }}
+    {{- include "geo-addressing-aks.labels" . | nindent 4 }}
 spec:
   accessModes:
     - ReadWriteMany

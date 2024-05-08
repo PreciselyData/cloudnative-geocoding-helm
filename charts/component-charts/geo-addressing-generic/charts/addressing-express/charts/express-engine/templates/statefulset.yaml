@@ -194,7 +194,7 @@ spec:
 {{- if .Values.sysctlInit.enabled }}
       - name: sysctl
         image: "{{ .Values.sysctlInit.image | default "busybox" }}:{{ .Values.sysctlInit.imageTag | default "latest" }}"
-        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+        imagePullPolicy: "{{ .Values.global.expressEngineImage.pullPolicy }}"
         command:
         - sh
         - -c
@@ -205,6 +205,8 @@ spec:
           if [ "$DESIRED" -gt "$CURRENT" ]; then
             sysctl -w vm.max_map_count=$DESIRED
           fi
+          ulimit -l unlimited
+          ulimit -a
         securityContext:
           runAsUser: 0
           privileged: true

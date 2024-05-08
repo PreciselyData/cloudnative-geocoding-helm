@@ -52,10 +52,9 @@ ingress:
   enabled: true
   ## The Ingress Class for the web Ingress
   ## - [WARNING] requires Kubernetes 1.18 or later, use "kubernetes.io/ingress.class" annotation for older versions
-  className: ""
+  className: "nginx"
   ## Annotations for the Ingress
   annotations:
-    kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/rewrite-target: /$1
   hosts:
