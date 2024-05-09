@@ -99,6 +99,8 @@ spec:
               value: "true"
             - name: IS_NO_COUNTRY_ENABLED_V2
               value: "true"
+            - name: COUNTRY_FINDER_SINGLE_LINE_ENABLED
+              value: "false"
             {{- if .Values.global.otelExporterEndpoint }}
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: {{ .Values.global.otelExporterEndpoint }}
