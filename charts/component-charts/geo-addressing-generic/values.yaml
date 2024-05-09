@@ -2,7 +2,7 @@
 ## CONFIG | Geo-Addressing Application | Regional Addressing Service
 ###################################################################
 
-enabled: true
+enabled: ~
 ## The number of regional-addressing pods to run
 replicaCount: 1
 
@@ -49,7 +49,7 @@ service:
 ###################################
 ingress:
   ## By default, ingress is enabled for regional-addressing service
-  enabled: true
+  enabled: false
   ## The Ingress Class for the web Ingress
   ## - [WARNING] requires Kubernetes 1.18 or later, use "kubernetes.io/ingress.class" annotation for older versions
   className: "nginx"
@@ -126,6 +126,7 @@ addressing-hook:
 ## This helm chart is required if you want to enable addressing express capabilities in your addressing infrastructure.
 ## This service is needed for enabling Geocoding without country.
 addressing-express:
+  enable: true
   ## number of replicas for addressing-express pods.
   replicaCount: 1
   imagePullSecrets: [ ]

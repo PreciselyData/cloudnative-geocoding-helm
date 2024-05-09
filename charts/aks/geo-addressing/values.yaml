@@ -119,7 +119,9 @@ global:
   otelExporterEndpoint: ""
 
 geo-addressing:
+  enabled: true
   addressing-express:
+    enabled: true
     expressenginedata:
       memLock:
         enabled: false

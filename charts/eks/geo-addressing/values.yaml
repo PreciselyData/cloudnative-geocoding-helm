@@ -116,3 +116,8 @@ global:
   ## For information related to Jaeger installation, refer to https://github.com/jaegertracing/helm-charts/tree/main/charts/jaeger
   ## Example endpoind http://jaeger-collector.default.svc.cluster.local:4317
   otelExporterEndpoint: ""
+
+geo-addressing:
+  enabled: true
+  addressing-express:
+    enabled: true

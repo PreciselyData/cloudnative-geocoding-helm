@@ -1,6 +1,6 @@
 replicaCount: 1
 
-enabled: true
+enabled: ~
 
 imagePullSecrets: [ ]
 nameOverride: "addressing"
