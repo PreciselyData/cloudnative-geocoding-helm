@@ -3,9 +3,9 @@ name: geo-addressing-aks
 description: A Helm chart for Geo Addressing service
 
 type: application
-version: 1.0.0
+version: 1.0.1
 appVersion: "1.16.0"
 dependencies:
   - name: geo-addressing
     repository: file://../../component-charts/geo-addressing-generic
-    version: "1.0.0"
+    version: "1.0.1"

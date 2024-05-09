@@ -13,7 +13,7 @@ replicaCount: 1
 image:
   repository: regional-addressing-service
   pullPolicy: Always
-  tag: 1.0.0
+  tag: 1.0.1
 imagePullSecrets: [ ]
 
 ## This will override the name of the installed regional-addressing deployment.
