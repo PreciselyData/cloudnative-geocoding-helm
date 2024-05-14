@@ -50,23 +50,23 @@ provided by this chart:
 > click the `▶` symbol to expand
 
 <details>
-<summary><code>image.*</code></summary>
+<summary><code>geo-addressing.image.*</code></summary>
 
-| Parameter          | Description                                         | Default                       |
-|--------------------|-----------------------------------------------------|-------------------------------|
-| `image.repository` | the regional-addressing container image repository  | `regional-addressing-service` |
-| `image.tag`        | the regional-addressing container image version tag | `1.0.1`                       |
+| Parameter                         | Description                                         | Default                       |
+|-----------------------------------|-----------------------------------------------------|-------------------------------|
+| `geo-addressing.image.repository` | the regional-addressing container image repository  | `regional-addressing-service` |
+| `geo-addressing.image.tag`        | the regional-addressing container image version tag | `1.0.1`                       |
 
 <hr>
 </details>
 
 <details>
-<summary><code>ingress.*</code></summary>
+<summary><code>geo-addressing.ingress.*</code></summary>
 
-| Parameter                        | Description                                             | Default                       |
-|----------------------------------|---------------------------------------------------------|-------------------------------|
-| `ingress.hosts[0].host`          | the ingress host url base path                          | `geoaddressing.precisely.com` |
-| `ingress.hosts[0].paths[0].path` | the base path for accessing regional-addressing service | `/precisely/addressing`       |
+| Parameter                                       | Description                                             | Default                       |
+|-------------------------------------------------|---------------------------------------------------------|-------------------------------|
+| `geo-addressing.ingress.hosts[0].host`          | the ingress host url base path                          | `geoaddressing.precisely.com` |
+| `geo-addressing.ingress.hosts[0].paths[0].path` | the base path for accessing regional-addressing service | `/precisely/addressing`       |
 
 <hr>
 </details>
@@ -75,51 +75,53 @@ provided by this chart:
 <details>
 <summary><code>global.*</code></summary>
 
-| Parameter                                         | Description                                                                                                                                                                                                                        | Default                 |
-|---------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|
-| `global.countries`                                | this parameter enables the provided country for an addressing functionality. A comma separated value can be provided to enable a particular set of countries from: `usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world` | `{usa,gbr,aus,nzl,can}` |
-| `global.awsRegion`                                | the region for where elastic file system is present.                                                                                                                                                                               | `us-east-1`             |
-| `global.addressingImage.repository`               | the addressing-service container image repository                                                                                                                                                                                  | `addressing-service`    |
-| `global.addressingImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `1.0.1`                 |
-| `global.nfs.fileSystemId`                         | the fileSystemId of the elastic file system (e.g. fs-0d49e756a)                                                                                                                                                                    | `fileSystemId`          |
-| `global.nfs.addressingBasePath`                   | the base path of the folder where verify-geocode data is present                                                                                                                                                                   | `verify-geocode`        |
-| `global.nfs.autoCompleteBasePath`                 | the base path of the folder where autocomplete data is present                                                                                                                                                                     | `autocomplete`          |
-| `global.nfs.lookupBasePath`                       | the base path of the folder where lookup data is present                                                                                                                                                                           | `lookup`                |
-| `global.nfs.reverseBasePath`                      | the base path of the folder where reverse-geocode data is present                                                                                                                                                                  | `verify-geocode`        |
-| `global.addressing-svc.enabled`                   | the flag to indicate whether `verify-geocode` functionality is enabled or not                                                                                                                                                      | `true`                  |
-| `global.addressing-svc.countryConfigurations.*`   | the country-specific configurations like resource requests, nodeSelector and threadPoolSize                                                                                                                                        | `<see values.yaml>`     |
-| `global.autocomplete-svc.enabled`                 | the flag to indicate whether `autocomplete` functionality is enabled or not                                                                                                                                                        | `false`                 |
-| `global.autocomplete-svc.countryConfigurations.*` | the country-specific configurations like resource requests, nodeSelector and threadPoolSize                                                                                                                                        | `<see values.yaml>`     |
-| `global.lookup-svc.enabled`                       | the flag to indicate whether `lookup` functionality is enabled or not                                                                                                                                                              | `false`                 |
-| `global.lookup-svc.countryConfigurations.*`       | the country-specific configurations like resource requests, nodeSelector and threadPoolSize                                                                                                                                        | `<see values.yaml>`     |
-| `global.reverse-svc.enabled`                      | the flag to indicate whether `reverse-geocode` functionality is enabled or not                                                                                                                                                     | `false`                 |
-| `global.reverse-svc.countryConfigurations.*`      | the country-specific configurations like resource requests, nodeSelector and threadPoolSize                                                                                                                                        | `<see values.yaml>`     |
-| `global.manualDataConfig.*`                       | the config to enable the manual configuration for country-specific vintage data config-map. `addressing-hook.enabled` should be set to false, else `global.manualDataConfig` will be given higher precedence.                      | `false`                 |
-| `global.expressEngineImage.repository`               | the express-engine container image repository                                                                                                                                                                                  | `express-engine`    |
-| `global.expressEngineImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `1.0.1`                 |
-| `global.expressEngineDataRestoreImage.repository`               | the express-engine-data-restore container image repository                                                                                                                                                                                  | `express-engine-data-restore`    |
-| `global.expressEngineDataRestoreImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `1.0.1`                 |
-| `global.nfs.expressEngineDataMountPath`                       | the mount path of the folder where express-engine data is present                                                                                                                                                                           | `/usr/share/express_snapshots`                |
-| `global.nfs.expressEngineBasePath`                      | the base path of the folder where express-engine data is present                                                                                                                                                                  | `verify-express_data`        |
+| Parameter                                                        | Description                                                                                                                                                                                                                        | Default                        |
+|------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------|
+| `global.countries`                                               | this parameter enables the provided country for an addressing functionality. A comma separated value can be provided to enable a particular set of countries from: `usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world` | `{usa,gbr,aus,nzl,can}`        |
+| `global.awsRegion`                                               | the region for where elastic file system is present.                                                                                                                                                                               | `us-east-1`                    |
+| `global.addressingImage.repository`                              | the addressing-service container image repository                                                                                                                                                                                  | `addressing-service`           |
+| `global.addressingImage.tag`                                     | the addressing-service container image version tag                                                                                                                                                                                 | `1.0.1`                        |
+| `global.nfs.fileSystemId`                                        | the fileSystemId of the elastic file system (e.g. fs-0d49e756a)                                                                                                                                                                    | `fileSystemId`                 |
+| `global.nfs.shareName`                                           | the shareName for Azure File Share                                                                                                                                                                                                 | `geoaddressingshare`           |
+| `global.nfs.storageAccount`                                      | the storage account for Azure Blob Storage                                                                                                                                                                                         | `geoaddressing`                |
+| `global.nfs.addressingBasePath`                                  | the base path of the folder where verify-geocode data is present                                                                                                                                                                   | `verify-geocode`               |
+| `global.nfs.autoCompleteBasePath`                                | the base path of the folder where autocomplete data is present                                                                                                                                                                     | `autocomplete`                 |
+| `global.nfs.lookupBasePath`                                      | the base path of the folder where lookup data is present                                                                                                                                                                           | `lookup`                       |
+| `global.nfs.reverseBasePath`                                     | the base path of the folder where reverse-geocode data is present                                                                                                                                                                  | `verify-geocode`               |
+| `geo-addressing.global.addressing-svc.enabled`                   | the flag to indicate whether `verify-geocode` functionality is enabled or not                                                                                                                                                      | `true`                         |
+| `geo-addressing.global.addressing-svc.countryConfigurations.*`   | the country-specific configurations like resource requests, nodeSelector and threadPoolSize                                                                                                                                        | `<see values.yaml>`            |
+| `geo-addressing.global.autocomplete-svc.enabled`                 | the flag to indicate whether `autocomplete` functionality is enabled or not                                                                                                                                                        | `false`                        |
+| `geo-addressing.global.autocomplete-svc.countryConfigurations.*` | the country-specific configurations like resource requests, nodeSelector and threadPoolSize                                                                                                                                        | `<see values.yaml>`            |
+| `geo-addressing.global.lookup-svc.enabled`                       | the flag to indicate whether `lookup` functionality is enabled or not                                                                                                                                                              | `false`                        |
+| `geo-addressing.global.lookup-svc.countryConfigurations.*`       | the country-specific configurations like resource requests, nodeSelector and threadPoolSize                                                                                                                                        | `<see values.yaml>`            |
+| `geo-addressing.global.reverse-svc.enabled`                      | the flag to indicate whether `reverse-geocode` functionality is enabled or not                                                                                                                                                     | `false`                        |
+| `geo-addressing.global.reverse-svc.countryConfigurations.*`      | the country-specific configurations like resource requests, nodeSelector and threadPoolSize                                                                                                                                        | `<see values.yaml>`            |
+| `global.manualDataConfig.*`                                      | the config to enable the manual configuration for country-specific vintage data config-map. `addressing-hook.enabled` should be set to false, else `global.manualDataConfig` will be given higher precedence.                      | `false`                        |
+| `global.expressEngineImage.repository`                           | the express-engine container image repository                                                                                                                                                                                      | `express-engine`               |
+| `global.expressEngineImage.tag`                                  | the addressing-service container image version tag                                                                                                                                                                                 | `1.0.1`                        |
+| `global.expressEngineDataRestoreImage.repository`                | the express-engine-data-restore container image repository                                                                                                                                                                         | `express-engine-data-restore`  |
+| `global.expressEngineDataRestoreImage.tag`                       | the addressing-service container image version tag                                                                                                                                                                                 | `1.0.1`                        |
+| `global.nfs.expressEngineDataMountPath`                          | the mount path of the folder where express-engine data is present                                                                                                                                                                  | `/usr/share/express_snapshots` |
+| `global.nfs.expressEngineBasePath`                               | the base path of the folder where express-engine data is present                                                                                                                                                                   | `verify-express_data`          |
 <hr>
 </details>
 
 <details>
-<summary><code>addressing-hook.*</code></summary>
+<summary><code>geo-addressing.addressing-hook.*</code></summary>
 
-| Parameter                 | Description                                                                                                                                                             | Default |
-|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| `addressing-hook.enabled` | flag to enable or disable the hook jobs for identifying the latest vintage. If you want to disable the hook, you should provide `global.manualDataConfigs` information. | `true`  |
+| Parameter                                | Description                                                                                                                                                             | Default |
+|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| `geo-addressing.addressing-hook.enabled` | flag to enable or disable the hook jobs for identifying the latest vintage. If you want to disable the hook, you should provide `global.manualDataConfigs` information. | `true`  |
 
 <hr>
 </details>
 
 <details>
-<summary><code>addressing-express.expressEngineDataRestore.*</code></summary>
+<summary><code>geo-addressing.addressing-express.expressEngineDataRestore.*</code></summary>
 
-| Parameter                 | Description                                                                                                                                                             | Default |
-|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| `addressing-express.expressEngineDataRestore.enabled` | flag to enable or disable the express engine data restore job. Refer to the comments in [values.yaml](../../../charts/geo-addressing/values.yaml) for express engine manual data configuration. | `true`  |
+| Parameter                                                            | Description                                                                                                                                                                                     | Default |
+|----------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| `geo-addressing.addressing-express.expressEngineDataRestore.enabled` | flag to enable or disable the express engine data restore job. Refer to the comments in [values.yaml](../../../charts/geo-addressing/values.yaml) for express engine manual data configuration. | `true`  |
 
 <hr>
 </details>

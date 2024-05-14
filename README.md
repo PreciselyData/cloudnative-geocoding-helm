@@ -40,8 +40,8 @@
 
 ![architecture.png](images/geoaddressing_architecture.png)
 
-<br>The core of the geo-addressing helm-chart-based solution relies on the Operational Addressing SDK (OAS). The robust
-functionality of OAS forms the backbone of our geo-addressing solution, empowering it to deliver accurate and efficient
+<br>The core of the geo-addressing helm-chart-based solution relies on the Geo-Addressing SDK (GA-SDK). The robust
+functionality of GA-SDK forms the backbone of our geo-addressing solution, empowering it to deliver accurate and efficient
 geo-addressing services while maintaining data integrity and usability.
 
 The geo-addressing application is designed as a robust microservice-based architecture, utilizing a modular approach to
@@ -68,32 +68,31 @@ Within this architecture, there are two key types of microservices:
 
 - [Reference Data](docs/ReferenceData.md)
 - [Docker Images](scripts/images-to-ecr-uploader/README.md#description)
-- [Helm Charts](charts/geo-addressing/README.md#helm-charts)
+- [Helm Charts](charts/component-charts/geo-addressing-generic/README.md#helm-charts)
 
 ## Guides
 
-- [Reference Data Installation](charts/reference-data-setup/README.md)
-- [Quickstart Guide](docs/guides/eks/QuickStartEKS.md)
-- [Upgrade Guide](docs/guides/eks/UpgradeGuide.md)
-- [Uninstall Guide](docs/guides/eks/UninstallGuide.md)
+- [Reference Data Installation](charts/component-charts/reference-data-setup-generic/README.md)
+- [Quickstart Guide For AWS EKS](docs/guides/eks/QuickStartEKS.md)
+- [Quickstart Guide For Azure AKS](docs/guides/aks/QuickStartAKS.md)
 
 ## Setup
 
 - [Local Setup](docker-desktop/README.md)
-- [Kubernetes Setup](charts/geo-addressing/README.md)
+- [Kubernetes Setup](charts/component-charts/geo-addressing-generic/README.md)
 
-> NOTE: As of now, geo-addressing helm chart is only supported for AWS EKS.
+> NOTE: As of now, geo-addressing helm chart is only supported for AWS EKS and Azure's AKS.
 
 ## Geo-Addressing Helm Version Chart
 
 Following is the helm version chart against geo-addressing PDX docker image version and GA-SDK version.
 
-| Docker Image PDX Version & GA-SDK Version     | Helm Chart Version |
-|-----------------------------------------------|--------------------|
-| `0.4.0/2023.9/Sept 12,2023` & `5.1.488` | `0.1.0` - `0.4.0`️ |
-| `0.5.0/2024.2/Feb 20,2024` & `5.1.644` | `0.5.0`️ |
-| `1.0.0/2024.3/Mar 31,2024` & `5.1.682` | `1.0.0`️ |
-| `1.0.0/2024.5/May 10,2024` & `5.1.682` | `1.0.1`️ |
+| Docker Image PDX Version & GA-SDK Version | Helm Chart Version |
+|-------------------------------------------|--------------------|
+| `0.4.0/2023.9/Sept 12,2023` & `5.1.488`   | `0.1.0` - `0.4.0`️ |
+| `0.5.0/2024.2/Feb 20,2024` & `5.1.644`    | `0.5.0`️           |
+| `1.0.0/2024.3/Mar 31,2024` & `5.1.682`    | `1.0.0`️           |
+| `1.0.0/2024.5/May 10,2024` & `5.1.682`    | `1.0.1`️           |
 
 > NOTE: The docker images pushed to the image repository should be tagged with the current helm chart version. Refer [Downloading Geo-Addressing Docker Images](docs/guides/eks/QuickStartEKS.md#step-3-download-geo-addressing-docker-images) for more information.
  
@@ -107,10 +106,9 @@ Following is the helm version chart against geo-addressing PDX docker image vers
 ## References
 
 - [Releases](https://github.com/PreciselyData/cloudnative-geocoding-helm/releases)
-- [Helm Values](charts/geo-addressing/README.md#helm-values)
-- [Environment Variables](charts/geo-addressing/README.md#environment-variables)
-- [Memory Recommendations](charts/geo-addressing/README.md#memory-recommendations)
-- [Geo-Addressing Service API Usage](charts/geo-addressing/README.md#geo-addressing-service-api-usage)
+- [Helm Values](charts/component-charts/geo-addressing-generic/README.md#helm-values)
+- [Environment Variables](charts/component-charts/geo-addressing-generic/README.md#environment-variables)
+- [Geo-Addressing Service API Usage](charts/component-charts/geo-addressing-generic/README.md#geo-addressing-service-api-usage)
 
 ## Links
 
