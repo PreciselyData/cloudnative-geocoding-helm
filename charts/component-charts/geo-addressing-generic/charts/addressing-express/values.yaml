@@ -60,7 +60,7 @@ expressEngineDataRestore:
   ## - docs for nodeSelector:
   ##   https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
   ##
-  ## Note: This should be a arm based cluster node group
+  ## Note: This should be an arm based cluster node group
   nodeSelector: { }
 
   ##
@@ -107,7 +107,7 @@ expressenginedata:
   ## - docs for nodeSelector:
   ##   https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
   ##
-  ## Note: This should be a arm based cluster node group
+  ## Note: This should be an arm based cluster node group
   nodeSelector: {}
 
   ##
@@ -168,7 +168,7 @@ expressenginemaster:
   ## - docs for nodeSelector:
   ##   https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
   ##
-  ## Note: This should be a arm based cluster node group
+  ## Note: This should be an arm based cluster node group
   nodeSelector: {}
 
   ##

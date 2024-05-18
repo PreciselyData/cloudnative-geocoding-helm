@@ -26,6 +26,7 @@ Follow the below steps to create and push the docker image to ECR:
 cd ./charts/reference-data-setup/image
 docker build . -t reference-data-extractor:1.0.1
 ```
+
 For AWS EKS:
 
 ```shell
@@ -38,7 +39,7 @@ docker tag reference-data-extractor:1.0.1 [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].
 docker push [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:1.0.1
 ```
 
-For Azure's AKS:
+For Microsoft AKS:
 
 ```shell
 az login
@@ -54,12 +55,12 @@ docker push <your-container-registry-name>.azurecr.io/reference-data-extractor:1
 For AWS EKS:
 
 We already have scripts to create EFS and link to the current EKS cluster. Please follow the steps
-mentioned [here](../../scripts/efs-creator/README.md) to create EFS.
+mentioned [here](../../../scripts/eks/efs-creator/README.md) to create EFS.
 
-For Azure AKS:
+For Microsoft AKS:
 
-Please follow the instructions and link to create mounted storage mentioned [here](../../../docs/guides/aks/QuickStartAKS.md#step-4-create-and-configure-azure-files-share).
-
+Please follow the instructions and link to create mounted storage
+mentioned [here](../../../docs/guides/aks/QuickStartAKS.md#step-4-create-and-configure-azure-files-share).
 
 ## Step 4: Running the Reference Data Installation Helm Chart
 
@@ -169,7 +170,7 @@ e.g. `Geocoding NT Street US#United States#All USA#Spectrum Platform Data`
 installing the helm chart as follows:
 
 > NOTE: If you want to download a specific vintage of data always, you can pass the vintage parameter as follows:
-> 
+>
 > [ProductName#Geography#RoasterGranularity#DataFormat#Vintage]
 >
 > e.g. `Geocoding NT Street US#United States#All USA#Spectrum Platform Data#2023.11`
@@ -189,4 +190,4 @@ kubectl get pods -w
 kubectl logs -f -l "app.kubernetes.io/name=reference-data"
 ```
 
-[🔗 Return to `Table of Contents` 🔗](../../README.md#guides)
+[🔗 Return to `Table of Contents` 🔗](../../../README.md#guides)

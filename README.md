@@ -29,19 +29,24 @@
     - Move away from building a single monolithic application for each SDK functionality.
     - Enhance scalability and flexibility by adopting a microservice architecture.
 
-> This solution is specifically for users who are looking for REST interface to interact with Geo Addressing SDK and Kubernetes based deployments.
+> This solution is specifically for users who are looking for REST interface to interact with Geo Addressing SDK and
+> Kubernetes based deployments.
 
 
 > [!IMPORTANT]
-> 1. Please consider these helm charts as recommendations only. They come with predefined configurations that may not be the best fit for your needs. Configurations can be tweaked based on the use case and requirements.
-> 2. These charts can be taken as a reference on how one can take advantage of the precisely data ecosystem and build a number of services around the same piece of software, creating a collection of microservices that can scale on a need basis.
+> 1. Please consider these helm charts as recommendations only. They come with predefined configurations that may not be
+     the best fit for your needs. Configurations can be tweaked based on the use case and requirements.
+> 2. These charts can be taken as a reference on how one can take advantage of the precisely-data ecosystem and build a
+     number of services around the same piece of software, creating a collection of microservices that can scale on a
+     need basis.
 
 ## Architecture
 
 ![architecture.png](images/geoaddressing_architecture.png)
 
 <br>The core of the geo-addressing helm-chart-based solution relies on the Geo-Addressing SDK (GA-SDK). The robust
-functionality of GA-SDK forms the backbone of our geo-addressing solution, empowering it to deliver accurate and efficient
+functionality of GA-SDK forms the backbone of our geo-addressing solution, empowering it to deliver accurate and
+efficient
 geo-addressing services while maintaining data integrity and usability.
 
 The geo-addressing application is designed as a robust microservice-based architecture, utilizing a modular approach to
@@ -62,26 +67,69 @@ Within this architecture, there are two key types of microservices:
 - _Addressing Service_ (Country-Specific): These microservices are specialized for individual countries, allowing us to
   cater to unique addressing requirements and regulations in different regions. Each country-based addressing service is
   optimized for accuracy within its specific jurisdiction.
-- _Addressing Express_: This microservice provides support for Geocoding without Country and new Address AutocompleteV2 service with enhanced quality & performance.
+- _Addressing Express_: This microservice provides support for Geocoding without Country and new Address AutocompleteV2
+  service with enhanced quality & performance.
+
+## Getting Started
+
+#### 1. Prepare your environment
+
+Install Client tools required for installation. Follow the guides to get the steps for specific cloud
+platform:
+[EKS](docs/guides/eks/QuickStartEKS.md#step-1-prepare-your-environment)
+| [AKS](docs/guides/aks/QuickStartAKS.md#step-1-before-you-begin)
+
+#### 2. Create Kubernetes Cluster
+
+Create or use an existing K8s cluster. Follow the guides to get the steps for specific cloud platform:
+[EKS](docs/guides/eks/QuickStartEKS.md#step-2-create-the-eks-cluster)
+| [AKS](docs/guides/aks/QuickStartAKS.md#step-2-create-the-aks-cluster)
+
+#### 3. Download Geo-Addressing Docker Images
+
+Download docker images and upload to your own container registry. Follow the guides to get the steps for specific cloud
+platform:
+[EKS](docs/guides/eks/QuickStartEKS.md#step-3-download-geo-addressing-docker-images)
+| [AKS](docs/guides/aks/QuickStartAKS.md#step-3-download-geo-addressing-docker-images)
+
+#### 4. Create a Persistent Volume
+
+Create or user an existing persistent volume for storing geo-addressing reference-data. Follow the guides to get the
+steps for specific cloud platform:
+[EKS](docs/guides/eks/QuickStartEKS.md#step-4-create-elastic-file-system-efs)
+| [AKS](docs/guides/aks/QuickStartAKS.md#step-4-create-and-configure-azure-files-share)
+
+#### 5. Installation of geo-addressing reference data
+
+Download and install the geo-addressing reference data in the persistent volume. Follow the guides to get the steps for
+specific cloud platform:
+[EKS](docs/guides/eks/QuickStartEKS.md#step-5-installation-of-reference-data)
+| [AKS](docs/guides/aks/QuickStartAKS.md#step-5-installation-of-reference-data)
+
+#### 6. Deploy the geo-addressing application
+
+Deploy the geo-addressing application using helm. Follow the guides to get the steps for specific cloud platform:
+[EKS](docs/guides/eks/QuickStartEKS.md#step-6-installation-of-geo-addressing-helm-chart)
+| [AKS](docs/guides/aks/QuickStartAKS.md#step-6-installation-of-geo-addressing-helm-chart)
 
 ## Components
 
 - [Reference Data](docs/ReferenceData.md)
-- [Docker Images](scripts/images-to-ecr-uploader/README.md#description)
+- [Docker Images](scripts/eks/images-to-ecr-uploader/README.md#description)
 - [Helm Charts](charts/component-charts/geo-addressing-generic/README.md#helm-charts)
 
 ## Guides
 
 - [Reference Data Installation](charts/component-charts/reference-data-setup-generic/README.md)
 - [Quickstart Guide For AWS EKS](docs/guides/eks/QuickStartEKS.md)
-- [Quickstart Guide For Azure AKS](docs/guides/aks/QuickStartAKS.md)
+- [Quickstart Guide For Microsoft AKS](docs/guides/aks/QuickStartAKS.md)
 
 ## Setup
 
 - [Local Setup](docker-desktop/README.md)
 - [Kubernetes Setup](charts/component-charts/geo-addressing-generic/README.md)
 
-> NOTE: As of now, geo-addressing helm chart is only supported for AWS EKS and Azure's AKS.
+> NOTE: As of now, geo-addressing helm chart is only supported for AWS EKS and Microsoft AKS.
 
 ## Geo-Addressing Helm Version Chart
 
@@ -94,8 +142,11 @@ Following is the helm version chart against geo-addressing PDX docker image vers
 | `1.0.0/2024.3/Mar 31,2024` & `5.1.682`    | `1.0.0`️           |
 | `1.0.0/2024.5/May 10,2024` & `5.1.682`    | `1.0.1`️           |
 
-> NOTE: The docker images pushed to the image repository should be tagged with the current helm chart version. Refer [Downloading Geo-Addressing Docker Images](docs/guides/eks/QuickStartEKS.md#step-3-download-geo-addressing-docker-images) for more information.
- 
+> NOTE: The docker images pushed to the image repository should be tagged with the current helm chart version.
+
+Refer [Downloading Geo-Addressing Docker Images](docs/guides/eks/QuickStartEKS.md#step-3-download-geo-addressing-docker-images)
+for more information.
+
 ## Miscellaneous
 
 - [Metrics](docs/MetricsAndTraces.md#generating-insights-from-metrics)

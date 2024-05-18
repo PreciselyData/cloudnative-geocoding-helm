@@ -72,7 +72,7 @@ You can create the EKS cluster or use existing EKS cluster.
 
 The docker files can be downloaded from Precisely's Data Portfolio. For information about Precisely's data portfolio,
 see the [Precisely Data Guide](https://dataguide.precisely.com/) where you can also sign up for a free account and
-access softwares, reference data and docker files available in [Precisely Data Experience](https://data.precisely.com/).
+access software, reference data and docker files available in [Precisely Data Experience](https://data.precisely.com/).
 
 This projects assumes the docker images to be present in the ECR. However, if you haven't pushed the required docker
 images in the ECR, we have provided you with the sample scripts to download the docker images
@@ -95,7 +95,7 @@ There are four docker container images which will be pushed to ECR with the tag 
 4. express-engine-data-restore
 
 For more details related to docker images download script, follow the
-instructions [here](../../../scripts/images-to-ecr-uploader/README.md)
+instructions [here](../../../scripts/eks/images-to-ecr-uploader/README.md)
 
 ## Step 4: Create Elastic File System (EFS)
 
@@ -130,7 +130,7 @@ The Geo-Addressing Application relies on reference data for performing geo-addre
 related to reference data, please refer to [this link](../../ReferenceData.md).
 
 You can make use of
-a [miscellaneous helm chart for installing reference data](../../../charts/reference-data-setup/README.md)
+[this](../../../charts/component-charts/reference-data-setup-generic/README.md) helm chart for installing reference data
 
 ## Step 6: Installation of Geo-Addressing Helm Chart
 
@@ -201,16 +201,16 @@ reverse-geocode you have to set the parameters in helm command as follows.
 * ``global.expressEngineImage.repository``: The ECR image repository for the express-engine image
 * ``global.expressEngineDataRestoreImage.repository``: The ECR image repository for the express-engine-data-restore
   image
-* ``global.nodeSelector``: The node selector to run the geo-addressing solutions on nodes of the cluster. Should be a
+* ``global.nodeSelector``: The node selector to run the geo-addressing solutions on nodes of the cluster. Should be an
   amd64 based Node group.
 * ``geo-addressing.addressing-express.expressEngineDataRestore.nodeSelector``: The node selector to run the express-engine data restore
-  job. Should be a arm64 based Node group.
+  job. Should be an arm64 based Node group.
 * ``geo-addressing.addressing-express.expressenginedata.nodeSelector``: The node selector to run the express-engine data service.
-  Should be a arm64 based Node group.
+  Should be an arm64 based Node group.
 * ``geo-addressing.addressing-express.expressenginemaster.nodeSelector``: The node selector to run the express-engine master service.
-  Should be a arm64 based Node group.
+  Should be an arm64 based Node group.
 
-For more information on helm values, follow [this link](../../../charts/geo-addressing/README.md#helm-values).
+For more information on helm values, follow [this link](../../../charts/component-charts/geo-addressing-generic/README.md#helm-values).
 
 ## Step 7: Monitoring Geo-Addressing Helm Chart Installation
 

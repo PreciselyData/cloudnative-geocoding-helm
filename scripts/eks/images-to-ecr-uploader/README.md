@@ -10,9 +10,7 @@ which are conveniently obtainable from Precisely Data Experience. The required d
 3. Express Engine Docker Image
 4. Express Engine Data Restore Docker Image
 
-> [!NOTE]:  
-> Contact Precisely for buying subscription to docker image
->
+> [!NOTE]: Contact Precisely for buying subscription to docker image
 
 Once you have purchased a subscription to Precisely Data Experience (PDX), you can directly download Docker images.
 Afterward, you can easily load these Docker images into your Docker environment.
@@ -41,4 +39,4 @@ The following command downloads the docker images from PDX and uploads it to you
 ```console
 python upload_ecr.py --pdx-api-key [pdx-api-key] --pdx-api-secret [pdx-secret] --aws-access-key [aws-access-key] --aws-secret [aws-secret] --aws-region [aws-region]
 ```
-[🔗 Return to `Table of Contents` 🔗](../../README.md#components)
+[🔗 Return to `Table of Contents` 🔗](../../../README.md#components)

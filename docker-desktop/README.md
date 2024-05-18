@@ -5,7 +5,7 @@ The geo-addressing application can be setup locally for test purpose.
 ## Step 1: Download Reference Data and Required Docker Images
 
 To run the docker images locally, reference data and docker images should be downloaded from Precisely Data Experience.
-> For more information on downloading the docker images, follow [this section](../scripts/images-to-ecr-uploader/README.md#download-and-upload-docker-images-to-ecr).
+> For more information on downloading the docker images, follow [this section](../scripts/eks/images-to-ecr-uploader/README.md#download-and-upload-docker-images-to-ecr).
 > 
 > For more information on reference data and downloading docker images, follow [this section](../docs/ReferenceData.md).
 >
@@ -78,6 +78,6 @@ _AUTOCOMPLETE_ENABLED -> Set to true to enable autocomplete endpoint.
 
 ## References
 
-- [Sample API Usage](../charts/geo-addressing/README.md#geo-addressing-service-api-usage)
+- [Sample API Usage](../charts/component-charts/geo-addressing-generic/README.md#geo-addressing-service-api-usage)
 
 [🔗 Return to `Table of Contents` 🔗](../README.md#setup)

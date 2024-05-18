@@ -16,30 +16,30 @@ Following are the metrics exposed by Regional-Addressing Application:
 
 <details>
 
-| Metric Name                      | Type    | Description                                                                                      |
-|----------------------------------|---------|--------------------------------------------------------------------------------------------------|
-| executor.active                  | Counter | Number of active tasks in the executor.                                                          |
-| executor.completed               | Counter | Number of completed tasks in the executor.                                                       |
-| executor.pool.core               | Gauge   | Core size of the executor's thread pool.                                                         |
-| executor.pool.max                | Gauge   | Maximum size of the executor's thread pool.                                                      |
-| executor.pool.size               | Gauge   | Current size of the executor's thread pool.                                                      |
-| executor.queue.remaining         | Gauge   | Remaining capacity of the executor's task queue.                                                  |
-| executor.queued                  | Counter | Number of queued tasks in the executor.                                                          |
-| http.server.requests             | Counter | Number of HTTP requests received by the server.                                                   |
-| jvm.classes.loaded               | Gauge   | Number of classes loaded by the JVM.                                                             |
-| jvm.classes.unloaded             | Gauge   | Number of classes unloaded by the JVM.                                                           |
-| jvm.threads.daemon               | Gauge   | Number of daemon threads in the JVM.                                                             |
-| jvm.threads.live                 | Gauge   | Number of live threads in the JVM.                                                               |
-| jvm.threads.peak                 | Gauge   | Peak number of threads in the JVM.                                                              |
-| logback.events                   | Gauge   | Number of logback events.                                                                        |
-| process.cpu.usage                | Gauge   | CPU usage of the process.                                                                        |
-| process.files.max                | Gauge   | Maximum number of open files allowed for the process.                                            |
-| process.files.open               | Gauge   | Number of open files for the process.                                                            |
-| process.start.time               | Gauge   | Start time of the process.                                                                       |
-| process.uptime                   | Gauge   | Uptime of the process.                                                                           |
-| system.cpu.count                 | Gauge   | Number of CPU cores in the system.                                                               |
-| system.cpu.usage                 | Gauge   | Overall CPU usage of the system.                                                                 |
-| system.load.average.1m           | Gauge   | Load average of the system over the last minute.                                                 |
+| Metric Name              | Type    | Description                                           |
+|--------------------------|---------|-------------------------------------------------------|
+| executor.active          | Counter | Number of active tasks in the executor.               |
+| executor.completed       | Counter | Number of completed tasks in the executor.            |
+| executor.pool.core       | Gauge   | Core size of the executor's thread pool.              |
+| executor.pool.max        | Gauge   | Maximum size of the executor's thread pool.           |
+| executor.pool.size       | Gauge   | Current size of the executor's thread pool.           |
+| executor.queue.remaining | Gauge   | Remaining capacity of the executor's task queue.      |
+| executor.queued          | Counter | Number of queued tasks in the executor.               |
+| http.server.requests     | Counter | Number of HTTP requests received by the server.       |
+| jvm.classes.loaded       | Gauge   | Number of classes loaded by the JVM.                  |
+| jvm.classes.unloaded     | Gauge   | Number of classes unloaded by the JVM.                |
+| jvm.threads.daemon       | Gauge   | Number of daemon threads in the JVM.                  |
+| jvm.threads.live         | Gauge   | Number of live threads in the JVM.                    |
+| jvm.threads.peak         | Gauge   | Peak number of threads in the JVM.                    |
+| logback.events           | Gauge   | Number of logback events.                             |
+| process.cpu.usage        | Gauge   | CPU usage of the process.                             |
+| process.files.max        | Gauge   | Maximum number of open files allowed for the process. |
+| process.files.open       | Gauge   | Number of open files for the process.                 |
+| process.start.time       | Gauge   | Start time of the process.                            |
+| process.uptime           | Gauge   | Uptime of the process.                                |
+| system.cpu.count         | Gauge   | Number of CPU cores in the system.                    |
+| system.cpu.usage         | Gauge   | Overall CPU usage of the system.                      |
+| system.load.average.1m   | Gauge   | Load average of the system over the last minute.      |
 
 <hr>
 </details>

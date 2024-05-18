@@ -80,7 +80,7 @@ podSecurityPolicy:
 
 persistence:
   enabled: true
-  # Set to false to disable the `fsgroup-volume` initContainer that will update permissions on the persistent disk.
+  # Set to `false` to disable the `fsgroup-volume` initContainer that will update permissions on the persistent disk.
   enableInitChown: true
   # override image, which is busybox by default
   # image: busybox
@@ -135,7 +135,7 @@ extraContainers: []
 # https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
 priorityClassName: ""
 
-# By default this will make sure two pods don't end up on the same node
+# By default, this will make sure two pods don't end up on the same node
 # Changing this to a region would allow you to spread pods across regions
 antiAffinityTopologyKey: "kubernetes.io/hostname"
 

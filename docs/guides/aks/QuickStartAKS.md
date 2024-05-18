@@ -28,7 +28,7 @@ some others listed below.
 
 ##### Authenticate to Azure using Azure Cli
 
-Azure CLI supports multiple authentication methods; use any authentication method to sign in. For details about Azure's
+Azure CLI supports multiple authentication methods; use any authentication method to sign in. For details about Microsoft
 authentication types see their [documentation](https://docs.microsoft.com/en-us/cli/azure/authenticate-azure-cli).
 
   ```shell 
@@ -42,7 +42,7 @@ all `azure CLI` commands, otherwise you will have to provide this subscription I
   az account set --subscription "@SUBSCRIPTION_ID@"
   ```
 
-Configure your resource group, this will be used to create all resources- cluster and storage account, otherwise you
+Configure your resource group, this will be used to create all resources-cluster and storage account, otherwise you
 will have to provide it in each command.
 
   ```shell
@@ -55,7 +55,7 @@ You can create the AKS cluster or use existing AKS cluster.
 
 - If you DON'T have AKS cluster, we have provided you with few
   sample cluster installation commands. Run the following sample commands to create the cluster:
-  > NOTE: You need to create a Azure Container Registry first before starting a cluster.
+  > NOTE: You need to create an Azure Container Registry first before starting a cluster.
   Commands to create and maintain azure container registry are
   mentioned [here](https://learn.microsoft.com/en-us/azure/container-registry/container-registry-get-started-portal?tabs=azure-cli).
     ```shell
@@ -97,7 +97,7 @@ command:
 
 The docker files can be downloaded from Precisely's Data Portfolio. For information about Precisely's data portfolio,
 see the [Precisely Data Guide](https://dataguide.precisely.com/) where you can also sign up for a free account and
-access softwares, reference data and docker files available in [Precisely Data Experience](https://data.precisely.com/).
+access software, reference data and docker files available in [Precisely Data Experience](https://data.precisely.com/).
 
 This projects assumes the docker images to be present in the container registry. However, if you haven't pushed the
 required docker
@@ -208,7 +208,7 @@ The Geo-Addressing Application relies on reference data for performing geo-addre
 related to reference data, please refer to [this link](../../ReferenceData.md).
 
 You can make use of
-a [miscellaneous helm chart for installing reference data](../../../charts/reference-data-setup/README.md), please
+a [miscellaneous helm chart for installing reference data](../../../charts/component-charts/reference-data-setup-generic/README.md), please
 follow the instructions mentioned in the helm chart or run the below command for installing data in EFS or contact
 Precisely Sales Team for the reference data installation.
 
@@ -289,16 +289,16 @@ reverse-geocode you have to set the parameters in helm command as follows.
 * ``global.expressEngineImage.repository``: The ECR image repository for the express-engine image
 * ``global.expressEngineDataRestoreImage.repository``: The ECR image repository for the express-engine-data-restore
   image
-* ``global.nodeSelector``: The node selector to run the geo-addressing solutions on nodes of the cluster. Should be a
+* ``global.nodeSelector``: The node selector to run the geo-addressing solutions on nodes of the cluster. Should be an
   amd64 based Node group.
 * ``geo-addressing.addressing-express.expressEngineDataRestore.nodeSelector``: The node selector to run the express-engine data restore
-  job. Should be a arm64 based Node group.
+  job. Should be an arm64 based Node group.
 * ``geo-addressing.addressing-express.expressenginedata.nodeSelector``: The node selector to run the express-engine data service.
-  Should be a arm64 based Node group.
+  Should be an arm64 based Node group.
 * ``geo-addressing.addressing-express.expressenginemaster.nodeSelector``: The node selector to run the express-engine master service.
-  Should be a arm64 based Node group.
+  Should be an arm64 based Node group.
 
-For more information on helm values, follow [this link](../../../charts/geo-addressing/README.md#helm-values).
+For more information on helm values, follow [this link](../../../charts/component-charts/geo-addressing-generic/README.md#helm-values).
 
 ## Step 7: Monitoring Geo-Addressing Helm Chart Installation
 
