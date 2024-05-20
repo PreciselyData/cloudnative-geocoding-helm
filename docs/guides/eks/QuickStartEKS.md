@@ -70,12 +70,21 @@ You can create the EKS cluster or use existing EKS cluster.
 
 ## Step 3: Download Geo-Addressing Docker Images
 
-The docker files can be downloaded from Precisely's Data Portfolio. For information about Precisely's data portfolio,
-see the [Precisely Data Guide](https://dataguide.precisely.com/) where you can also sign up for a free account and
-access software, reference data and docker files available in [Precisely Data Experience](https://data.precisely.com/).
+The geo-addressing helm chart relies on the availability of Docker images for several essential microservices, all of
+which are conveniently obtainable from Precisely Data Experience. The required docker images include:
 
-This projects assumes the docker images to be present in the ECR. However, if you haven't pushed the required docker
-images in the ECR, we have provided you with the sample scripts to download the docker images
+1. Regional Addressing Service Docker Image
+2. Addressing Service Docker Image
+3. Express Engine Docker Image
+4. Express Engine Data Restore Docker Image
+
+> [!NOTE]:
+> Contact Precisely or visit [Precisely Data Experience](https://data.precisely.com/) for buying subscription to docker image
+
+Once you have purchased a subscription to Precisely Data Experience (PDX), you can directly download Docker images.
+Afterward, you can easily load these Docker images into your Docker environment.
+
+We have provided you with the sample scripts to download the docker images
 from [Precisely Data Experience](https://data.precisely.com/)
 and push it to your Elastic Container Repositories.
 
@@ -86,13 +95,6 @@ cd ./scripts/images-to-ecr-uploader
 pip install -r requirements.txt
 python upload_ecr.py --pdx-api-key [pdx-api-key] --pdx-api-secret [pdx-secret] --aws-access-key [aws-access-key] --aws-secret [aws-secret] --aws-region [aws-region]
 ```
-
-There are four docker container images which will be pushed to ECR with the tag of helm chart version.
-
-1. regional-addressing-service
-2. addressing-service
-3. express-engine
-4. express-engine-data-restore
 
 For more details related to docker images download script, follow the
 instructions [here](../../../scripts/eks/images-to-ecr-uploader/README.md)

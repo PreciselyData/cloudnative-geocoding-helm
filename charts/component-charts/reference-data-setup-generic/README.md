@@ -13,7 +13,7 @@ Follow the aforementioned steps for installation of the reference data in the mo
 
 ## Step 1: Getting Access to Reference Data
 
-To download the reference data (country-specific data),
+To download the reference data (country-specific data) .spd files,
 visit [Precisely Data Portfolio](https://dataguide.precisely.com/) where you can also sign up for a free account and
 access files available in your [Precisely Data Experience](https://data.precisely.com/) account.
 

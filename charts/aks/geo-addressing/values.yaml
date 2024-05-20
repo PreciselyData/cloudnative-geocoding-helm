@@ -15,7 +15,7 @@ global:
 geo-addressing:
   enabled: true
   addressing-express:
-    enabled: false
+    enabled: true
     expressenginedata:
       memLock:
         enabled: false

@@ -1,4 +1,4 @@
-# Download and Upload Docker Images to ECR
+# Download and Upload Docker Images to AWS ECR
 
 ## Description
 
@@ -10,17 +10,18 @@ which are conveniently obtainable from Precisely Data Experience. The required d
 3. Express Engine Docker Image
 4. Express Engine Data Restore Docker Image
 
-> [!NOTE]: Contact Precisely for buying subscription to docker image
+> [!NOTE]: 
+> Contact Precisely for buying subscription to docker image
 
 Once you have purchased a subscription to Precisely Data Experience (PDX), you can directly download Docker images.
 Afterward, you can easily load these Docker images into your Docker environment.
 
-Additionally, this repository includes a script that facilitates the download of Docker image zips from PDX and their
-subsequent upload to AWS ECR.
+This repository includes a script that facilitates the download of Docker image zips from PDX and their
+subsequent upload to AWS ECR, or you can run the commands to upload the docker images to ECR manually.
 
 Please note that this project assumes the presence of Python, Docker, and awscli on your system.
 
-## Step 1 - Install Requirements
+### Step 1 - Install Requirements
 
 Run the following command to install requirements:
 
@@ -28,7 +29,7 @@ Run the following command to install requirements:
 pip install -r ./requirements.txt
 ```
 
-## Step 2: Run Script for Uploading to ECR
+### Step 2: Run Script for Uploading to ECR
 
 The following command downloads the docker images from PDX and uploads it to your Elastic Container Registry.
 
@@ -39,4 +40,16 @@ The following command downloads the docker images from PDX and uploads it to you
 ```console
 python upload_ecr.py --pdx-api-key [pdx-api-key] --pdx-api-secret [pdx-secret] --aws-access-key [aws-access-key] --aws-secret [aws-secret] --aws-region [aws-region]
 ```
+
+### Step 3: (Optional) Manually push the docker images to ECR
+
+Run the following commands for EACH docker image in the zip file:
+
+```shell
+aws ecr get-login-password --region [REGION] | docker login --username AWS --password-stdin [AWS-ACCOUNT-ID].dkr.ecr.[REGION].amazonaws.com
+docker load -i ./regional-addressing-service.tar
+docker tag regional-addressing-service:latest [AWS-ACCOUNT-ID].dkr.ecr.[REGION].amazonaws.com/regional-addressing-service:1.0.1
+docker push [AWS-ACCOUNT-ID].dkr.ecr.[REGION].amazonaws.com/regional-addressing-service:1.0.1
+```
+
 [🔗 Return to `Table of Contents` 🔗](../../../README.md#components)

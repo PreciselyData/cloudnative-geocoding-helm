@@ -114,13 +114,14 @@ Deploy the geo-addressing application using helm. Follow the guides to get the s
 
 ## Components
 
-- [Reference Data](docs/ReferenceData.md)
-- [Docker Images](scripts/eks/images-to-ecr-uploader/README.md#description)
-- [Helm Charts](charts/component-charts/geo-addressing-generic/README.md#helm-charts)
+- [Understanding Geo-Addressing Helm Chart](charts/component-charts/geo-addressing-generic/README.md#understanding-geo-addressing-helm-charts)
+- [Reference Data Structure](docs/ReferenceData.md)
+- [Pushing Docker Images (AWS ECR)](docs/guides/eks/QuickStartEKS.md#step-3-download-geo-addressing-docker-images)
+- [Pushing Docker Images (Microsoft ACR)](docs/guides/aks/QuickStartAKS.md#step-3-download-geo-addressing-docker-images)
 
 ## Guides
 
-- [Reference Data Installation](charts/component-charts/reference-data-setup-generic/README.md)
+- [Reference Data Installation Helm Chart](charts/component-charts/reference-data-setup-generic/README.md)
 - [Quickstart Guide For AWS EKS](docs/guides/eks/QuickStartEKS.md)
 - [Quickstart Guide For Microsoft AKS](docs/guides/aks/QuickStartAKS.md)
 

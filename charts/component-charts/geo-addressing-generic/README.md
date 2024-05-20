@@ -14,16 +14,19 @@ To get started with installation of helm chart, follow:
 <br><br>For Amazon EKS: [Quick Start Guide for EKS](../../../docs/guides/eks/QuickStartEKS.md)
 <br>For Microsoft AKS: [Quick Start Guide for AKS](../../../docs/guides/aks/QuickStartAKS.md)
 
-## Helm charts
+## Understanding Geo-Addressing Helm charts
 
 The geo-addressing helm chart compromises of following components:
 
-- Parent Chart
+- Environment Specific Parent Helm Chart
+    - The environment specific parent chart is responsible for configurations related to specific cloud platform like
+      network file storages, regions, etc.
 
-    - The parent chart is responsible for the deployment of `regional-addressing-service`.
+- Component Chart
+    - The geo-addressing generic component chart is responsible for the deployment of `regional-addressing-service`.
     - Additionally, it contains all the necessary helm components responsible for deploying geo-addressing application.
-- Sub-Charts
 
+- Sub-Charts
     - addressing-svc:
         - deploys country-specific addressing services for `verify`, `geocode` capabilities.
     - autocomplete-svc:
@@ -42,9 +45,7 @@ The geo-addressing helm chart compromises of following components:
             - express-engine-data : One-to-One POD to Node scheduling
             - express-engine-master: Many-to-One POD to Node scheduling
 
-- Ingress
-- Horizontal Autoscaler (HPA)
-- Persistent Volume
+Feel free to modify these helm charts and update it based on your needs.
 
 ## Helm Values
 

@@ -95,33 +95,31 @@ command:
 
 ## Step 3: Download Geo-Addressing Docker Images
 
-The docker files can be downloaded from Precisely's Data Portfolio. For information about Precisely's data portfolio,
-see the [Precisely Data Guide](https://dataguide.precisely.com/) where you can also sign up for a free account and
-access software, reference data and docker files available in [Precisely Data Experience](https://data.precisely.com/).
+The geo-addressing helm chart relies on the availability of Docker images for several essential microservices, all of
+which are conveniently obtainable from Precisely Data Experience. The required docker images include:
 
-This projects assumes the docker images to be present in the container registry. However, if you haven't pushed the
-required docker
-images in the Container Registry, we recommend you to download the docker images
-from [Precisely Data Experience](https://data.precisely.com/)
-and push it to your Container Repositories.
+1. Regional Addressing Service Docker Image
+2. Addressing Service Docker Image
+3. Express Engine Docker Image
+4. Express Engine Data Restore Docker Image
 
-There are four docker container images which need be pushed to Container Registry with the tag of helm chart version.
+> [!NOTE]:
+> Contact Precisely or visit [Precisely Data Experience](https://data.precisely.com/) for buying subscription to docker image
 
-1. regional-addressing-service
-2. addressing-service
-3. express-engine
-4. express-engine-data-restore
+Once you have purchased a subscription to Precisely Data Experience (PDX), you can directly download Docker images.
+Afterward, you can easily load these Docker images into your Docker environment.
 
-You can run the following commands after extracting the zipped images:
+You can run the following commands after extracting the zipped docker images:
 
 ```shell
 cd ./geo-addressing-images
+az acr login --name <registry-name> --subscription <subscription-id>
 docker load -i ./regional-addressing-service.tar
-docker tag regional-addressing-service:latest <your-container-registry-name>.azurecr.io/regional-addressing-service:1.0.0
-docker push <your-container-registry-name>.azurecr.io/regional-addressing-service:1.0.0
+docker tag regional-addressing-service:latest <your-container-registry-name>.azurecr.io/regional-addressing-service:1.0.1
+docker push <your-container-registry-name>.azurecr.io/regional-addressing-service:1.0.1
 ```
 
-Follow the above steps for all the images inside the zipped file.
+Follow the above steps for ALL the images inside the zipped file.
 
 ## Step 4: Create and Configure Azure Files Share
 
