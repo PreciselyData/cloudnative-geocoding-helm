@@ -125,7 +125,7 @@ Follow the above steps for ALL the images inside the zipped file.
 
 The Geo-Addressing Application requires reference data for geo-addressing capabilities. This reference data should be
 deployed using [persistent volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/). This persistent
-volume is backed by Amazon Elastic File System (EFS) so that the data is ready to use immediately when the volume is
+volume is backed by Azure File Share so that the data is ready to use immediately when the volume is
 mounted to the pods.
 
 If you have already created & configured an instance of the Azure Files share, and it is accessible from your AKS
