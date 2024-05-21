@@ -115,8 +115,8 @@ You can run the following commands after extracting the zipped docker images:
 cd ./geo-addressing-images
 az acr login --name <registry-name> --subscription <subscription-id>
 docker load -i ./regional-addressing-service.tar
-docker tag regional-addressing-service:latest <your-container-registry-name>.azurecr.io/regional-addressing-service:1.0.1
-docker push <your-container-registry-name>.azurecr.io/regional-addressing-service:1.0.1
+docker tag regional-addressing-service:latest <your-container-registry-name>.azurecr.io/regional-addressing-service:2.0.0
+docker push <your-container-registry-name>.azurecr.io/regional-addressing-service:2.0.0
 ```
 
 Follow the above steps for ALL the images inside the zipped file.

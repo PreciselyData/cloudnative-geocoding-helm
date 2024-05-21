@@ -142,6 +142,7 @@ Following is the helm version chart against geo-addressing PDX docker image vers
 | `0.5.0/2024.2/Feb 20,2024` & `5.1.644`    | `0.5.0`️           |
 | `1.0.0/2024.3/Mar 31,2024` & `5.1.682`    | `1.0.0`️           |
 | `1.0.0/2024.5/May 10,2024` & `5.1.682`    | `1.0.1`️           |
+| `1.0.0/2024.5/May 10,2024` & `5.1.682`    | `2.0.0`️           |
 
 > NOTE: The docker images pushed to the image repository should be tagged with the current helm chart version.
 
