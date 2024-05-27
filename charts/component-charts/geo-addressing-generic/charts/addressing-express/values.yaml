@@ -63,6 +63,9 @@ expressEngineDataRestore:
   ## Note: This should be an arm based cluster node group
   nodeSelector: { }
 
+  serviceAccount:
+    annotations: { }
+
   ## data Sync Init containers.
   dataSyncInitContainers: []
 

@@ -1,12 +1,15 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: "{{ .Release.Name }}-sa"
+  name: "ref-{{ .Release.Name }}-sa"
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "1"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
     "helm.sh/resource-policy": delete
+    {{- with $top.Values.serviceAccount.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   labels:
     {{- include "reference-data.labels" . | nindent 4 }}
 ---
@@ -43,7 +46,7 @@ metadata:
     "helm.sh/resource-policy": delete
 subjects:
   - kind: ServiceAccount
-    name: "{{ .Release.Name }}-sa"
+    name: "ref-{{ .Release.Name }}-sa"
 roleRef:
   kind: Role
   name: "{{ .Release.Name }}-role"

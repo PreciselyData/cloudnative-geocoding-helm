@@ -1,5 +1,8 @@
 enabled: ~
 
+serviceAccount:
+  annotations: { }
+
 dataVintage:
   image:
     repository: bitnami/kubectl

@@ -8,8 +8,12 @@ metadata:
     "helm.sh/hook-weight": "1"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
     "helm.sh/resource-policy": delete
+    {{- with $top.Values.serviceAccount.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   labels:
     {{- include "addressing-hook.labels" . | nindent 4 }}
+  {{- with $top.Values.serviceAccount.annotations }}
 {{- end }}
 ---
 {{- if .Values.enabled }}

@@ -11,6 +11,9 @@ fullnameOverride: "reference-data"
 
 nodeSelector: { }
 
+serviceAccount:
+  annotations: { }
+
 global:
   pdxApiKey: "pdx-api-key"
   pdxSecret: "pdx-api-secret"
