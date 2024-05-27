@@ -61,7 +61,7 @@ spec:
       {{- else if eq .Values.expressEngineDataRestore.dataSync.type "azure-blob" }}
           image: "peterdavehello/azcopy:10"
           args:
-            - {{- printf "mkdir -p %s/%s && time azcopy sync %s %s/%s"  .Values.global.nfs.expressEngineDataMountPath .Values.global.nfs.expressEngineBasePath .Values.expressEngineDataRestore.dataSync.bucket .Values.global.nfs.expressEngineDataMountPath .Values.global.nfs.expressEngineBasePath | quote | indent 1 }}
+            - {{- printf "mkdir -p %s/%s && time azcopy sync %s %s/%s"  .Values.global.nfs.expressEngineDataMountPath .Values.global.nfs.expressEngineBasePath .Values.expressEngineDataRestore.dataSync.blobPath .Values.global.nfs.expressEngineDataMountPath .Values.global.nfs.expressEngineBasePath | quote | indent 1 }}
       {{- end }}
           securityContext:
             runAsUser: 0
