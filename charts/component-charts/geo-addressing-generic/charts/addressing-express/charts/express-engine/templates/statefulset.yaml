@@ -174,7 +174,7 @@ spec:
 {{ toYaml .Values.imagePullSecrets | indent 8 }}
       {{- end }}
       enableServiceLinks: {{ .Values.enableServiceLinks }}
-      {{- if or (.Values.extraInitContainers) (.Values.keystore) (.Values.persistence.enabled) (.Values.sysctlInit.enabled) (.Values.dataSyncInitContainers) }}
+      {{- if or (.Values.extraInitContainers) (.Values.keystore) (.Values.persistence.enabled) (.Values.sysctlInit.enabled) }}
       initContainers:
 {{- if and .Values.persistence.enabled .Values.persistence.enableInitChown }}
       - name: fsgroup-volume
@@ -234,13 +234,6 @@ spec:
             subPath: {{ $path }}
         {{- end -}}
 {{- end }}
-      {{- if .Values.dataSyncInitContainers }}
-      {{- if eq "string" (printf "%T" .Values.dataSyncInitContainers) }}
-{{ tpl .Values.dataSyncInitContainers . | indent 6 }}
-      {{- else }}
-{{ toYaml .Values.dataSyncInitContainers | indent 6 }}
-      {{- end }}
-      {{- end }}
       {{- if .Values.extraInitContainers }}
       # Currently some extra blocks accept strings
       # to continue with backwards compatibility this is being kept

@@ -45,6 +45,16 @@ spec:
   ttlSecondsAfterFinished: 200
   template:
     spec:
+    {{- if (.Values.expressEngineDataRestore.dataSyncInitContainers) }}
+      initContainers:
+      {{- if .Values.expressEngineDataRestore.dataSyncInitContainers }}
+      {{- if eq "string" (printf "%T" .Values.expressEngineDataRestore.dataSyncInitContainers) }}
+{{ tpl .Values.expressEngineDataRestore.dataSyncInitContainers . | indent 8 }}
+      {{- else }}
+{{ toYaml .Values.expressEngineDataRestore.dataSyncInitContainers | indent 8 }}
+      {{- end }}
+      {{- end }}
+    {{- end}}
       containers:
         - name: exp-engine-restore-data
           securityContext:

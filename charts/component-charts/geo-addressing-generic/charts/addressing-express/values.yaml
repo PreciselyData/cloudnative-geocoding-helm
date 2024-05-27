@@ -63,6 +63,9 @@ expressEngineDataRestore:
   ## Note: This should be an arm based cluster node group
   nodeSelector: { }
 
+  ## data Sync Init containers.
+  dataSyncInitContainers: []
+
   ##
   ## Flag to allow reload of express engine data
   ## Note: This will delete all existing data from the cluster and reload it

@@ -111,8 +111,6 @@ extraVolumeMounts: |
   - name: snapshot-volume
     mountPath: {{ .Values.global.nfs.expressEngineDataMountPath }}
 
-dataSyncInitContainers: []
-
 extraInitContainers: |
   - name: fsgroup-snapshot
     image: "busybox:latest"
