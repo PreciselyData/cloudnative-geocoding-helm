@@ -67,7 +67,11 @@ expressEngineDataRestore:
     annotations: { }
 
   ## data Sync Init containers.
-  dataSyncInitContainers: []
+  dataSync:
+    enabled: false
+    # type:
+    # bucket: 
+    # blobPath:
 
   ##
   ## Flag to allow reload of express engine data

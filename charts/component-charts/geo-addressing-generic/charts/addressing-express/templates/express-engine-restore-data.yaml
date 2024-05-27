@@ -49,15 +49,27 @@ spec:
   ttlSecondsAfterFinished: 200
   template:
     spec:
-    {{- if (.Values.expressEngineDataRestore.dataSyncInitContainers) }}
+    {{- if (.Values.expressEngineDataRestore.dataSync.enabled) }}
       initContainers:
-      {{- if .Values.expressEngineDataRestore.dataSyncInitContainers }}
-      {{- if eq "string" (printf "%T" .Values.expressEngineDataRestore.dataSyncInitContainers) }}
-{{ tpl .Values.expressEngineDataRestore.dataSyncInitContainers . | indent 8 }}
-      {{- else }}
-{{ toYaml .Values.expressEngineDataRestore.dataSyncInitContainers | indent 8 }}
+        - name: syncdata
+          imagePullPolicy: "IfNotPresent"
+          command: ['sh', '-c']
+      {{- if eq .Values.expressEngineDataRestore.dataSync.type "s3" }}
+          image: "amazon/aws-cli"
+          args:
+            - {{- printf "mkdir -p %s/%s && time aws s3 sync %s %s/%s --no-progress --delete"  .Values.global.nfs.expressEngineDataMountPath .Values.global.nfs.expressEngineBasePath .Values.expressEngineDataRestore.dataSync.bucket .Values.global.nfs.expressEngineDataMountPath .Values.global.nfs.expressEngineBasePath | quote | indent 1 }}
+      {{- else if eq .Values.expressEngineDataRestore.dataSync.type "azure-blob" }}
+          image: "peterdavehello/azcopy:10"
+          args:
+            - {{- printf "mkdir -p %s/%s && time azcopy sync %s %s/%s"  .Values.global.nfs.expressEngineDataMountPath .Values.global.nfs.expressEngineBasePath .Values.expressEngineDataRestore.dataSync.bucket .Values.global.nfs.expressEngineDataMountPath .Values.global.nfs.expressEngineBasePath | quote | indent 1 }}
       {{- end }}
-      {{- end }}
+          securityContext:
+            runAsUser: 0
+          resources:
+            {}
+          volumeMounts:
+            - name: "snapshot-volume"
+              mountPath: {{ .Values.global.nfs.expressEngineDataMountPath }}
     {{- end}}
       containers:
         - name: exp-engine-restore-data
