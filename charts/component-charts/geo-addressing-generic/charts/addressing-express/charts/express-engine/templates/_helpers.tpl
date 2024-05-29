@@ -96,7 +96,7 @@ app.kubernetes.io/part-of: express-engine
 {{- end -}}
 
 {{- define "expressEngine.majorVersion" -}}
-  {{- $version := semver (coalesce .Values.global.expressEngineImage.tag .Chart.AppVersion "1") }}
+  {{- $version := semver .Chart.Version }}
   {{- $version.Major }}
 {{- end }}
 
