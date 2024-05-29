@@ -283,6 +283,11 @@ nodeGroup: "master"
 memLock:
   enabled: true
 
+serviceAccount:
+  create: true
+  annotations: { }
+  name: ""
+
 masterService: "express-engine-cluster-master"
 
 roles:

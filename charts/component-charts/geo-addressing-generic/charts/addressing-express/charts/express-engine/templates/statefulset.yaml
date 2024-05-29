@@ -77,7 +77,7 @@ spec:
         - name: vm.max_map_count
           value: {{ .Values.sysctlVmMaxMapCount | quote }}
         {{- end }}
-      automountServiceAccountToken: false
+      serviceAccountName: {{ include "expressEngine.serviceAccountName" . }}
       {{- if .Values.imagePullSecrets }}
       {{- end }}
       {{- with .Values.tolerations }}

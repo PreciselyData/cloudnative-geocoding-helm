@@ -109,3 +109,14 @@ app.kubernetes.io/part-of: express-engine
 {{ . }},
 {{- end -}}
 {{- end -}}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "expressEngine.serviceAccountName" -}}
+{{- if $.Values.serviceAccount.create }}
+{{- default (include "expressEngine.uname" .) $.Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" (printf "%s-exp" $.Values.serviceAccount.name | trimSuffix "-") }}
+{{- end }}
+{{- end }}
