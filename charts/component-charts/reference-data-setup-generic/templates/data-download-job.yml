@@ -34,18 +34,18 @@ spec:
           imagePullPolicy: {{ .Values.dataDownload.image.pullPolicy }}
           args:
             - "--pdx-api-key"
-            - "{{ .Values.global.pdxApiKey }}"
+            - "{{ .Values.config.pdxApiKey }}"
             - "--pdx-api-secret"
-            - "{{ .Values.global.pdxSecret }}"
+            - "{{ .Values.config.pdxSecret }}"
             - "--countries"
-            - "{{ .Values.global.countries }}"
+            - "{{ .Values.config.countries }}"
             - "--dest-path"
-            - "{{ .Values.global.mountBasePath }}"
+            - "{{ .Values.config.mountBasePath }}"
             - "--data-mapping"
-            - {{ .Values.global.dataConfigMap | quote }}
+            - {{ .Values.config.dataConfigMap | quote }}
           volumeMounts:
             - name: geoaddressing-host-volume
-              mountPath: {{ .Values.global.mountBasePath }}
+              mountPath: {{ .Values.config.mountBasePath }}
       terminationGracePeriodSeconds: 0
       {{- with .Values.nodeSelector }}
       nodeSelector:

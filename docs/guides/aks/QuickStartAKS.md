@@ -212,8 +212,8 @@ Precisely Sales Team for the reference data installation.
 
 ```shell
 helm install reference-data ./charts/aks/reference-data-setup/ \
---set "reference-data.global.pdxApiKey=[your-pdx-key]" \
---set "reference-data.global.pdxSecret=[your-pdx-secret]" \
+--set "reference-data.config.pdxApiKey=[your-pdx-key]" \
+--set "reference-data.config.pdxSecret=[your-pdx-secret]" \
 --set "reference-data.node-selector.node-app=geo-addressing" \
 --set "global.nfs.shareName=[shareName]" \
 --set "global.nfs.storageAccount=[storageAccountName]" \
