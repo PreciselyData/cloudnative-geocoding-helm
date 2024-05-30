@@ -63,6 +63,7 @@ expressEngineDataRestore:
   ## Note: This should be an arm based cluster node group
   nodeSelector: { }
 
+  tolerations: [ ]
   serviceAccount:
     annotations: { }
 
@@ -98,7 +99,7 @@ expressEngineDataRestore:
     #     }
     #   }
 
-expressenginedata:
+expressEngineData:
   enabled: true
   
   autoscaling:
@@ -165,7 +166,7 @@ expressenginedata:
       cpu: 16
       memory: 32Gi
 
-expressenginemaster:
+expressEngineMaster:
   enabled: true
   
   ##

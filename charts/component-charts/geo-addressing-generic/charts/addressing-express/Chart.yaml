@@ -27,10 +27,10 @@ dependencies:
   - name: express-engine
     repository: file://charts/express-engine
     version: "2.0.0"
-    alias: expressenginemaster
-    condition: expressenginemaster.enabled
+    alias: expressEngineMaster
+    condition: expressEngineMaster.enabled
   - name: express-engine
     repository: file://charts/express-engine
     version: "2.0.0"
-    alias: expressenginedata
-    condition: expressenginedata.enabled
+    alias: expressEngineData
+    condition: expressEngineData.enabled

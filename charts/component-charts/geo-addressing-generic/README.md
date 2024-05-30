@@ -161,8 +161,8 @@ provided by this chart:
 
 | Parameter                                             | Description                                                                                                                                                                                                              | Default |
 |-------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| `addressing-express.expressenginemaster.*`            | Values for Express Engine Master                                                                                                                                                                                         |         |
-| `addressing-express.expressenginedata.*`              | Values for Express Engine Master                                                                                                                                                                                         |         |
+| `addressing-express.expressEngineMaster.*`            | Values for Express Engine Master                                                                                                                                                                                         |         |
+| `addressing-express.expressEngineData.*`              | Values for Express Engine Master                                                                                                                                                                                         |         |
 | `addressing-express.expressEngineDataRestore.enabled` | flag to enable or disable the express engine data restore job. Refer to the comments in [values.yaml](../../../charts/component-charts/geo-addressing-generic/values.yaml) for express engine manual data configuration. | `true`  |
 
 <hr>

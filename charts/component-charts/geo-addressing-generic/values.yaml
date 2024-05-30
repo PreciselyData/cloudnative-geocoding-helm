@@ -320,7 +320,7 @@ addressing-express:
       #     }
       #   }
 
-  expressenginedata:
+  expressEngineData:
     
     autoscaling:
       ## Keep this enabled
@@ -354,7 +354,7 @@ addressing-express:
         cpu: 16
         memory: 32Gi
 
-  expressenginemaster:
+  expressEngineMaster:
     
     ##
     ## Warning: Do not reduce the count of replicas on helm upgrade. This will lead to data loss

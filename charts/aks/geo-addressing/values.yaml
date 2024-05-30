@@ -16,12 +16,12 @@ geo-addressing:
   enabled: true
   addressing-express:
     enabled: true
-    expressenginedata:
+    expressEngineData:
       memLock:
         enabled: false
       sysctlInit:
         enabled: true
-    expressenginemaster:
+    expressEngineMaster:
       memLock:
         enabled: false
       sysctlInit:
