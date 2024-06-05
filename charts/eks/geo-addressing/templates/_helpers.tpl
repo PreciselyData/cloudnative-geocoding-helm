@@ -37,49 +37,49 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Express engine data Storage Class Name
 */}}
 {{- define "addressing-exp-storage-class.name" -}}
-{{- printf "%s-%s-%s" "exp-sc" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s-%s" .Release.Name "exp-sc" .Release.Namespace | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Express engine restore data Storage Class Name
 */}}
 {{- define "addressing-nfs-storage-class.name" -}}
-{{- printf "%s-%s-%s" "nfs-sc" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s-%s" .Release.Name "nfs-sc" .Release.Namespace | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Express engine restore data PV
 */}}
 {{- define "addressing-nfs-pv.name" -}}
-{{- printf "%s-pv-%s-%s" "exp-snap" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-pv-%s-%s" .Release.Name "exp-snap" .Release.Namespace | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Express engine restore data PVC
 */}}
 {{- define "addressing-nfs-pvc.name" -}}
-{{- printf "%s-pvc-%s-%s" "exp-snap" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-pvc-%s-%s" .Release.Name "exp-snap" .Release.Namespace | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Addressing Hook Storage Class
 */}}
 {{- define "addressing-hook-storage-class.name" -}}
-{{- printf "%s-%s" "hook-efs" .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" .Release.Name "hook-efs" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Addressing Hook Persistent Volume Name
 */}}
 {{- define "addressing-hook-pv.name" -}}
-{{- printf "%s-%s-%s" "hook" .Release.Name "pv" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-hook-pv" .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Addressing Hook Persistent Volume Claim Name
 */}}
 {{- define "addressing-hook-pvc.name" -}}
-{{- printf "%s-%s-%s" "hook" .Release.Name "pvc" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-hook-pvc" .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*

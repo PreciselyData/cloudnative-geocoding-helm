@@ -109,3 +109,19 @@ Addressing data config map name
 {{- printf "%s" "addressing-data-mnt-config" }}
 {{- end }}
 {{- end }}
+
+{{- define "addressing-svc.Url" -}}
+{{- $top := index . 0 -}}
+{{- $var := index . 1 -}}
+{{- $sar := index . 2 -}}
+{{- if (index $top.Values $sar).fullnameOverride }}
+{{- (printf "%s%s" (index $top.Values $sar).fullnameOverride $var) | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $name := default $top.Chart.Name (index $top.Values $sar).nameOverride }}
+{{- if contains $name $top.Release.Name }}
+{{- printf "%s%s" $top.Release.Name $var | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s-%s%s" $top.Release.Name $name $var | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+{{- end }}

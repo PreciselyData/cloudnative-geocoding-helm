@@ -68,16 +68,24 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
+            {{- if (index .Values "addressing-svc").enabled }}
             - name: ADDRESSING_BASE_URL
-              value: http://addressing-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080
+              value: http://{{ include "addressing-svc.Url" (list . "-<region>" "addressing-svc")  }}.{{ .Release.Namespace }}.svc.cluster.local:8080
+            {{- end}}
+            {{- if (index .Values "lookup-svc").enabled }}
             - name: LOOKUP_BASE_URL
-              value: http://lookup-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080
+              value: http://{{ include "addressing-svc.Url" (list . "-<region>" "lookup-svc")  }}.{{ .Release.Namespace }}.svc.cluster.local:8080
+            {{- end}}
+            {{- if (index .Values "autocomplete-svc").enabled }}
             - name: AUTOCOMPLETE_BASE_URL
-              value: http://autocomplete-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080
+              value: http://{{ include "addressing-svc.Url" (list . "-<region>" "autocomplete-svc")  }}.{{ .Release.Namespace }}.svc.cluster.local:8080
+            {{- end}}
             - name: ADDRESSING_EXPRESS_BASE_URL
-              value: http://addressing-express.{{ .Release.Namespace }}.svc.cluster.local:8080
+              value: http://{{ include "addressing-svc.Url" (list . "-express" "addressing-express")  }}.{{ .Release.Namespace }}.svc.cluster.local:8080
+            {{- if (index .Values "reverse-svc").enabled }}
             - name: REVERSE_GEOCODE_BASE_URL
-              value: http://reverse-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080
+              value: http://{{ include "addressing-svc.Url" (list . "-<region>" "reverse-svc")  }}.{{ .Release.Namespace }}.svc.cluster.local:8080
+            {{- end}}
             - name: SUPPORTED_COUNTRIES_GEOCODE
               value: {{ printf "%s,express" (join "," .Values.global.countries) }}
             - name: SUPPORTED_REGIONS_GEOCODE

@@ -57,7 +57,7 @@ Selector labels
 {{- $top := index . 0 -}}
 {{- $var := index . 1 -}}
 app.kubernetes.io/name: {{ include "addressing-express.name" . }}
-app.kubernetes.io/instance: {{ printf "%s-%s" $top.Release.Name $var | trimSuffix "-" }}
+app.kubernetes.io/instance: {{ printf "%s" $top.Release.Name | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -77,33 +77,50 @@ Create the name of the service account to use
 RBAC Express engine restore data job Service Account
 */}}
 {{- define "addressing-exp-restore-job-sa.name" -}}
-{{- printf "%s-sa-%s-%s" "exp-restore" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-sa-%s-%s" .Release.Name "exp-restore" .Release.Namespace | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 RBAC Express engine restore data job Role
 */}}
 {{- define "addressing-exp-restore-job-role.name" -}}
-{{- printf "%s-role-%s-%s" "exp-restore" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-role-%s-%s" .Release.Name "exp-restore"  .Release.Namespace | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 RBAC Express engine restore data job Role Binding
 */}}
 {{- define "addressing-exp-restore-job-rb.name" -}}
-{{- printf "%s-rb-%s-%s" "exp-restore" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-rb-%s-%s" .Release.Name "exp-restore"  .Release.Namespace | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Express engine restore data Job name
 */}}
 {{- define "addressing-exp-restore-job.name" -}}
-{{- printf "%s-job-%s-%s-%d" "exp-restore" .Release.Name  .Release.Namespace (.Release.Revision | int) | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-job-%s-%s-%d" .Release.Name "exp-restore"  .Release.Namespace (.Release.Revision | int) | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Express engine restore data Job config name
 */}}
 {{- define "addressing-exp-restore-job-config.name" -}}
-{{- printf "%s-config-%s-%s" "exp-restore" .Release.Name  .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-config-%s-%s" .Release.Name "exp-restore" .Release.Namespace | trunc 63 | trimSuffix "-" }}
 {{- end }}
+
+
+{{- define "expressEngine.masterServiceUrl" -}}
+{{- if empty .Values.expressEngineMaster.masterService -}}
+{{- if empty .Values.expressEngineMaster.fullnameOverride -}}
+{{- if empty .Values.expressEngineMaster.nameOverride -}}
+{{ .Values.expressEngineMaster.clusterName }}-master
+{{- else -}}
+{{ .Values.expressEngineMaster.nameOverride }}-master
+{{- end -}}
+{{- else -}}
+{{ .Values.expressEngineMaster.fullnameOverride }}
+{{- end -}}
+{{- else -}}
+{{ .Values.expressEngineMaster.masterService }}
+{{- end -}}
+{{- end -}}

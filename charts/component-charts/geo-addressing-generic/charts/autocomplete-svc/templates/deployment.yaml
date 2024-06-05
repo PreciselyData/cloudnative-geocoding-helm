@@ -98,10 +98,8 @@ spec:
             {{- end }}
             - name: AUTH_ENABLED
               value: "false"
-      {{- with ((get $top.Values.countryConfigurations .) | default ($top.Values.global)).nodeSelector }}
       nodeSelector:
         {{- include "common-svc.global" (list $top.Values . "nodeSelector") | nindent 8 }}
-      {{- end }}
       {{- with $top.Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

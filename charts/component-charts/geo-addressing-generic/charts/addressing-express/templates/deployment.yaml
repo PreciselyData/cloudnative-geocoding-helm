@@ -82,7 +82,7 @@ spec:
             - name: COUNTRY_FINDER_ENABLED
               value: "true"
             - name: EXPRESS_URL
-              value: "https://express-engine-cluster-master:9200"
+              value: "https://{{- include "expressEngine.masterServiceUrl" $top }}.{{ .Release.Namespace }}.svc.cluster.local:9200"
             {{- if $top.Values.global.otelExporterEndpoint }}
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: {{ $top.Values.global.otelExporterEndpoint }}

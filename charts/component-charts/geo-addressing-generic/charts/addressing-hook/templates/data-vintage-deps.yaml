@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: "{{ .Release.Name }}-sa"
+  name: "{{ .Release.Name }}-vintage-job-sa"
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "1"
@@ -19,7 +19,7 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: "{{ .Release.Name }}-role"
+  name: "{{ .Release.Name }}-vintage-job-role"
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "1"
@@ -43,7 +43,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: "{{ .Release.Name }}-role-binding"
+  name: "{{ .Release.Name }}-vintage-job-rb"
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "1"
@@ -51,9 +51,9 @@ metadata:
     "helm.sh/resource-policy": delete
 subjects:
   - kind: ServiceAccount
-    name: "{{ .Release.Name }}-sa"
+    name: "{{ .Release.Name }}-vintage-job-sa"
 roleRef:
   kind: Role
-  name: "{{ .Release.Name }}-role"
+  name: "{{ .Release.Name }}-vintage-job-role"
   apiGroup: rbac.authorization.k8s.io
 {{- end }}

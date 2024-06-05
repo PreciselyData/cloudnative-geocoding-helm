@@ -26,13 +26,13 @@ spec:
       volumes:
         - name: data-vintage-scripts-volume
           configMap:
-            name: "{{ .Release.Name }}-config-map"
+            name: "{{ .Release.Name }}-hook-config-map"
             defaultMode: 0777
         - name: geoaddressing-host-volume
           persistentVolumeClaim:
             claimName: {{ include "addressing-hook-pvc.name" . }}
       restartPolicy: Never
-      serviceAccountName: "{{ .Release.Name }}-sa"
+      serviceAccountName: "{{ .Release.Name }}-vintage-job-sa"
       containers:
         - name: data-vintage-job
           image: "{{ .Values.dataVintage.image.repository }}:{{ .Values.dataVintage.image.tag | default .Chart.AppVersion }}"

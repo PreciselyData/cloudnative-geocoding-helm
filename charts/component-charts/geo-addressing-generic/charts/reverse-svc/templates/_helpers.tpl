@@ -57,7 +57,7 @@ Selector labels
 {{- $top := index . 0 -}}
 {{- $var := index . 1 -}}
 app.kubernetes.io/name: {{ include "reverse-svc.name" . }}
-app.kubernetes.io/instance: {{ printf "%s-%s" $top.Release.Name $var | trimSuffix "-" }}
+app.kubernetes.io/instance: {{ printf "%s" $top.Release.Name | trimSuffix "-" }}
 {{- end }}
 
 {{/*
