@@ -82,11 +82,11 @@ spec:
             - "{{- printf "%s/%s"  .Values.global.nfs.expressEngineDataMountPath .Values.global.nfs.expressEngineBasePath }}"
             - --user
             - "{{ .Values.expressEngineDataRestore.chownUser }}"
+            - --express-url
+            - "https://{{- include "expressEngine.masterServiceUrl" . }}.{{ .Release.Namespace }}.svc.cluster.local:9200"
             {{- if .Values.expressEngineDataRestore.allowDataReload }}
             - --allow-data-reload
             - "true"
-            - --express-url
-            - "https://{{- include "expressEngine.masterServiceUrl" . }}.{{ .Release.Namespace }}.svc.cluster.local:9200"
             {{- end}}
           volumeMounts:
             - name: snapshot-volume
