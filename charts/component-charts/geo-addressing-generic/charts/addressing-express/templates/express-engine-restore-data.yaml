@@ -83,7 +83,7 @@ spec:
             - --user
             - "{{ .Values.expressEngineDataRestore.chownUser }}"
             - --express-url
-            - "https://{{- include "expressEngine.masterServiceUrl" . }}.{{ .Release.Namespace }}.svc.cluster.local:9200"
+            - "{{- include "expressEngine.masterServiceUrl" . }}.{{ .Release.Namespace }}.svc.cluster.local"
             {{- if .Values.expressEngineDataRestore.allowDataReload }}
             - --allow-data-reload
             - "true"
