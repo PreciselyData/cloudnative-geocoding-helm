@@ -88,6 +88,10 @@ spec:
             - --allow-data-reload
             - "true"
             {{- end}}
+          {{- with .Values.expressEngineDataRestore.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: snapshot-volume
               mountPath: {{ .Values.global.nfs.expressEngineDataMountPath }}

@@ -63,6 +63,11 @@ expressEngineDataRestore:
   ## Note: This should be an arm based cluster node group
   nodeSelector: { }
 
+  resources:
+    requests:
+      cpu: 1
+      memory: 2Gi
+
   tolerations: [ ]
   serviceAccount:
     annotations: { }
