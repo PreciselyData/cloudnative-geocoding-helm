@@ -77,35 +77,35 @@ Create the name of the service account to use
 RBAC Express engine restore data job Service Account
 */}}
 {{- define "addressing-exp-restore-job-sa.name" -}}
-{{- printf "%s-sa-%s-%s" .Release.Name "exp-restore" .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-sa-%s" .Release.Name "exp-restore" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 RBAC Express engine restore data job Role
 */}}
 {{- define "addressing-exp-restore-job-role.name" -}}
-{{- printf "%s-role-%s-%s" .Release.Name "exp-restore"  .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-role-%s" .Release.Name "exp-restore" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 RBAC Express engine restore data job Role Binding
 */}}
 {{- define "addressing-exp-restore-job-rb.name" -}}
-{{- printf "%s-rb-%s-%s" .Release.Name "exp-restore"  .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-rb-%s" .Release.Name "exp-restore" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Express engine restore data Job name
 */}}
 {{- define "addressing-exp-restore-job.name" -}}
-{{- printf "%s-job-%s-%s-%d" .Release.Name "exp-restore"  .Release.Namespace (.Release.Revision | int) | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-job-%s-%d" .Release.Name "exp-restore" (.Release.Revision | int) | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Express engine restore data Job config name
 */}}
 {{- define "addressing-exp-restore-job-config.name" -}}
-{{- printf "%s-config-%s-%s" .Release.Name "exp-restore" .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-config-%s" .Release.Name "exp-restore" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 
