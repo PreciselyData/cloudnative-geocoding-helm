@@ -15,3 +15,13 @@ geo-addressing:
   enabled: true
   addressing-express:
     enabled: true
+    expressEngineData:
+      memLock:
+        enabled: false
+      sysctlInit:
+        enabled: true
+    expressEngineMaster:
+      memLock:
+        enabled: false
+      sysctlInit:
+        enabled: true
