@@ -85,6 +85,10 @@ expressEngineDataRestore:
   allowDataReload: false
 
   ##
+  ## Flat to delete the job after completion.
+  deleteAfterCompleted: true
+
+  ##
   ## Manual data vintage configuration for express engine data
   ## Note: Manual data vintage configuration overrides the automatic data vintage configuration
   dataConfig:

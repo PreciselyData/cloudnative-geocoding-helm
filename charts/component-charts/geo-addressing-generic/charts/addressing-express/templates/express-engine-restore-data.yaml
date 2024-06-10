@@ -46,7 +46,9 @@ metadata:
   labels:
     {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
 spec:
+  {{- if (.Values.expressEngineDataRestore.deleteAfterCompleted) }}
   ttlSecondsAfterFinished: 200
+  {{- end}}
   template:
     spec:
     {{- if (.Values.expressEngineDataRestore.dataSync.enabled) }}
