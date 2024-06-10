@@ -21,7 +21,6 @@ metadata:
     "helm.sh/resource-policy": delete
   labels:
     {{- include "addressing-hook-pv.labels" . | nindent 4 }}
-  finalizers: [ ]
 spec:
   capacity:
     storage: 100G
@@ -47,7 +46,6 @@ metadata:
     "helm.sh/hook-weight": "1"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
     "helm.sh/resource-policy": delete
-  finalizers: [ ]
   labels:
     {{- include "addressing-hook-pvc.labels" . | nindent 4 }}
 spec:

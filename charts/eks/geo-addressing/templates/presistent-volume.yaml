@@ -32,7 +32,6 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: {{include "addressing-nfs-pv.name" .}}
-  finalizers: [ ]
   labels:
     {{- include "geo-addressing-eks.labels" . | nindent 4 }}
 spec:

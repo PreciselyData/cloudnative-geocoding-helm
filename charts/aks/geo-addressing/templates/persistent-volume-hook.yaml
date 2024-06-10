@@ -36,7 +36,6 @@ metadata:
     "helm.sh/hook-weight": "1"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
     "helm.sh/resource-policy": delete
-  finalizers: [ ]
   labels:
     {{- include "addressing-hook-pvc.labels" . | nindent 4 }}
 spec:
