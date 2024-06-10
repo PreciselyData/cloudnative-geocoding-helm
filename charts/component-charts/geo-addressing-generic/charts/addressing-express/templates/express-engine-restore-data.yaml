@@ -45,6 +45,10 @@ metadata:
   name: {{include "addressing-exp-restore-job.name" .}}
   labels:
     {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
+  {{- with .Values.expressEngineDataRestore.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   {{- if (.Values.expressEngineDataRestore.deleteAfterCompleted) }}
   ttlSecondsAfterFinished: 200

@@ -48,6 +48,9 @@ helm.sh/chart: {{ include "addressing-express.chart" .}}
 app.kubernetes.io/version: {{ $top.Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ $top.Release.Service }}
+{{- with $top.Values.labels }}
+{{ toYaml . }}
+{{- end }}
 {{- end }}
 
 {{/*

@@ -39,6 +39,8 @@ autoscaling:
 tolerations: [ ]
 affinity: { }
 
+# additionals labels
+labels: {}
 
 ###################################
 ## CONFIG | Express Engine Data Restore Job
@@ -71,6 +73,8 @@ expressEngineDataRestore:
   tolerations: [ ]
   serviceAccount:
     annotations: { }
+
+  annotations: { }
 
   ## data Sync Init containers.
   dataSync:
