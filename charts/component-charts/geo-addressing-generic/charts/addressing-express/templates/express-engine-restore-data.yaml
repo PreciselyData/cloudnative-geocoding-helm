@@ -54,14 +54,13 @@ spec:
   ttlSecondsAfterFinished: 200
   {{- end}}
   template:
-    template:
-      metadata:
-        labels:
-          {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
-        {{- with .Values.expressEngineDataRestore.annotations }}
-        annotations:
-          {{- toYaml . | nindent 4 }}
-        {{- end }}
+    metadata:
+      labels:
+        {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
+      {{- with .Values.expressEngineDataRestore.annotations }}
+      annotations:
+        {{- toYaml . | nindent 4 }}
+      {{- end }}
     spec:
     {{- if (.Values.expressEngineDataRestore.dataSync.enabled) }}
       initContainers:
