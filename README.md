@@ -99,14 +99,14 @@ steps for specific cloud platform:
 [EKS](docs/guides/eks/QuickStartEKS.md#step-4-create-elastic-file-system-efs)
 | [AKS](docs/guides/aks/QuickStartAKS.md#step-4-create-and-configure-azure-files-share)
 
-#### 5. Installation of geo-addressing reference data
+#### 5. Installation of Geo Addressing reference data
 
 Download and install the geo-addressing reference data in the persistent volume. Follow the guides to get the steps for
 specific cloud platform:
 [EKS](docs/guides/eks/QuickStartEKS.md#step-5-installation-of-reference-data)
 | [AKS](docs/guides/aks/QuickStartAKS.md#step-5-installation-of-reference-data)
 
-#### 6. Deploy the geo-addressing application
+#### 6. Deploy the Geo Addressing application
 
 Deploy the geo-addressing application using helm. Follow the guides to get the steps for specific cloud platform:
 [EKS](docs/guides/eks/QuickStartEKS.md#step-6-installation-of-geo-addressing-helm-chart)
@@ -114,7 +114,7 @@ Deploy the geo-addressing application using helm. Follow the guides to get the s
 
 ## Components
 
-- [Understanding Geo-Addressing Helm Chart](charts/component-charts/geo-addressing-generic/README.md#understanding-geo-addressing-helm-charts)
+- [Understanding Geo Addressing Helm Chart](charts/component-charts/geo-addressing-generic/README.md#understanding-geo-addressing-helm-charts)
 - [Reference Data Structure](docs/ReferenceData.md)
 - [Pushing Docker Images (AWS ECR)](docs/guides/eks/QuickStartEKS.md#step-3-download-geo-addressing-docker-images)
 - [Pushing Docker Images (Microsoft ACR)](docs/guides/aks/QuickStartAKS.md#step-3-download-geo-addressing-docker-images)
