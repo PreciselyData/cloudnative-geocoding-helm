@@ -28,7 +28,7 @@ spec:
       labels:
         service: precisely
         app: {{ include "addressing-express.fullname" (list $top $country) }}
-        {{- include "addressing-express.selectorLabels" (list $top $country) | nindent 8 }}
+        {{- include "addressing-express.labels" (list $top $country) | nindent 8 }}
     spec:
       terminationGracePeriodSeconds: 60
       {{- with $top.Values.imagePullSecrets }}
