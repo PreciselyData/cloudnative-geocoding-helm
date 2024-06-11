@@ -57,7 +57,7 @@ spec:
     metadata:
       name: "{{ template "expressEngine.uname" . }}"
       labels:
-        {{- include "expressEngine.labels" . | nindent 8 }}
+        {{- include "expressEngineSt.labels" . | nindent 8 }}
       annotations:
         {{- range $key, $value := .Values.podAnnotations }}
         {{ $key }}: {{ $value | quote }}
