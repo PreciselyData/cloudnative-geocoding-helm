@@ -42,7 +42,6 @@ app.kubernetes.io/component: {{ include "expressEngine.uname" . }}
 Common labels
 */}}
 {{- define "expressEngine.labels" -}}
-helm.sh/chart: {{ include "expressEngine.chart" . }}
 {{ include "expressEngine.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
