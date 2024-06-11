@@ -29,6 +29,18 @@ Create chart name and version as used by the chart label.
 {{/*
 Common labels
 */}}
+{{- define "expressEngineSt.labels" -}}
+{{ include "expressEngine.selectorLabels" . }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+app.kubernetes.io/component: {{ include "expressEngine.uname" . }}
+{{- with .Values.labels }}
+{{ toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Common labels
+*/}}
 {{- define "expressEngine.labels" -}}
 helm.sh/chart: {{ include "expressEngine.chart" . }}
 {{ include "expressEngine.selectorLabels" . }}

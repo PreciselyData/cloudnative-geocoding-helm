@@ -56,10 +56,10 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
+        {{- include "addressing-express.labels" (list . "express") | nindent 8 }}
       {{- with .Values.expressEngineDataRestore.annotations }}
       annotations:
-        {{- toYaml . | nindent 4 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
     {{- if (.Values.expressEngineDataRestore.dataSync.enabled) }}

@@ -5,7 +5,7 @@ kind: StatefulSet
 metadata:
   name: {{ template "expressEngine.uname" . }}
   labels:
-    {{- include "expressEngine.labels" . | nindent 4 }}
+    {{- include "expressEngineSt.labels" . | nindent 4 }}
   annotations:
     majorVersion: "{{ include "expressEngine.majorVersion" . }}"
     {{- with .Values.expressEngineAnnotations }}
