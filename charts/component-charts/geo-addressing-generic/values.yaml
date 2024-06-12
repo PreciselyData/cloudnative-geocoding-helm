@@ -1,5 +1,5 @@
 ###################################################################
-## CONFIG | Geo-Addressing Application | Regional Addressing Service
+## CONFIG | Geo Addressing Application | Regional Addressing Service
 ###################################################################
 ## Global configurations will be applicable and referred in every dependent helm chart
 ## - for more information on global parameter of helm, refer to:
@@ -447,7 +447,7 @@ addressing-svc:
   ##  NZL       1000m, 10Gi
   ##  FRA       1000m, 7Gi
   ##
-  ## [NOTE]: These configurations are recommended after testing scenarios in a production environment for the Geo-Addressing application.
+  ## [NOTE]: These configurations are recommended after testing scenarios in a production environment for the Geo Addressing application.
   ##
   ## If a country-specific configuration is not provided, the default configurations will be used.
   ## For example, to provide configurations related to [CAN], use the following block or configurations like [USA]:
@@ -541,7 +541,7 @@ autocomplete-svc:
   ##  NZL       1000m, 8Gi
   ##  FRA       1000m, 6Gi
   ##
-  ## [NOTE]: These configurations are recommended after testing scenarios in a production environment for the Geo-Addressing application.
+  ## [NOTE]: These configurations are recommended after testing scenarios in a production environment for the Geo Addressing application.
   ##
   ## If a country-specific configuration is not provided, the default configurations will be used.
   ## For example, to provide configurations related to [CAN], use the following block or configurations like [USA]:
@@ -636,7 +636,7 @@ lookup-svc:
   ##  NZL       1000m, 6Gi
   ##  FRA       1000m, 6Gi
   ##
-  ## [NOTE]: These configurations are recommended after testing scenarios in a production environment for the Geo-Addressing application.
+  ## [NOTE]: These configurations are recommended after testing scenarios in a production environment for the Geo Addressing application.
   ##
   ## If a country-specific configuration is not provided, the default configurations will be used.
   ## For example, to provide configurations related to [CAN], use the following block or configurations like [USA]:
@@ -732,7 +732,7 @@ reverse-svc:
   ##  NZL       1000m, 10Gi
   ##  FRA       1000m, 7Gi
   ##
-  ## [NOTE]: These configurations are recommended after testing scenarios in a production environment for the Geo-Addressing application.
+  ## [NOTE]: These configurations are recommended after testing scenarios in a production environment for the Geo Addressing application.
   ##
   ## If a country-specific configuration is not provided, the default configurations will be used.
   ## For example, to provide configurations related to [CAN], use the following block or configurations like [USA]:

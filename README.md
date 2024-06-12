@@ -141,11 +141,12 @@ Following is the helm version chart against geo-addressing PDX docker image vers
 | `0.4.0/2023.9/Sept 12,2023` & `5.1.488`   | `0.1.0` - `0.4.0`️ |
 | `0.5.0/2024.2/Feb 20,2024` & `5.1.644`    | `0.5.0`️           |
 | `1.0.0/2024.3/Mar 31,2024` & `5.1.682`    | `1.0.0`️           |
-| `1.0.0/2024.5/May 10,2024` & `5.1.682`    | `1.0.1`️ - `2.0.0` |
+| `1.0.0/2024.5/May 10,2024` & `5.1.682`    | `1.0.1`️           |
+| `1.0.0/2024.6/June 14,2024` & `5.1.682`    | `2.0.0`️           |
 
 > NOTE: The docker images pushed to the image repository should be tagged with the current helm chart version.
 
-Refer [Downloading Geo-Addressing Docker Images](docs/guides/eks/QuickStartEKS.md#step-3-download-geo-addressing-docker-images)
+Refer [Downloading Geo Addressing Docker Images](docs/guides/eks/QuickStartEKS.md#step-3-download-geo-addressing-docker-images)
 for more information.
 
 ## Miscellaneous
@@ -160,7 +161,7 @@ for more information.
 - [Releases](https://github.com/PreciselyData/cloudnative-geocoding-helm/releases)
 - [Helm Values](charts/component-charts/geo-addressing-generic/README.md#helm-values)
 - [Environment Variables](charts/component-charts/geo-addressing-generic/README.md#environment-variables)
-- [Geo-Addressing Service API Usage](charts/component-charts/geo-addressing-generic/README.md#geo-addressing-service-api-usage)
+- [Geo Addressing Service API Usage](charts/component-charts/geo-addressing-generic/README.md#geo-addressing-service-api-usage)
 
 ## Links
 

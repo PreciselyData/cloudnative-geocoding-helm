@@ -1,4 +1,4 @@
-# Geo-Addressing Helm Chart
+# Geo Addressing Helm Chart
 
 Built upon the [architecture](../../../README.md#architecture), the geo-addressing helm chart offers flexibility to
 users, allowing them to configure and set up infrastructure according to their
@@ -14,7 +14,7 @@ To get started with installation of helm chart, follow:
 <br><br>For Amazon EKS: [Quick Start Guide for EKS](../../../docs/guides/eks/QuickStartEKS.md)
 <br>For Microsoft AKS: [Quick Start Guide for AKS](../../../docs/guides/aks/QuickStartAKS.md)
 
-## Understanding Geo-Addressing Helm charts
+## Understanding Geo Addressing Helm charts
 
 The geo-addressing helm chart compromises of following components:
 
@@ -261,7 +261,7 @@ minimum amount of pod memory for the addressing-services for each specific count
 You can adjust the values in [values.yaml](values.yaml), or you can set these parameters in the helm command itself
 during installation/up-gradation.
 
-## Geo-Addressing Service API Usage
+## Geo Addressing Service API Usage
 
 The geo-addressing service exposes different operational-addressing APIs like geocode, verify, reverse-geocode, lookup,
 etc.

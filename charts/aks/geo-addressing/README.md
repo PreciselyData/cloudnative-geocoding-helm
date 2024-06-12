@@ -1,4 +1,4 @@
-# Geo-Addressing Helm Chart For AKS
+# Geo Addressing Helm Chart For AKS
 
 ## Helm Values
 
@@ -29,7 +29,7 @@ provided by this chart:
 <hr>
 </details>
 
-> NOTE: For more details of Geo-Addressing Helm Chart, see
+> NOTE: For more details of Geo Addressing Helm Chart, see
 > the [geo-addressing component helm chart](../../component-charts/geo-addressing-generic/README.md)
 
 [🔗 Return to `Table of Contents` 🔗](../../../README.md#components)
