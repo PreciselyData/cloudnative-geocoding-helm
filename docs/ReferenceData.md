@@ -87,6 +87,6 @@ visit [Precisely Data Portfolio](https://dataguide.precisely.com/) where you can
 access files available in [Precisely Data Experience](https://data.precisely.com/).
 
 Additionally, we have provided a miscellaneous helm chart which will download the required reference data SPDs from Precisely Data Experience and extract it to the necessary reference data structure.
-Please visit the [reference-data-setup helm chart](../charts/reference-data-setup/README.md).
+Please visit the [reference-data-setup helm chart](../charts/component-charts/reference-data-setup-generic/README.md).
 
 [🔗 Return to `Table of Contents` 🔗](../README.md#components)

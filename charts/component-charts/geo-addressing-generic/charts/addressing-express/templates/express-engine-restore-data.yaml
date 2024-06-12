@@ -1,0 +1,130 @@
+{{- if .Values.expressEngineDataRestore.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{include "addressing-exp-restore-job-sa.name" .}}
+  labels:
+    {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
+  {{- with .Values.expressEngineDataRestore.serviceAccount.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{include "addressing-exp-restore-job-role.name" .}}
+  labels:
+    {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources:
+      - pods
+    verbs:
+      - get
+      - watch
+      - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{include "addressing-exp-restore-job-rb.name" .}}
+  labels:
+    {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{include "addressing-exp-restore-job-sa.name" .}}
+roleRef:
+  kind: Role
+  name: {{include "addressing-exp-restore-job-role.name" .}}
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{include "addressing-exp-restore-job.name" .}}
+  labels:
+    {{- include "addressing-express.labels" (list . "express") | nindent 4 }}
+  {{- with .Values.expressEngineDataRestore.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if (.Values.expressEngineDataRestore.deleteAfterCompleted) }}
+  ttlSecondsAfterFinished: 200
+  {{- end}}
+  template:
+    spec:
+    {{- if (.Values.expressEngineDataRestore.dataSync.enabled) }}
+      initContainers:
+        - name: syncdata
+          imagePullPolicy: "IfNotPresent"
+          command: ['sh', '-c']
+      {{- if eq .Values.expressEngineDataRestore.dataSync.type "s3" }}
+          image: "amazon/aws-cli"
+          args:
+            - {{- printf "mkdir -p %s/%s && time aws s3 sync %s %s/%s --no-progress --delete"  .Values.global.nfs.expressEngineDataMountPath .Values.global.nfs.expressEngineBasePath .Values.expressEngineDataRestore.dataSync.bucket .Values.global.nfs.expressEngineDataMountPath .Values.global.nfs.expressEngineBasePath | quote | indent 1 }}
+      {{- else if eq .Values.expressEngineDataRestore.dataSync.type "azure-blob" }}
+          image: "peterdavehello/azcopy:10"
+          args:
+            - {{- printf "mkdir -p %s/%s && time azcopy sync %s %s/%s"  .Values.global.nfs.expressEngineDataMountPath .Values.global.nfs.expressEngineBasePath .Values.expressEngineDataRestore.dataSync.blobPath .Values.global.nfs.expressEngineDataMountPath .Values.global.nfs.expressEngineBasePath | quote | indent 1 }}
+      {{- end }}
+          securityContext:
+            runAsUser: 0
+          resources:
+            {}
+          volumeMounts:
+            - name: "snapshot-volume"
+              mountPath: {{ .Values.global.nfs.expressEngineDataMountPath }}
+    {{- end}}
+      containers:
+        - name: exp-engine-restore-data
+          securityContext:
+            runAsUser: 0
+          image: "{{ .Values.global.expressEngineDataRestoreImage.repository }}:{{ .Values.global.expressEngineDataRestoreImage.tag }}"
+          imagePullPolicy: {{ .Values.global.expressEngineDataRestoreImage.pullPolicy }}
+          args: 
+            - --data-path
+            - "{{- printf "%s/%s"  .Values.global.nfs.expressEngineDataMountPath .Values.global.nfs.expressEngineBasePath }}"
+            - --user
+            - "{{ .Values.expressEngineDataRestore.chownUser }}"
+            - --express-url
+            - "{{- include "expressEngine.masterServiceUrl" . }}.{{ .Release.Namespace }}.svc.cluster.local"
+            {{- if .Values.expressEngineDataRestore.allowDataReload }}
+            - --allow-data-reload
+            - "true"
+            {{- end}}
+          {{- with .Values.expressEngineDataRestore.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: snapshot-volume
+              mountPath: {{ .Values.global.nfs.expressEngineDataMountPath }}
+          {{- if .Values.expressEngineDataRestore.dataConfig }}
+            - name: config-volume
+              mountPath: /etc/config/autocomplete.json
+              subPath: autocomplete.json
+          {{- end}}
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 10
+      serviceAccountName: {{include "addressing-exp-restore-job-sa.name" .}}
+      volumes:
+        - name: snapshot-volume
+          persistentVolumeClaim:
+            claimName: {{include "addressing-nfs-pvc.name" .}}
+        {{- if .Values.expressEngineDataRestore.dataConfig }}
+        - name: config-volume
+          configMap:
+            name: {{ include "addressing-exp-restore-job-config.name" .}}
+        {{- end}}
+      {{- with .Values.expressEngineDataRestore.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.expressEngineDataRestore.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  backoffLimit: 0
+{{- end}}

@@ -1,0 +1,28 @@
+## Global configurations will be applicable and referred in every dependent helm chart
+## - for more information on global parameter of helm, refer to:
+##    https://helm.sh/docs/chart_template_guide/subcharts_and_globals/
+global:
+
+  ## Configurations related to Network File System
+  nfs:
+    ##
+    ## The Azure Storage Name
+    shareName: geoaddressingshare
+    ##
+    ## The Azure Storage Account ID
+    storageAccount: geoaddressing
+
+geo-addressing:
+  enabled: true
+  addressing-express:
+    enabled: true
+    expressEngineData:
+      memLock:
+        enabled: false
+      sysctlInit:
+        enabled: true
+    expressEngineMaster:
+      memLock:
+        enabled: false
+      sysctlInit:
+        enabled: true

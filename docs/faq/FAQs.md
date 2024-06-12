@@ -5,16 +5,14 @@ checking the below questions. This resource provides answers to common questions
 assistance in troubleshooting any deployment-related difficulties you may encounter. If your question is not covered in
 the FAQs, feel free to reach out to our support team for personalized assistance.
 
-<br>
 1. How can I monitor the Geo-Addressing Helm Chart is installation?
    <br><br>
    Once you run the helm chart command, you can monitor the helm chart creation by using the following command:
     ```shell
     kubectl get pods -n [geo-addressing] -w
     ```
-
-Please wait for all the services to be in the running stage:
-![kubectl-all.png](../../images/kubectl-all.png)
+   Please wait for all the services to be in the running stage:
+   ![kubectl-all.png](../../images/kubectl-all.png)
 
 2. How to check the logs if the helm chart installation is unsuccessful?
    <br><br>
@@ -44,7 +42,7 @@ Please wait for all the services to be in the running stage:
    <br><br>
    Helm command will fail mostly because of missing mandatory parameters or not overriding few of the default
    parameters. Apart from mandatory parameters, you can always override the default values in
-   the [values.yaml](../../charts/geo-addressing/values.yaml) file by using the --set parameter.
+   the [values.yaml](../../charts/component-charts/geo-addressing-generic/values.yaml) file by using the --set parameter.
 
    However, you can view the logs and fix those issues by cleaning up and rerunning the helm command.
     ```shell

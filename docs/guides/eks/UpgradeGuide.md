@@ -18,7 +18,7 @@ This guide is applicable in the following situations:
 helm repo update
 
 ## apply the changes values.yaml file AND upgrade the chart to newer version
-helm upgrade --install geo-addressing ./charts/geo-addressing \
+helm upgrade --install geo-addressing ./charts/[your-cloud-environment]/geo-addressing \
 --dependency-update \
 --namespace geo-addressing --create-namespace \
 --version [updated-version]

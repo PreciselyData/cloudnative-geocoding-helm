@@ -1,0 +1,4 @@
+global:
+  awsRegion: "us-east-1"
+  nfs:
+    fileSystemId: fileSystemId

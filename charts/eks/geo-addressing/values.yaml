@@ -1,0 +1,27 @@
+## Global configurations will be applicable and referred in every dependent helm chart
+## - for more information on global parameter of helm, refer to:
+##    https://helm.sh/docs/chart_template_guide/subcharts_and_globals/
+global:
+  ## Aws region where EFS is installed.
+  awsRegion: us-east-1
+
+  ## Configurations related to Network File System
+  nfs:
+    ##
+    ## The `fileSystemId` this is a mandatory parameter as regional-addressing service used the reference data mounted in EFS.
+    fileSystemId: fileSystemId
+
+geo-addressing:
+  enabled: true
+  addressing-express:
+    enabled: true
+    expressEngineData:
+      memLock:
+        enabled: false
+      sysctlInit:
+        enabled: true
+    expressEngineMaster:
+      memLock:
+        enabled: false
+      sysctlInit:
+        enabled: true

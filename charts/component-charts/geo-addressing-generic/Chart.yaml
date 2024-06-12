@@ -1,0 +1,32 @@
+apiVersion: v2
+name: geo-addressing
+description: A Helm chart for Geo Addressing service
+
+type: application
+version: 2.0.0
+appVersion: "1.16.0"
+dependencies:
+  - name: addressing-hook
+    repository: file://charts/addressing-hook
+    version: "2.0.0"
+    condition: addressing-hook.enabled
+  - name: addressing-svc
+    repository: file://charts/addressing-svc
+    version: "2.0.0"
+    condition: addressing-svc.enabled
+  - name: autocomplete-svc
+    repository: file://charts/autocomplete-svc
+    version: "2.0.0"
+    condition: autocomplete-svc.enabled
+  - name: lookup-svc
+    repository: file://charts/lookup-svc
+    version: "2.0.0"
+    condition: lookup-svc.enabled
+  - name: reverse-svc
+    repository: file://charts/reverse-svc
+    version: "2.0.0"
+    condition: reverse-svc.enabled
+  - name: addressing-express
+    repository: file://charts/addressing-express
+    version: "2.0.0"
+    condition: addressing-express.enabled

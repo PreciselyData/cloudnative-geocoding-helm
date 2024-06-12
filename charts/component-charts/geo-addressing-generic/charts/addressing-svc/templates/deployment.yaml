@@ -1,0 +1,116 @@
+{{- if .Values.enabled }}
+{{- $top := . -}}
+{{- range $.Values.global.countries }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "addressing-svc.fullname" (list $top .) }}
+  {{- if $top.Values.global.manualDataConfig.enabled }}
+  annotations:
+    preicsely.com/config-checksum: {{ $top.Values.global.manualDataConfig.configMapData | toYaml | sha256sum }}
+  {{- end}}
+  labels:
+    service: precisely
+    app: {{ include "addressing-svc.fullname" (list $top .) }}
+    {{- include "addressing-svc.labels" (list $top .) | nindent 4 }}
+spec:
+  {{- if not $top.Values.autoscaling.enabled }}
+  replicas: {{ $top.Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      service: precisely
+      app: {{ include "addressing-svc.fullname" (list $top .) }}
+      {{- include "addressing-svc.selectorLabels" (list $top .) | nindent 6 }}
+  template:
+    metadata:
+      {{- with $top.Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        service: precisely
+        app: {{ include "addressing-svc.fullname" (list $top .) }}
+        {{- include "addressing-svc.selectorLabels" (list $top .) | nindent 8 }}
+    spec:
+      {{- with $top.Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "addressing-svc.serviceAccountName" (list $top .) }}
+      securityContext:
+        {{- toYaml $top.Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ $top.Chart.Name }}
+          securityContext:
+            {{- toYaml $top.Values.securityContext | nindent 12 }}
+          image: "{{ $top.Values.global.addressingImage.repository }}:{{ $top.Values.global.addressingImage.tag | default $top.Chart.AppVersion }}"
+          imagePullPolicy: {{ $top.Values.global.addressingImage.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            successThreshold: 1
+            timeoutSeconds: 1
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            successThreshold: 1
+            timeoutSeconds: 1
+            periodSeconds: 10
+          resources:
+            {{- (include "common-svc.configuration" (list $top.Values.countryConfigurations . "resources")) | nindent 12 }}
+          volumeMounts:
+            {{- include "addressing-svc.volumeMounts" $top | nindent 12 }}
+          env:
+            - name: DATA_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "addressing-data-config.name" $top }}
+                  key: {{ (printf "verify-geocode.%s.vintage" .) }}
+            - name: GEOCODE_VERIFY_ENABLED
+              value: "true"
+            - name: LOOKUP_ENABLED
+              value: "false"
+            - name: REVERSEGEOCODE_ENABLED
+              value: "false"
+            - name: AUTOCOMPLETE_ENABLED
+              value: "false"
+            - name: DATA_REGION
+              value: {{ . | upper }}
+            {{- if $top.Values.global.otelExporterEndpoint }}
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: {{ $top.Values.global.otelExporterEndpoint }}
+            {{- else }}
+            - name: OTEL_TRACES_EXPORTER
+              value: none
+            {{- end }}
+            - name: AUTH_ENABLED
+              value: "false"
+      nodeSelector:
+        {{- include "common-svc.global" (list $top.Values . "nodeSelector") | nindent 8 }}
+      {{- with $top.Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $top.Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: geoaddressing-host-volume
+          persistentVolumeClaim:
+            claimName: {{ include "addressing-nfs-pvc.name" $top }}
+{{- end }}
+{{- end }}

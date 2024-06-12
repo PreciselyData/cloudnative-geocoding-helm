@@ -1,0 +1,54 @@
+{{ if .Values.dataDownload.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-download"
+  labels:
+    {{- include "reference-data.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/resource-policy": delete
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 100
+  template:
+    metadata:
+      name: "{{ .Release.Name }}-download"
+      labels:
+        {{- include "reference-data.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.dataDownload.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      restartPolicy: Never
+      volumes:
+        - name: geoaddressing-host-volume
+          persistentVolumeClaim:
+            claimName:  {{include "addressing-ref-pvc.name" .}}
+      containers:
+        - name: data-download-job
+          image: "{{ .Values.dataDownload.image.repository }}:{{ .Values.dataDownload.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.dataDownload.image.pullPolicy }}
+          args:
+            - "--pdx-api-key"
+            - "{{ .Values.config.pdxApiKey }}"
+            - "--pdx-api-secret"
+            - "{{ .Values.config.pdxSecret }}"
+            - "--countries"
+            - "{{ .Values.config.countries }}"
+            - "--dest-path"
+            - "{{ .Values.config.mountBasePath }}"
+            - "--data-mapping"
+            - {{ .Values.config.dataConfigMap | quote }}
+          volumeMounts:
+            - name: geoaddressing-host-volume
+              mountPath: {{ .Values.config.mountBasePath }}
+      terminationGracePeriodSeconds: 0
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

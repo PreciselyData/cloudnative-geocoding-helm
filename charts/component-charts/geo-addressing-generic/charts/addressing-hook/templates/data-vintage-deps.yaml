@@ -1,0 +1,59 @@
+{{- if .Values.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: "{{ .Release.Name }}-vintage-job-sa"
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/resource-policy": delete
+    {{- with .Values.serviceAccount.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  labels:
+    {{- include "addressing-hook.labels" . | nindent 4 }}
+{{- end }}
+---
+{{- if .Values.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: "{{ .Release.Name }}-vintage-job-role"
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/resource-policy": delete
+rules:
+  - apiGroups: [""]
+    resources:
+      - configmaps
+    verbs:
+      - create
+      - update
+      - patch
+      - delete
+      - get
+      - watch
+      - list
+{{- end }}
+---
+{{- if .Values.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: "{{ .Release.Name }}-vintage-job-rb"
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/resource-policy": delete
+subjects:
+  - kind: ServiceAccount
+    name: "{{ .Release.Name }}-vintage-job-sa"
+roleRef:
+  kind: Role
+  name: "{{ .Release.Name }}-vintage-job-role"
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}
