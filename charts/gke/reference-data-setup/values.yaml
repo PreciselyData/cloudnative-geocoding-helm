@@ -1,0 +1,4 @@
+global:
+  nfs:
+    path: /ga_data
+    server: 10.122.176.250
