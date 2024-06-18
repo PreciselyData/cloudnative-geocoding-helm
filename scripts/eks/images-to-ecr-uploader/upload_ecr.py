@@ -198,7 +198,7 @@ LOCAL_PATH = args.local_path
 AWS_REGION = args.aws_region
 AWS_ACCESS_KEY = args.aws_access_key
 AWS_SECRET_KEY = args.aws_secret_key
-image_tag = '2.0.0'
+image_tag = '2.0.1'
 date_folder = str(time.strftime("%Y%m%d%H%M"))
 
 if not AWS_REGION:
@@ -214,7 +214,7 @@ if AWS_SECRET_KEY:
 if not LOCAL_PATH:
     LOCAL_PATH = os.getcwd()
 
-client = DataDeliveryClient(PDX_API_KEY, PDX_SECRET, "SDM_HELM_APP_2.0.0")
+client = DataDeliveryClient(PDX_API_KEY, PDX_SECRET, "SDM_HELM_APP_2.0.1")
 spd_path = os.path.join(LOCAL_PATH, "docker_images")
 os.makedirs(spd_path, exist_ok=True)
 
