@@ -154,8 +154,8 @@ helm upgrade --install geo-addressing ./charts/geo-addressing \
 --set "global.addressingImage.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/addressing-service" \
 --set "global.expressEngineImage.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/express-engine" \
 --set "global.expressEngineDataRestoreImage.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/express-engine-data-restore" \
---set "geo-addressing.addressing-express.expressenginedata.nodeSelector.node-app=[node-selector-label-arm64-node]" \
---set "geo-addressing.addressing-express.expressenginemaster.nodeSelector.node-app=[node-selector-label-arm64-node]" \ 
+--set "geo-addressing.addressing-express.expressEngineData.nodeSelector.node-app=[node-selector-label-arm64-node]" \
+--set "geo-addressing.addressing-express.expressEngineMaster.nodeSelector.node-app=[node-selector-label-arm64-node]" \ 
 --set "geo-addressing.addressing-express.expressEngineDataRestore.nodeSelector.node-app=[node-selector-label-arm64-node]" \
 --set "global.countries={usa,can,aus,nzl}" \
 --namespace geo-addressing --create-namespace
@@ -207,9 +207,9 @@ reverse-geocode you have to set the parameters in helm command as follows.
   amd64 based Node group.
 * ``geo-addressing.addressing-express.expressEngineDataRestore.nodeSelector``: The node selector to run the express-engine data restore
   job. Should be an arm64 based Node group.
-* ``geo-addressing.addressing-express.expressenginedata.nodeSelector``: The node selector to run the express-engine data service.
+* ``geo-addressing.addressing-express.expressEngineData.nodeSelector``: The node selector to run the express-engine data service.
   Should be an arm64 based Node group.
-* ``geo-addressing.addressing-express.expressenginemaster.nodeSelector``: The node selector to run the express-engine master service.
+* ``geo-addressing.addressing-express.expressEngineMaster.nodeSelector``: The node selector to run the express-engine master service.
   Should be an arm64 based Node group.
 
 For more information on helm values, follow [this link](../../../charts/component-charts/geo-addressing-generic/README.md#helm-values).
