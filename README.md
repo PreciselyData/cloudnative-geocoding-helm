@@ -94,7 +94,7 @@ platform:
 
 #### 4. Create a Persistent Volume
 
-Create or user an existing persistent volume for storing geo-addressing reference-data. Follow the guides to get the
+Create or use an existing persistent volume for storing geo-addressing reference-data. Follow the guides to get the
 steps for specific cloud platform:
 [EKS](docs/guides/eks/QuickStartEKS.md#step-4-create-elastic-file-system-efs)
 | [AKS](docs/guides/aks/QuickStartAKS.md#step-4-create-and-configure-azure-files-share)
