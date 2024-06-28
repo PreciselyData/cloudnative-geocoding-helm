@@ -152,7 +152,7 @@
 					}
 				},
 				"url": {
-					"raw": "{{EXTERNAL-IP}}/v2/autocomplete",
+					"raw": "{{EXTERNAL-IP}}/v1/express-autocomplete",
 					"host": [
 						"{{EXTERNAL-IP}}"
 					],

@@ -441,7 +441,7 @@ curl --location 'https://[EXTERNAL-URL]/li/v1/oas/autocomplete' --header 'Conten
 }'
 ```
 
-### `/v2/autocomplete`:
+### `/v1/express-autocomplete`:
 
 API to autocomplete the addresses
 
