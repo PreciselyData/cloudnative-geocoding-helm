@@ -1,4 +1,4 @@
-# Reference Data Setup on AKS
+# Reference Data Setup on GKE
 
 The Geo Addressing Application requires reference data installed in the worker nodes for running geo-addressing capabilities. This reference data should be deployed
 using [persistent volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/). This persistent volume is

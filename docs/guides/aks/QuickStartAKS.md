@@ -283,9 +283,9 @@ reverse-geocode you have to set the parameters in helm command as follows.
   Provide a comma separated list to enable a particular set of countries
   from: `{usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world}`
 * ``geo-addressing.image.repository``: The image repository for the regional-addressing image
-* ``global.addressingImage.repository``: The ECR image repository for the addressing-service image
-* ``global.expressEngineImage.repository``: The ECR image repository for the express-engine image
-* ``global.expressEngineDataRestoreImage.repository``: The ECR image repository for the express-engine-data-restore
+* ``global.addressingImage.repository``: The image repository for the addressing-service image
+* ``global.expressEngineImage.repository``: The image repository for the express-engine image
+* ``global.expressEngineDataRestoreImage.repository``: The image repository for the express-engine-data-restore
   image
 * ``global.nodeSelector``: The node selector to run the geo-addressing solutions on nodes of the cluster. Should be an
   amd64 based Node group.
