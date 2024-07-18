@@ -80,7 +80,7 @@ You can create the GKE cluster or use existing GKE cluster.
   controller:
   ```shell
   helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-  help repo update
+  helm repo update
   helm install nginx-ingress ingress-nginx/ingress-nginx -f ./cluster-sample/gke/ingress-values.yaml
   ```
 
