@@ -11,10 +11,10 @@ provided by this chart:
 <details>
 <summary><code>global.*</code></summary>
 
-| Parameter           | Description                                    | Default          |
-|---------------------|------------------------------------------------|------------------|
-| `global.nfs.path`   | The Path of Google Filestore Instance          | `/ga_data`       |
-| `global.nfs.server` | The IP of the Google Filestore Instance Server | `10.122.176.250` |
+| Parameter           | Description                                    | Default               |
+|---------------------|------------------------------------------------|-----------------------|
+| `global.nfs.path`   | The Path of Google Filestore Instance          | `/ga_data`            |
+| `global.nfs.server` | The IP of the Google Filestore Instance Server | `<fileStoreServerIP>` |
 
 <hr>
 </details>

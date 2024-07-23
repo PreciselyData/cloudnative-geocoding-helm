@@ -12,7 +12,7 @@ global:
     # The server url for NFS
     # You can get this by running below command:
     # gcloud filestore instances describe {fileStoreName} --zone us-east1-c --format="value(networks[0].ipAddresses[0])"
-    server: 10.122.176.250
+    server: fileStoreServerIP
 
 geo-addressing:
   enabled: true
