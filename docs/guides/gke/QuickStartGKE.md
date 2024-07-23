@@ -197,10 +197,6 @@ Follow the following steps to create a Filestore instance for the Geo Addressing
    ```
    gcloud filestore instances describe <filestore-instance-name> --zone us-east1-c --format="value(networks[0].ipAddresses[0])"
    ```
-  Your output should be similar to this:
-  ```
-  10.231.81.122
-  ```
 - Locate the NFS path (the name) of your Filestore instance:
   ```
   gcloud filestore instances describe <filestore-instance-name> --zone us-east1-c --format="value(fileShares[0].name)"
@@ -209,7 +205,7 @@ Follow the following steps to create a Filestore instance for the Geo Addressing
   ```
   nfs:
     path: /<filestore-instance-name-with-underscore>
-    server: 10.231.81.122
+    server: <fileStoreServerIP>
   ```  
 
 **Note:** The path of the data that you are going to use must exist on Filestore.
@@ -236,7 +232,7 @@ helm install reference-data ./charts/gke/reference-data-setup/ \
 --set "reference-data.config.pdxSecret=<pdx-api-secret>" \
 --set "reference-data.node-selector.node-app=<node-selector-label>" \
 --set "global.nfs.path=/<filestore-instance-name-with-underscore>" \
---set "global.nfs.server=10.231.81.122" \
+--set "global.nfs.server=<filestoreServerIP>" \
 --set "reference-data.dataDownload.image.repository=[e.g. us.gcr.io/<project-id>/reference-data-extractor]" \
 --dependency-update --timeout 60m
 ```
@@ -252,7 +248,7 @@ To install/upgrade the geo-addressing helm chart, use the following command:
 helm upgrade --install geo-addressing ./charts/gke/geo-addressing \
 --dependency-update \
 --set "global.nfs.path=/<filestore-instance-name-with-underscore>" \
---set "global.nfs.server=10.231.81.122" \
+--set "global.nfs.server=<filestoreServerIP>" \
 --set "geo-addressing.ingress.hosts[0].host=[ingress-host-name]" \ 
 --set "geo-addressing.ingress.hosts[0].paths[0].path=/precisely/addressing" \
 --set "geo-addressing.ingress.hosts[0].paths[0].pathType=ImplementationSpecific" \
