@@ -1,0 +1,4 @@
+global:
+  nfs:
+    path: /ga_data
+    server: fileStoreServerIP

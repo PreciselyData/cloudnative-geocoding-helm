@@ -1,11 +1,11 @@
 apiVersion: v2
-name: reference-data-setup-eks
+name: reference-data-setup-gke
 description: A Helm chart for Installation of Reference Data
 
 type: application
 version: 2.0.1
 appVersion: "1.16.0"
 dependencies:
-  - name: reference-data-setup
+  - name: reference-data-setup-generic
     repository: file://../../component-charts/reference-data-setup-generic
     version: "2.0.1"

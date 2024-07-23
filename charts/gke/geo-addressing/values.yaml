@@ -1,0 +1,30 @@
+## Global configurations will be applicable and referred in every dependent helm chart
+## - for more information on global parameter of helm, refer to:
+##    https://helm.sh/docs/chart_template_guide/subcharts_and_globals/
+global:
+
+  ## Configurations related to Network File System
+  nfs:
+    # The NFS path
+    # You can get this by running following command:
+    # gcloud filestore instances describe {fileStoreName} --zone us-east1-c --format="value(fileShares[0].name)"
+    path: /ga_data
+    # The server url for NFS
+    # You can get this by running below command:
+    # gcloud filestore instances describe {fileStoreName} --zone us-east1-c --format="value(networks[0].ipAddresses[0])"
+    server: fileStoreServerIP
+
+geo-addressing:
+  enabled: true
+  addressing-express:
+    enabled: false
+    expressEngineData:
+      memLock:
+        enabled: false
+      sysctlInit:
+        enabled: true
+    expressEngineMaster:
+      memLock:
+        enabled: false
+      sysctlInit:
+        enabled: true

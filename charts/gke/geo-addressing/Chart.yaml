@@ -1,5 +1,5 @@
 apiVersion: v2
-name: geo-addressing-eks
+name: geo-addressing-gke
 description: A Helm chart for Geo Addressing service
 
 type: application

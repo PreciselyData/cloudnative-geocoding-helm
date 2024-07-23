@@ -1,0 +1,45 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{include "addressing-exp-storage-class.name" .}}
+  labels:
+    {{- include "geo-addressing-gke.labels" . | nindent 4 }}
+provisioner: pd.csi.storage.gke.io
+parameters:
+  type: pd-balanced
+  csi.storage.k8s.io/fstype: ext4
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{include "addressing-nfs-pv.name" .}}
+  labels:
+    {{- include "geo-addressing-gke.labels" . | nindent 4 }}
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain  # if set as "Delete" file share would be removed in pvc deletion
+  volumeMode: Filesystem
+  nfs:
+    path: {{ .Values.global.nfs.path }}
+    server: {{ .Values.global.nfs.server }}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{include "addressing-nfs-pvc.name" .}}
+  labels:
+    {{- include "geo-addressing-gke.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  volumeName: {{include "addressing-nfs-pv.name" .}}
+  storageClassName: ""

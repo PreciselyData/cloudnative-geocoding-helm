@@ -1,0 +1,42 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{include "addressing-ref-pv.name" .}}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "2"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/resource-policy": delete
+  labels:
+    {{- include "addressing-ref-pv.labels" . | nindent 4 }}
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain  # if set as "Delete" file share would be removed in pvc deletion
+  volumeMode: Filesystem
+  nfs:
+    path: {{ .Values.global.nfs.path }}
+    server: {{ .Values.global.nfs.server }}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{include "addressing-ref-pvc.name" .}}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "2"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/resource-policy": delete
+  labels:
+    {{- include "addressing-ref-pvc.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  volumeName: {{include "addressing-ref-pv.name" .}}
+  storageClassName: ""

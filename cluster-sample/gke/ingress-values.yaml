@@ -1,0 +1,24 @@
+controller:
+  replicaCount: 3
+  nodeSelector:
+    node-app: geo-addressing-ingress
+  autoscaling:
+    enabled: true
+  resources:
+    requests:
+      cpu: 100m
+      memory: 300Mi
+    limits:
+      memory: 1Gi
+  metrics:
+    enabled: true
+    port: 10254
+  service:
+    externalTrafficPolicy: Local
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "10254"
+  config:
+    use-forwarded-headers: "true"
+    proxy-buffer-size: "128k"
+    proxy-body-size: "10m"
