@@ -15,7 +15,7 @@ Use the following Helm command to deploy or upgrade the `custom-data-import` job
 #### Command Example
 
 ```bash
-helm upgrade --install custom-data-import ./path-to-your-chart \
+helm upgrade --install custom-data-import ./charts/component-charts/custom-data-importer \
   --namespace geo-addressing \
   --set dataImport.image.repository="custom-data-importer" \
   --set dataImport.image.tag="2.0.2" \
