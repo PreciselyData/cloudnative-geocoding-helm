@@ -125,7 +125,7 @@ Deploy the geo-addressing application using helm. Follow the guides to get the s
 - [Pushing Docker Images (AWS ECR)](docs/guides/eks/QuickStartEKS.md#step-3-download-geo-addressing-docker-images)
 - [Pushing Docker Images (Microsoft ACR)](docs/guides/aks/QuickStartAKS.md#step-3-download-geo-addressing-docker-images)
 - [Pushing Docker Images (Google Artifact Registry)](docs/guides/gke/QuickStartGKE.md#step-3-download-geo-addressing-docker-images)
-- [Custom Data Import Job](charts/component-charts/custom-data-importer/README.md)
+- [Custom Data Import Job (Optional)](charts/component-charts/custom-data-importer/README.md)
 
 ## Guides
 
