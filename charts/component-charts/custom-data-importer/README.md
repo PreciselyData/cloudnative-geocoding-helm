@@ -62,3 +62,39 @@ kubectl logs -f -l "app.kubernetes.io/name=custom-data-import" -n geo-addressing
 ---
 
 This section provides users with the necessary information and commands to deploy and monitor the custom data import job using Helm.
+
+---
+
+# Custom Data Import - CSV File Schema
+
+This document provides the schema for the CSV file that is used for the Custom Data Import. The table below defines the fields, data types, and descriptions for each column in the CSV file.
+
+| Field Name      | Description                                                        | Example       | Data Type                          | Size       |
+|-----------------|--------------------------------------------------------------------|---------------|------------------------------------|------------|
+| `source_id`     | Identifier for the data. The source may contain a UUID (36 chars).  | `D5`          | `text` (stored as `varchar`)       | 36         |
+| `place_name`    | Point of Interest (POI) name                                        | `Precisely`   | `text`                             | N/A        |
+| `address_number`| Address number (e.g., 123 Main St -> 123 in parsed format)          | `1`           | `text`                             | N/A        |
+| `street_name`   | Name of the street                                                  | `Global View` | `text`                             | N/A        |
+| `post_code`     | Postal code                                                         | `12180`       | `text`                             | N/A        |
+| `post_code_ex`  | Extended postal code (if available)                                 | `0007`        | `text`                             | N/A        |
+| `admin1`        | State or Province                                                   | `NY`          | `text`                             | N/A        |
+| `city`          | Name of the city                                                    | `Troy`        | `text`                             | N/A        |
+| `neighborhood`  | Locality or suburb in the city                                      | `Pier 15`     | `text`                             | N/A        |
+| `unit_type`     | Type of unit (e.g., Unit, Apt, #)                                   | `APT`         | `text`                             | N/A        |
+| `unit_value`    | Value of the unit                                                   | `15`          | `text`                             | N/A        |
+| `country`       | ISO 3 Country Code                                                  | `usa`         | `text` (stored as `varchar`)       | 3          |
+| `latitude`      | Latitude coordinate (decimal format)                                | `0.0`         | `decimal`                          | (10,9)     |
+| `longitude`     | Longitude coordinate (decimal format)                               | `0.0`         | `decimal`                          | (10,9)     |
+| `location_desc` | Description of the location                                          | `null island` | `text`                             | N/A        |
+
+## Notes:
+- **Source ID:** This is a unique identifier for each entry in the dataset, and it can contain UUID values.
+- **Address Fields:** These include fields such as `address_number`, `street_name`, `post_code`, etc., which define the physical location of the place.
+- **Coordinates:** Both latitude and longitude are stored as decimal values with up to 9 digits of precision.
+- **Country:** Stored as a 3-character ISO country code.
+- **Unit Information:** `unit_type` and `unit_value` are used to provide additional details about the unit or apartment, if applicable.
+
+---
+
+This structure can be used as the reference guide for any future updates or documentation purposes for the custom data import schema.
+
