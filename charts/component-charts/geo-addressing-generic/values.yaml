@@ -32,7 +32,7 @@ global:
   addressingImage:
     repository: addressing-service
     pullPolicy: Always
-    tag: 2.0.1
+    tag: 2.0.2
 
   ## Configurations for the express-engine container image.
   ##
@@ -40,7 +40,7 @@ global:
   ## https://data.precisely.com/products
   expressEngineImage:
     repository: express-engine
-    tag: 2.0.1
+    tag: 2.0.2
     pullPolicy: Always
 
   ## Configurations for the express-engine-data-restore container image.
@@ -51,7 +51,7 @@ global:
     repository: express-engine-data-restore
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
-    tag: 2.0.1
+    tag: 2.0.2
 
   ## Configuration for manually configuring the data mount path for addressing-service
   ## When doing the manual configuration for data mount path, disable the data-vintage
@@ -125,7 +125,7 @@ replicaCount: 1
 image:
   repository: regional-addressing-service
   pullPolicy: Always
-  tag: 2.0.1
+  tag: 2.0.2
 imagePullSecrets: [ ]
 
 ## This will override the name of the installed regional-addressing deployment.
