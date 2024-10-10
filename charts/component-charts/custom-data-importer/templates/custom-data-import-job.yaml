@@ -1,0 +1,51 @@
+{{ if .Values.dataImport.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-importer"
+  labels:
+    {{- include "custom-data.labels" . | nindent 4 }}
+spec:
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 86400
+  template:
+    metadata:
+      name: "{{ .Release.Name }}-data-import"
+      labels:
+        {{- include "custom-data.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.dataImport.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      restartPolicy: Never
+      volumes:
+        - name: data-volume-in-memory
+          emptyDir:
+            medium: Memory
+      containers:
+        - name: data-import-job
+          image: "{{ .Values.dataImport.image.repository }}:{{ .Values.dataImport.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.dataImport.image.pullPolicy }}
+          env:
+            - name: DATA_IMPORT_CLUSTER_NAME
+              value: "express-engine-cluster"
+            - name: DATA_IMPORT_EXPRESS_URL
+              value: "{{ .Values.dataImport.config.expressUrl }}"
+            - name: DATA_IMPORT_S3_ACCESS_KEY
+              value: "{{ .Values.dataImport.config.aws.s3AccessKeyId }}"
+            - name: DATA_IMPORT_S3_ACCESS_SECRET
+              value: "{{ .Values.dataImport.config.aws.s3AccessKeySecret }}"
+            - name: DATA_IMPORT_S3_REGION
+              value: "{{ .Values.dataImport.config.aws.s3Region }}"
+            - name: DATA_IMPORT_CSV_PATH
+              value: "{{ .Values.dataImport.config.csvSourceFile }}"
+          volumeMounts:
+            - name: data-volume-in-memory
+              mountPath: "/mnt/data"
+      terminationGracePeriodSeconds: 0
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

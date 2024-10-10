@@ -125,6 +125,7 @@ Deploy the geo-addressing application using helm. Follow the guides to get the s
 - [Pushing Docker Images (AWS ECR)](docs/guides/eks/QuickStartEKS.md#step-3-download-geo-addressing-docker-images)
 - [Pushing Docker Images (Microsoft ACR)](docs/guides/aks/QuickStartAKS.md#step-3-download-geo-addressing-docker-images)
 - [Pushing Docker Images (Google Artifact Registry)](docs/guides/gke/QuickStartGKE.md#step-3-download-geo-addressing-docker-images)
+- [Custom Data Import Job (Optional)](charts/component-charts/custom-data-importer/README.md)
 
 ## Guides
 
@@ -144,14 +145,14 @@ Deploy the geo-addressing application using helm. Follow the guides to get the s
 
 Following is the helm version chart against geo-addressing PDX docker image version and GA-SDK version.
 
-| Docker Image PDX Version & GA-SDK Version | Helm Chart Version |
-|-------------------------------------------|--------------------|
-| `0.4.0/2023.9/Sept 12,2023` & `5.1.488`   | `0.1.0` - `0.4.0`️ |
-| `0.5.0/2024.2/Feb 20,2024` & `5.1.644`    | `0.5.0`️           |
-| `1.0.0/2024.3/Mar 31,2024` & `5.1.682`    | `1.0.0`️           |
-| `1.0.0/2024.5/May 10,2024` & `5.1.682`    | `1.0.1`️           |
-| `1.0.0/2024.6/June 14,2024` & `5.1.682`   | `2.0.1`️           |
-| `1.0.0/2024.9/Sept 09,2024` & `5.1.682`   | `2.0.1`️           |
+| Docker Image PDX Version & GA-SDK Version   | Helm Chart Version |
+|---------------------------------------------|--------------------|
+| `0.4.0/2023.9/Sept 12,2023` & `5.1.488`     | `0.1.0` - `0.4.0`️ |
+| `0.5.0/2024.2/Feb 20,2024` & `5.1.644`      | `0.5.0`️           |
+| `1.0.0/2024.3/Mar 31,2024` & `5.1.682`      | `1.0.0`️           |
+| `1.0.0/2024.5/May 10,2024` & `5.1.682`      | `1.0.1`️           |
+| `1.0.0/2024.6/June 14,2024` & `5.1.682`     | `2.0.1`️           |
+| `2.0.0/2024.10/October 10 2024` & `5.1.854` | `2.0.2`            |
 
 > NOTE: The docker images pushed to the image repository should be tagged with the current helm chart version.
 

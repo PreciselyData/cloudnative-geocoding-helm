@@ -1,0 +1,22 @@
+nameOverride: "custom-data"
+fullnameOverride: "custom-data"
+
+nodeSelector: { }
+
+serviceAccount:
+  annotations: { }
+
+dataImport:
+  enabled: true
+  image:
+    repository: "custom-data-importer"
+    pullPolicy: Always
+    tag: 2.0.2
+    pullSecrets: []
+  config:
+    aws:
+      s3AccessKeyId: ""
+      s3AccessKeySecret: ""
+      s3Region: "us-east-1"
+    expressUrl: "https://express-engine-cluster-master:9200"
+    csvSourceFile: "s3://new-bucket/data.csv"

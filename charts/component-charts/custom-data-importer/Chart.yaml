@@ -1,0 +1,6 @@
+apiVersion: v2
+name: custom-data-importer
+description: A Helm chart for Installation of Custom Data
+type: application
+version: 2.0.2
+appVersion: "1.16.0"
