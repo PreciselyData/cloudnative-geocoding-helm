@@ -3,9 +3,9 @@ name: reference-data-setup-aks
 description: A Helm chart for Installation of Reference Data
 
 type: application
-version: 2.0.1
+version: 2.0.2
 appVersion: "1.16.0"
 dependencies:
   - name: reference-data-setup-generic
     repository: file://../../component-charts/reference-data-setup-generic
-    version: "2.0.1"
+    version: "2.0.2"

@@ -33,17 +33,17 @@ The following table provides a summary of the key *Helm values* that can be cust
 <details>
 <summary><code>dataImport.*</code></summary>
 
-| Parameter                                 | Description                                                  | Default                       |
-|-------------------------------------------|--------------------------------------------------------------|-------------------------------|
-| `dataImport.enabled`                      | Enable or disable the `custom-data-import` job               | `true`                        |
-| `dataImport.image.repository`             | The Docker image repository for the custom data importer     | `custom-data-importer`         |
-| `dataImport.image.tag`                    | The Docker image tag for the custom data importer            | `2.0.1`                       |
-| `dataImport.image.pullPolicy`             | The image pull policy                                        | `Always`                      |
+| Parameter                                 | Description                                                  | Default                                      |
+|-------------------------------------------|--------------------------------------------------------------|----------------------------------------------|
+| `dataImport.enabled`                      | Enable or disable the `custom-data-import` job               | `true`                                       |
+| `dataImport.image.repository`             | The Docker image repository for the custom data importer     | `custom-data-importer`                       |
+| `dataImport.image.tag`                    | The Docker image tag for the custom data importer            | `2.0.2`                                      |
+| `dataImport.image.pullPolicy`             | The image pull policy                                        | `Always`                                     |
 | `dataImport.config.expressUrl`            | The URL for the express engine used in the import job        | `https://express-engine-cluster-master:9200` |
-| `dataImport.config.aws.s3AccessKeyId`     | AWS S3 access key for reading the CSV data                   | `""`                          |
-| `dataImport.config.aws.s3AccessKeySecret` | AWS S3 secret key for reading the CSV data                   | `""`                          |
-| `dataImport.config.aws.s3Region`          | AWS S3 region for accessing the bucket                       | `us-east-1`                   |
-| `dataImport.config.csvSourceFile`         | The source file for data import                              | `s3://new-bucket/data.csv`    |
+| `dataImport.config.aws.s3AccessKeyId`     | AWS S3 access key for reading the CSV data                   | `""`                                         |
+| `dataImport.config.aws.s3AccessKeySecret` | AWS S3 secret key for reading the CSV data                   | `""`                                         |
+| `dataImport.config.aws.s3Region`          | AWS S3 region for accessing the bucket                       | `us-east-1`                                  |
+| `dataImport.config.csvSourceFile`         | The source file for data import                              | `s3://new-bucket/data.csv`                   |
 
 <hr>
 </details>
