@@ -24,7 +24,7 @@ Follow the below steps to create and push the docker image to ECR:
 
 ```shell
 cd ./charts/reference-data-setup/image
-docker build . -t reference-data-extractor:2.0.2
+docker build . -t reference-data-extractor:3.0.0
 ```
 
 For AWS EKS:
@@ -34,9 +34,9 @@ aws ecr get-login-password --region us-east-1 | docker login --username AWS --pa
 
 aws ecr create-repository --repository-name reference-data-extractor --image-scanning-configuration scanOnPush=true --region [AWS-REGION]
 
-docker tag reference-data-extractor:2.0.2 [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:2.0.2
+docker tag reference-data-extractor:3.0.0 [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:3.0.0
 
-docker push [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:2.0.2
+docker push [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:3.0.0
 ```
 
 For Microsoft AKS:
@@ -45,9 +45,9 @@ For Microsoft AKS:
 az login
 az acr login --name <registry-name> --subscription <subscription-id>
 
-docker tag reference-data-extractor:2.0.2 <your-container-registry-name>.azurecr.io/reference-data-extractor:2.0.2
+docker tag reference-data-extractor:3.0.0 <your-container-registry-name>.azurecr.io/reference-data-extractor:3.0.0
 
-docker push <your-container-registry-name>.azurecr.io/reference-data-extractor:2.0.2
+docker push <your-container-registry-name>.azurecr.io/reference-data-extractor:3.0.0
 ```
 
 ## Step 3: Creating Mounted Storage
@@ -89,7 +89,7 @@ provided by this chart:
 | Parameter          | Description                                              | Default                    |
 |--------------------|----------------------------------------------------------|----------------------------|
 | `image.repository` | the reference-data-extractor container image repository  | `reference-data-extractor` |
-| `image.tag`        | the reference-data-extractor container image version tag | `2.0.2`                    |
+| `image.tag`        | the reference-data-extractor container image version tag | `3.0.0`                    |
 
 <hr>
 </details>

@@ -48,8 +48,8 @@ Run the following commands for EACH docker image in the zip file:
 ```shell
 aws ecr get-login-password --region [REGION] | docker login --username AWS --password-stdin [AWS-ACCOUNT-ID].dkr.ecr.[REGION].amazonaws.com
 docker load -i ./regional-addressing-service.tar
-docker tag regional-addressing-service:latest [AWS-ACCOUNT-ID].dkr.ecr.[REGION].amazonaws.com/regional-addressing-service:2.0.2
-docker push [AWS-ACCOUNT-ID].dkr.ecr.[REGION].amazonaws.com/regional-addressing-service:2.0.2
+docker tag regional-addressing-service:latest [AWS-ACCOUNT-ID].dkr.ecr.[REGION].amazonaws.com/regional-addressing-service:3.0.0
+docker push [AWS-ACCOUNT-ID].dkr.ecr.[REGION].amazonaws.com/regional-addressing-service:3.0.0
 ```
 
 [🔗 Return to `Table of Contents` 🔗](../../../README.md#components)
