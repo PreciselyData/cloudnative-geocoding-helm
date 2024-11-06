@@ -11,6 +11,9 @@ serviceAccount:
   annotations: { }
   name: ""
 
+# container level lifecycle hooks
+containerLifecycleHooks: {}
+
 podAnnotations: { }
 podSecurityContext: { }
 securityContext: { }

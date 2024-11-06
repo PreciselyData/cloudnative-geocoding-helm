@@ -47,6 +47,9 @@ spec:
             {{- toYaml $top.Values.securityContext | nindent 12 }}
           image: "{{ $top.Values.global.addressingImage.repository }}:{{ $top.Values.global.addressingImage.tag | default $top.Chart.AppVersion }}"
           imagePullPolicy: {{ $top.Values.global.addressingImage.pullPolicy }}
+          {{- if $top.Values.containerLifecycleHooks  }}
+          lifecycle: {{- tpl (toYaml $top.Values.containerLifecycleHooks) . | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080
