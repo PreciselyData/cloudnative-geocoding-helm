@@ -170,6 +170,11 @@ podLabels: {}
 podSecurityContext: { }
 securityContext: { }
 
+# This is the max unavailable setting for the pod disruption budget
+# The default value of 1 will make sure that kubernetes won't allow more than 1
+# of your pods to be unavailable during maintenance
+maxUnavailable: 1
+
 ## Configs for the service of the regional-addressing deployment
 service:
   type: ClusterIP
@@ -287,6 +292,10 @@ addressing-express:
   ##
   podSecurityContext: { }
   securityContext: { }
+  # This is the max unavailable setting for the pod disruption budget
+  # The default value of 1 will make sure that kubernetes won't allow more than 1
+  # of your pods to be unavailable during maintenance
+  maxUnavailable: 1
   ## the toleration configs for the addressing-express pods
   ## - spec for Toleration:
   ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#toleration-v1-core
@@ -378,6 +387,11 @@ addressing-express:
     ##
     expressEngineJavaOpts: "-Xmx16G -Xms16G"
 
+    # This is the max unavailable setting for the pod disruption budget
+    # The default value of 1 will make sure that kubernetes won't allow more than 1
+    # of your pods to be unavailable during maintenance
+    maxUnavailable: 1
+
     ##
     ## This is the minimum resources required
     ##
@@ -405,6 +419,11 @@ addressing-express:
     ## Should be 50% of the memory
     ##
     expressEngineJavaOpts: "-Xmx3G -Xms3G"
+
+    # This is the max unavailable setting for the pod disruption budget
+    # The default value of 1 will make sure that kubernetes won't allow more than 1
+    # of your pods to be unavailable during maintenance
+    maxUnavailable: 1
 
     ##
     ## This is the minimum resources required
@@ -442,6 +461,10 @@ addressing-svc:
   ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core
   ##
   podSecurityContext: { }
+  # This is the max unavailable setting for the pod disruption budget
+  # The default value of 1 will make sure that kubernetes won't allow more than 1
+  # of your pods to be unavailable during maintenance
+  maxUnavailable: 1
   securityContext: { }
   ## The toleration configs for the addressing pods
   ## - spec for Toleration:
@@ -536,6 +559,10 @@ autocomplete-svc:
   ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core
   ##
   podSecurityContext: { }
+  # This is the max unavailable setting for the pod disruption budget
+  # The default value of 1 will make sure that kubernetes won't allow more than 1
+  # of your pods to be unavailable during maintenance
+  maxUnavailable: 1
   securityContext: { }
   ## the toleration configs for the autocomplete pods
   ## - spec for Toleration:
@@ -631,6 +658,10 @@ lookup-svc:
   ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core
   ##
   podSecurityContext: { }
+  # This is the max unavailable setting for the pod disruption budget
+  # The default value of 1 will make sure that kubernetes won't allow more than 1
+  # of your pods to be unavailable during maintenance
+  maxUnavailable: 1
   securityContext: { }
   ## the toleration configs for the lookup pods
   ## - spec for Toleration:
@@ -727,6 +758,10 @@ reverse-svc:
   ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core
   ##
   podSecurityContext: { }
+  # This is the max unavailable setting for the pod disruption budget
+  # The default value of 1 will make sure that kubernetes won't allow more than 1
+  # of your pods to be unavailable during maintenance
+  maxUnavailable: 1
   securityContext: { }
   ## the toleration configs for the reverse-geocode pods
   ## - spec for Toleration:
