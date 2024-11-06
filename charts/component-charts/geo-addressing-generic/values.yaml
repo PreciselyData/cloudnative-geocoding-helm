@@ -67,9 +67,29 @@ global:
       reverse.usa.vintage: /mnt/data/geoaddressing-data/verify-geocode/usa/202312131538
       lookup.usa.vintage: /mnt/data/geoaddressing-data/lookup/usa/202312131538
       autocomplete.usa.vintage: /mnt/data/geoaddressing-data/autocomplete/usa/202312131538
+
+  addressingHook:
+    ## Create storage class as part of chart
+    storageClass:
+      enabled: true
+      ## external storage class name if not created as part of chart
+      name: ~
+
+  addressingExpress:
+    ## Create storage class as part of chart
+    storageClass:
+      enabled: true
+      ## external storage class name if not created as part of chart
+      name: ~
+
   ##
   ## Configurations related to Network File System
   nfs:
+    ## Create storage class as part of chart
+    storageClass:
+      enabled: true
+      ## external storage class name if not created as part of chart
+      name: ~
     ##
     ## The base path where the volume should be mounted inside the container.
     volumeMountPath: /mnt/data/geoaddressing-data
@@ -229,6 +249,11 @@ affinity: { }
 addressing-hook:
 ## Config for enabling or disabling `data-vintage` job hook.
   enabled: true
+  ## Create storage class as part of chart
+  storageClass:
+    enabled: true
+    ## external storage class name if not created as part of chart
+    name: ~
 
 ################################################
 ## CONFIG | Autocomplete Express Functionalities
@@ -239,6 +264,13 @@ addressing-hook:
 ## This service is needed for enabling Geocoding without country.
 addressing-express:
   enable: true
+
+  ## Create storage class as part of chart
+  storageClass:
+    enabled: true
+    ## external storage class name if not created as part of chart
+    name: ~
+
   ## number of replicas for addressing-express pods.
   replicaCount: 1
   imagePullSecrets: [ ]
@@ -275,7 +307,7 @@ addressing-express:
     minReplicas: 3
     maxReplicas: 20
     targetCPUUtilizationPercentage: 50
-  
+
   resources:
     requests:
       cpu: 2
@@ -321,7 +353,7 @@ addressing-express:
       #   }
 
   expressEngineData:
-    
+
     autoscaling:
       ## Keep this enabled
       enabled: true
@@ -345,7 +377,7 @@ addressing-express:
     ## Should be 50% of the memory
     ##
     expressEngineJavaOpts: "-Xmx16G -Xms16G"
-    
+
     ##
     ## This is the minimum resources required
     ##
@@ -355,7 +387,7 @@ addressing-express:
         memory: 32Gi
 
   expressEngineMaster:
-    
+
     ##
     ## Warning: Do not reduce the count of replicas on helm upgrade. This will lead to data loss
     ##

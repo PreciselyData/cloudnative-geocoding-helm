@@ -2,3 +2,8 @@ global:
   awsRegion: "us-east-1"
   nfs:
     fileSystemId: fileSystemId
+    ## Create storage class as part of chart
+    storageClass:
+      enabled: true
+      ## external storage class name if not created as part of chart
+      name: ~

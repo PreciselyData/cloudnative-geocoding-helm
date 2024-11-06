@@ -36,15 +36,30 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{/*
 Express engine data Storage Class Name
 */}}
+{{- define "addressing-exp-storage-class-test.name" -}}
+{{ toYaml .Values }}
+{{- end }}
+
+{{/*
+Express engine data Storage Class Name
+*/}}
 {{- define "addressing-exp-storage-class.name" -}}
+{{- if .Values.global.addressingExpress.storageClass.enabled }}
 {{- printf "%s-%s-%s" .Release.Name "exp-sc" .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s" .Values.global.addressingExpress.storageClass.name }}
+{{- end }}
 {{- end }}
 
 {{/*
 Express engine restore data Storage Class Name
 */}}
 {{- define "addressing-nfs-storage-class.name" -}}
+{{- if .Values.global.nfs.storageClass.enabled }}
 {{- printf "%s-%s-%s" .Release.Name "nfs-sc" .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s" .Values.global.nfs.storageClass.name }}
+{{- end }}
 {{- end }}
 
 {{/*
@@ -65,7 +80,11 @@ Express engine restore data PVC
 Addressing Hook Storage Class
 */}}
 {{- define "addressing-hook-storage-class.name" -}}
+{{- if .Values.global.addressingHook.storageClass.enabled }}
 {{- printf "%s-%s" .Release.Name "hook-efs" | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s" .Values.global.addressingHook.storageClass.name }}
+{{- end }}
 {{- end }}
 
 {{/*
