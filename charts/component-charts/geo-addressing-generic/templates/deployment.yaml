@@ -1,4 +1,5 @@
 {{- if .Values.enabled }}
+{{- $top := . }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -71,6 +72,7 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
+            {{- if .Values.defaultUrlsEnabled }}
             {{- if (index .Values "addressing-svc").enabled }}
             - name: ADDRESSING_BASE_URL
               value: http://{{ include "addressing-svc.Url" (list . "-<region>" "addressing-svc")  }}.{{ .Release.Namespace }}.svc.cluster.local:8080
@@ -88,6 +90,7 @@ spec:
             {{- if (index .Values "reverse-svc").enabled }}
             - name: REVERSE_GEOCODE_BASE_URL
               value: http://{{ include "addressing-svc.Url" (list . "-<region>" "reverse-svc")  }}.{{ .Release.Namespace }}.svc.cluster.local:8080
+            {{- end}}
             {{- end}}
             - name: SUPPORTED_COUNTRIES_GEOCODE
               value: {{ printf "%s,express" (join "," .Values.global.countries) }}
@@ -119,6 +122,9 @@ spec:
             {{- else }}
             - name: OTEL_TRACES_EXPORTER
               value: none
+            {{- end }}
+            {{- with .Values.extraEnv }}
+              {{- tpl . $top | nindent 12 }}
             {{- end }}
       {{- with .Values.global.nodeSelector }}
       nodeSelector:

@@ -166,6 +166,18 @@ podAnnotations: { }
 
 podLabels: {}
 
+## Default internal service URL's env variables enabled or not
+## Below env variables with values are added or removed based on this flag
+## ADDRESSING_BASE_URL, LOOKUP_BASE_URL, AUTOCOMPLETE_BASE_URL,
+## ADDRESSING_EXPRESS_BASE_URL, REVERSE_GEOCODE_BASE_URL
+defaultUrlsEnabled: true
+
+extraEnv: ~
+# eg:
+# extraEnv: |
+#   - name: ADDRESSING_BASE_URL
+#     value: custom-url
+
 ## The security context for the regional-addressing Pods
 ## - spec for PodSecurityContext:
 ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core
