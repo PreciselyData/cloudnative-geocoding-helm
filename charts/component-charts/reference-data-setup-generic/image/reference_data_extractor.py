@@ -7,13 +7,13 @@ import time
 import requests
 import urllib
 import os.path
+import sys
 from builtins import bytes
 from zipfile import ZipFile
 import subprocess
-
+import logging
 
 def current_milli_time(): return int(round(time.time() * 1000))
-
 
 COUNTRY_SPD_MAPPING = {
   "verify-geocode": {
@@ -29,7 +29,8 @@ COUNTRY_SPD_MAPPING = {
   "lookup": {
     "usa": [
       "Geocoding MLD US#United States#All USA#Spectrum Platform Data",
-      "Geocoding NT Street US#United States#All USA#Spectrum Platform Data"
+      "Geocoding NT Street US#United States#All USA#Spectrum Platform Data",
+      "Geocoding Reverse PRECISELYID#United States#All USA#Spectrum Platform Data"
     ],
     "aus": [
       "Geocoding PSMA Street#Australia#All AUS#Geocoding",
@@ -110,7 +111,7 @@ class DataDeliveryClient:
                                 headers=self.create_headers())
             return json.loads(response.text)
         except Exception as exception:
-            return exception
+            raise exception
 
     def create_headers(self):
         return {
@@ -135,7 +136,6 @@ class DataDeliveryClient:
         }
 
         response = self.post(self.auth_url, headers, data=params)
-        # print('Proxy server invoked')
         response_json = json.loads(response.text)
 
         if 'access_token' in response_json:
@@ -147,30 +147,36 @@ class DataDeliveryClient:
                 'An error occurred getting authorization info, please check your api key and shared secret.')
 
     def post(self, url, headers=None, data=None):
-        if headers is None:
-            headers = {}
-        if self.app_id:
-            headers['x-pb-appid'] = self.app_id
-            response = requests.post(url=url, data=data, headers=headers)
-        return response
+        try:
+            if headers is None:
+                headers = {}
+            if self.app_id:
+                headers['x-pb-appid'] = self.app_id
+                response = requests.post(url=url, data=data, headers=headers)
+            return response
+        except Exception as exception:
+            raise exception
 
     def get(self, url, headers=None, params=None):
-        if headers is None:
-            headers = {}
-        if self.app_id:
-            headers['x-pb-appid'] = self.app_id
-            response = requests.get(
-                url, stream=True, headers=headers, params=params)
-        return response
+        try:
+            if headers is None:
+                headers = {}
+            if self.app_id:
+                headers['x-pb-appid'] = self.app_id
+                response = requests.get(url, stream=True, headers=headers, params=params)
+            return response
+        except Exception as exception:
+            raise exception
 
 
 def unzip(path, zip_filename):
     with ZipFile(zip_filename, 'r') as handle:
         if len(os.listdir(path)) == 0:
-            print("Extracting {:s} to {:s}".format(zip_filename, path))
+            logging.info("Extracting {:s} to {:s} ...".format(zip_filename, path))
             handle.extractall(path=path)
+            logging.info("Extraction completed for {:s} at {:s}".format(zip_filename, path))
         else:
-            print("Skipping extraction to {:s} as directory is not empty.".format(path))
+            logging.info("Skipping extraction to {:s} as directory is not empty.".format(path))
 
 
 def get_argument_parser():
@@ -191,6 +197,14 @@ def get_argument_parser():
     parser.add_argument('--dest-path',
                         dest='dest_path',
                         help='The mount base path for extracting SPDs')
+    parser.add_argument('--fail-fast',
+                        dest='fail_fast',
+                        help='The fail fast argument validates all the provided input address string first and fail if any one of the provided data string is incorrect or not accessible.',
+                        default=False)
+    parser.add_argument('--timestamp',
+                        dest='timestamp',
+                        help='The numerical timestamp folder value where all of the data is present.',
+                        default=str(time.strftime("%Y%m%d%H%M")))
     parser.add_argument('--data-mapping',
                         dest='data_mapping',
                         help='Mapping of data in the form of dictionary',
@@ -216,19 +230,11 @@ def get_products(country_spd_mapping, country_name):
         try:
             search_results = client.get_deliveries(product_name, geography, roster_gran, 1, None, None, data_format,
                                                    latest=byLatest)
-            if 'errors' in search_results:
-                raise Exception(f'An error occurred getting product information: {search_results}')
-
-            try:
-                if dict(search_results).get('deliveries', None) is None:
-                    raise Exception(f'Deliveries are not available for the product: {product_name}'
-                                    f'. Response from PDX: {search_results}')
-                for delivery_info in search_results['deliveries']:
-                    if vintage == None or vintage == delivery_info['vintage']:
-                        product_list.append((product_name, delivery_info['downloadUrl']))
-            except Exception as exp:
-                raise exp
-
+            if dict(search_results).get('deliveries', None) is None:
+                raise Exception(f'Deliveries are not available for the product: `{product_name}` of the spd: `{spd}` for country: `{country_name}`.')
+            for delivery_info in search_results['deliveries']:
+                if vintage is None or vintage == delivery_info['vintage']:
+                    product_list.append((product_name, delivery_info['downloadUrl']))
         except Exception as exp:
             raise exp
     return product_list
@@ -239,8 +245,9 @@ def download_spds_to_local(products_list, spd_base_path, country_name):
         download_file_name = re.sub(r'.*/(.+)\?.*', r'\1', url)
         file_path = os.path.join(spd_base_path, country_name, download_file_name)
         if not os.path.isfile(file_path):
-            print('Downloading {:s} to {:s}'.format(download_file_name, file_path))
+            logging.info('Downloading {:s} to {:s} ...'.format(download_file_name, file_path))
             urllib.request.urlretrieve(url, file_path)
+            logging.info('Download complete for {:s} at {:s}'.format(download_file_name, file_path))
 
 
 def extract_spds_to_mount_path(country_path_value, extract_path_value, country_name, current_date_folder):
@@ -261,6 +268,30 @@ def extract_spds_to_mount_path(country_path_value, extract_path_value, country_n
         except Exception as exp:
             raise exp
 
+def validate_provided_products():
+    logging.info("Validating the provided inputs...")
+    for addressing_type, country_mapping in COUNTRY_MAPPING.items():
+        for country in provided_countries:
+            try:
+                products = get_products(country_mapping, country)
+                if not len(products):
+                    raise Exception(
+                        "Either no Deliveries available for provided OR validate the parameters."
+                        " To request access to the particular data, please visit https://data.precisely.com/")
+            except Exception as ex:
+                logging.error(f"Validation FAILED or some exception occurred for `{addressing_type}` and `{country}` with Exception: %s \nPlease validate the product information or check if you have access to that product or try again later.", ex, exc_info=True)
+                sys.exit(1)
+    logging.info("Validation successful!")
+
+def is_positive_integer(input_string):
+    pattern = r"^[1-9]\d*$"
+    return re.match(pattern, input_string)
+
+# Configure logging with a custom format including the timestamp
+logging.basicConfig(
+    level=logging.INFO,  # Set the minimum level of logging to INFO
+    format='%(asctime)s - %(levelname)s - %(message)s',  # Custom log format
+)
 
 args = get_argument_parser()
 
@@ -269,7 +300,11 @@ PDX_SECRET = args.pdx_api_secret
 REQUIRED_COUNTRIES = args.countries
 LOCAL_PATH = args.local_path
 COUNTRY_MAPPING = args.data_mapping
-date_folder = str(time.strftime("%Y%m%d%H%M"))
+date_folder = args.timestamp
+
+if not is_positive_integer(date_folder):
+    logging.error("The timestamp folder value where all of the data is present should be numeric and positive.")
+    sys.exit(1)
 
 if not COUNTRY_MAPPING:
     COUNTRY_MAPPING = COUNTRY_SPD_MAPPING
@@ -285,14 +320,24 @@ if not args.dest_path:
     extract_path = "/mnt/data/geoaddressing-data"
 spd_path = os.path.join(LOCAL_PATH, "spds")
 
-print(f"Provided Countries for Installation: {provided_countries}")
+logging.info(f"Prepared ConfigMap for Reference Data Installation: {COUNTRY_MAPPING}")
+logging.info(f"Provided Countries for Installation: {provided_countries}")
+
+FAIL_FAST_ENABLED = args.fail_fast
+
+validate_provided_products()
+
+logging.info(f"Current timestamp folder where the reference data will be installed is: {date_folder}")
+
 os.makedirs(spd_path, exist_ok=True)
 os.makedirs(extract_path, exist_ok=True)
 for addressing_type, country_mapping in COUNTRY_MAPPING.items():
+    logging.info(f"Reference data setup for the countries of `{addressing_type}` functionality is in progress ...")
     os.makedirs(os.path.join(spd_path, addressing_type), exist_ok=True)
     os.makedirs(os.path.join(extract_path, addressing_type), exist_ok=True)
     for country in provided_countries:
         try:
+            logging.info(f"Reference data setup for the country `{country}` is in progress ...")
             country_path = os.path.join(spd_path, addressing_type, country)
             extract_country_path = os.path.join(extract_path, addressing_type, country)
             os.makedirs(country_path, exist_ok=True)
@@ -324,21 +369,25 @@ for addressing_type, country_mapping in COUNTRY_MAPPING.items():
                 raise Exception(f'Exception while extracting spds for {country}: {ex}', ex)
 
             try:
-                print(f'Deleting local directories: {country_path}')
+                logging.info(f'Reference data setup for `{country}` is completed successfully!')
+                logging.info(f'Deleting local directories of spds as extraction is complete: {country_path}')
                 subprocess.check_output(f'rm -rf {country_path}', shell=True)
             except subprocess.CalledProcessError as e:
-                print(
+                logging.error(
                     f"Unable to delete {country_path} -> Exception: {e}, Output: {e.output}, "
                     f"StdOut: {e.stdout}, StdErr: {e.stderr}")
         except Exception as ex:
-            print(ex)
-            print(f'Data download and extraction process is not successful for {country}. '
-                  f'Please run the setup again for {country} by fixing the issues.')
+            logging.error(ex)
+            logging.error(f'Data download and extraction process is not successful for the country: {country}. '
+                  f'Please run the setup again for {country} by fixing the issues and using the same timestamp.')
+            if FAIL_FAST_ENABLED:
+                sys.exit(1)
             pass
 
 try:
-    print(f'Deleting local directory: {spd_path}')
+    logging.info(f'Reference data setup is completed!')
+    logging.info(f'Deleting local directory of spd as extraction is complete: {spd_path}')
     subprocess.check_output(f'rm -rf {spd_path}', shell=True)
 except subprocess.CalledProcessError as e:
-    print(
+    logging.error(
         f"Unable to delete {spd_path} -> Exception: {e}, Output: {e.output}, StdOut: {e.stdout}, StdErr: {e.stderr}")
