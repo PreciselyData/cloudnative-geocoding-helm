@@ -11,9 +11,17 @@ serviceAccount:
   annotations: { }
   name: ""
 
+# container level lifecycle hooks
+containerLifecycleHooks: {}
+
 podAnnotations: { }
 podSecurityContext: { }
 securityContext: { }
+
+# This is the max unavailable setting for the pod disruption budget
+# The default value of 1 will make sure that kubernetes won't allow more than 1
+# of your pods to be unavailable during maintenance
+maxUnavailable: 1
 
 service:
   type: ClusterIP
@@ -52,7 +60,7 @@ expressEngineDataRestore:
     repository: express-engine-data-restore
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
-    tag: 2.0.2
+    tag: 3.0.0
   ##
   ## Do not update
   ##

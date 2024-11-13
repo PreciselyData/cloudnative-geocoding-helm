@@ -32,7 +32,7 @@ global:
   addressingImage:
     repository: addressing-service
     pullPolicy: Always
-    tag: 2.0.2
+    tag: 3.0.0
 
   ## Configurations for the express-engine container image.
   ##
@@ -40,7 +40,7 @@ global:
   ## https://data.precisely.com/products
   expressEngineImage:
     repository: express-engine
-    tag: 2.0.2
+    tag: 3.0.0
     pullPolicy: Always
 
   ## Configurations for the express-engine-data-restore container image.
@@ -51,7 +51,7 @@ global:
     repository: express-engine-data-restore
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
-    tag: 2.0.2
+    tag: 3.0.0
 
   ## Configuration for manually configuring the data mount path for addressing-service
   ## When doing the manual configuration for data mount path, disable the data-vintage
@@ -67,9 +67,29 @@ global:
       reverse.usa.vintage: /mnt/data/geoaddressing-data/verify-geocode/usa/202312131538
       lookup.usa.vintage: /mnt/data/geoaddressing-data/lookup/usa/202312131538
       autocomplete.usa.vintage: /mnt/data/geoaddressing-data/autocomplete/usa/202312131538
+
+  addressingHook:
+    ## Create storage class as part of chart
+    storageClass:
+      enabled: true
+      ## external storage class name if not created as part of chart
+      name: ~
+
+  addressingExpress:
+    ## Create storage class as part of chart
+    storageClass:
+      enabled: true
+      ## external storage class name if not created as part of chart
+      name: ~
+
   ##
   ## Configurations related to Network File System
   nfs:
+    ## Create storage class as part of chart
+    storageClass:
+      enabled: true
+      ## external storage class name if not created as part of chart
+      name: ~
     ##
     ## The base path where the volume should be mounted inside the container.
     volumeMountPath: /mnt/data/geoaddressing-data
@@ -125,7 +145,7 @@ replicaCount: 1
 image:
   repository: regional-addressing-service
   pullPolicy: Always
-  tag: 2.0.2
+  tag: 3.0.0
 imagePullSecrets: [ ]
 
 ## This will override the name of the installed regional-addressing deployment.
@@ -138,10 +158,25 @@ serviceAccount:
   annotations: { }
   name: ""
 
+# container level lifecycle hooks
+containerLifecycleHooks: {}
+
 ## podAnnotations for regional-addressing deployments
 podAnnotations: { }
 
 podLabels: {}
+
+## Default internal service URL's env variables enabled or not
+## Below env variables with values are added or removed based on this flag
+## ADDRESSING_BASE_URL, LOOKUP_BASE_URL, AUTOCOMPLETE_BASE_URL,
+## ADDRESSING_EXPRESS_BASE_URL, REVERSE_GEOCODE_BASE_URL
+defaultUrlsEnabled: true
+
+extraEnv: ~
+# eg:
+# extraEnv: |
+#   - name: ADDRESSING_BASE_URL
+#     value: custom-url
 
 ## The security context for the regional-addressing Pods
 ## - spec for PodSecurityContext:
@@ -149,6 +184,11 @@ podLabels: {}
 ##
 podSecurityContext: { }
 securityContext: { }
+
+# This is the max unavailable setting for the pod disruption budget
+# The default value of 1 will make sure that kubernetes won't allow more than 1
+# of your pods to be unavailable during maintenance
+maxUnavailable: 1
 
 ## Configs for the service of the regional-addressing deployment
 service:
@@ -229,6 +269,11 @@ affinity: { }
 addressing-hook:
 ## Config for enabling or disabling `data-vintage` job hook.
   enabled: true
+  ## Create storage class as part of chart
+  storageClass:
+    enabled: true
+    ## external storage class name if not created as part of chart
+    name: ~
 
 ################################################
 ## CONFIG | Autocomplete Express Functionalities
@@ -239,6 +284,13 @@ addressing-hook:
 ## This service is needed for enabling Geocoding without country.
 addressing-express:
   enable: true
+
+  ## Create storage class as part of chart
+  storageClass:
+    enabled: true
+    ## external storage class name if not created as part of chart
+    name: ~
+
   ## number of replicas for addressing-express pods.
   replicaCount: 1
   imagePullSecrets: [ ]
@@ -255,6 +307,10 @@ addressing-express:
   ##
   podSecurityContext: { }
   securityContext: { }
+  # This is the max unavailable setting for the pod disruption budget
+  # The default value of 1 will make sure that kubernetes won't allow more than 1
+  # of your pods to be unavailable during maintenance
+  maxUnavailable: 1
   ## the toleration configs for the addressing-express pods
   ## - spec for Toleration:
   ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#toleration-v1-core
@@ -275,7 +331,7 @@ addressing-express:
     minReplicas: 3
     maxReplicas: 20
     targetCPUUtilizationPercentage: 50
-  
+
   resources:
     requests:
       cpu: 2
@@ -321,7 +377,7 @@ addressing-express:
       #   }
 
   expressEngineData:
-    
+
     autoscaling:
       ## Keep this enabled
       enabled: true
@@ -345,7 +401,12 @@ addressing-express:
     ## Should be 50% of the memory
     ##
     expressEngineJavaOpts: "-Xmx16G -Xms16G"
-    
+
+    # This is the max unavailable setting for the pod disruption budget
+    # The default value of 1 will make sure that kubernetes won't allow more than 1
+    # of your pods to be unavailable during maintenance
+    maxUnavailable: 1
+
     ##
     ## This is the minimum resources required
     ##
@@ -355,7 +416,7 @@ addressing-express:
         memory: 32Gi
 
   expressEngineMaster:
-    
+
     ##
     ## Warning: Do not reduce the count of replicas on helm upgrade. This will lead to data loss
     ##
@@ -373,6 +434,11 @@ addressing-express:
     ## Should be 50% of the memory
     ##
     expressEngineJavaOpts: "-Xmx3G -Xms3G"
+
+    # This is the max unavailable setting for the pod disruption budget
+    # The default value of 1 will make sure that kubernetes won't allow more than 1
+    # of your pods to be unavailable during maintenance
+    maxUnavailable: 1
 
     ##
     ## This is the minimum resources required
@@ -410,6 +476,10 @@ addressing-svc:
   ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core
   ##
   podSecurityContext: { }
+  # This is the max unavailable setting for the pod disruption budget
+  # The default value of 1 will make sure that kubernetes won't allow more than 1
+  # of your pods to be unavailable during maintenance
+  maxUnavailable: 1
   securityContext: { }
   ## The toleration configs for the addressing pods
   ## - spec for Toleration:
@@ -504,6 +574,10 @@ autocomplete-svc:
   ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core
   ##
   podSecurityContext: { }
+  # This is the max unavailable setting for the pod disruption budget
+  # The default value of 1 will make sure that kubernetes won't allow more than 1
+  # of your pods to be unavailable during maintenance
+  maxUnavailable: 1
   securityContext: { }
   ## the toleration configs for the autocomplete pods
   ## - spec for Toleration:
@@ -599,6 +673,10 @@ lookup-svc:
   ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core
   ##
   podSecurityContext: { }
+  # This is the max unavailable setting for the pod disruption budget
+  # The default value of 1 will make sure that kubernetes won't allow more than 1
+  # of your pods to be unavailable during maintenance
+  maxUnavailable: 1
   securityContext: { }
   ## the toleration configs for the lookup pods
   ## - spec for Toleration:
@@ -695,6 +773,10 @@ reverse-svc:
   ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core
   ##
   podSecurityContext: { }
+  # This is the max unavailable setting for the pod disruption budget
+  # The default value of 1 will make sure that kubernetes won't allow more than 1
+  # of your pods to be unavailable during maintenance
+  maxUnavailable: 1
   securityContext: { }
   ## the toleration configs for the reverse-geocode pods
   ## - spec for Toleration:

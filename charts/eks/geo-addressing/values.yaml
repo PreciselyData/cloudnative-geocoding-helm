@@ -5,8 +5,27 @@ global:
   ## Aws region where EFS is installed.
   awsRegion: us-east-1
 
+  addressingHook:
+    ## Create storage class as part of chart
+    storageClass:
+      enabled: true
+      ## external storage class name if not created as part of chart
+      name: ~
+
+  addressingExpress:
+    ## Create storage class as part of chart
+    storageClass:
+      enabled: true
+      ## external storage class name if not created as part of chart
+      name: ~
+
   ## Configurations related to Network File System
   nfs:
+    ## Create storage class as part of chart
+    storageClass:
+      enabled: true
+      ## external storage class name if not created as part of chart
+      name: ~
     ##
     ## The `fileSystemId` this is a mandatory parameter as regional-addressing service used the reference data mounted in EFS.
     fileSystemId: fileSystemId

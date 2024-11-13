@@ -11,10 +11,16 @@ provided by this chart:
 <details>
 <summary><code>global.*</code></summary>
 
-| Parameter                 | Description               | Default        |
-|---------------------------|---------------------------|----------------|
-| `global.awsRegion`        | The AWS Region of AWS EFS | `us-east-1`    |
-| `global.nfs.fileSystemId` | The EFS fileSystemId      | `fileSystemId` |
+| Parameter                                       | Description                                                                                                                                         | Default        |
+|-------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|----------------|
+| *`global.awsRegion`                             | The AWS Region of AWS EFS                                                                                                                           | `us-east-1`    |
+| *`global.nfs.fileSystemId`                      | The EFS fileSystemId                                                                                                                                | `fileSystemId` |
+| `global.addressingHook.storageClass.enabled`    | If you want to provide a custom Storage class for Addressing Hook, you need to disable this flag and set the storageClass Name Parameter.           | `true`         |
+| `global.addressingHook.storageClass.name`       | If you want to provide a custom Storage class for Addressing Hook, you need to disable the flag and set the storageClass Name Parameter.            | `~`            |
+| `global.nfs.storageClass.enabled`               | If you want to provide a custom Storage class for Addressing Service, you need to disable this flag and set the storageClass Name Parameter.        | `true`         |
+| `global.nfs.storageClass.name`                  | If you want to provide a custom Storage class for Addressing Service, you need to disable the flag and set the storageClass Name Parameter.         | `~`            |
+| `global.addressingExpress.storageClass.enabled` | If you want to provide a custom Storage class for Addressing Express Engine, you need to disable this flag and set the storageClass Name Parameter. | `true`         |
+| `global.addressingExpress.storageClass.name`    | If you want to provide a custom Storage class for Addressing Express Engine, you need to disable the flag and set the storageClass Name Parameter.  | `~`            |
 
 <hr>
 </details>

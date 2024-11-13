@@ -2,3 +2,6 @@
 ../.idea
 .vscode
 .idea
+**/*Chart.lock
+**/**/Chart.lock
+**/**/**/Chart.lock

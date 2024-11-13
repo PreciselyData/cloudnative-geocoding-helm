@@ -43,6 +43,12 @@ spec:
             - "{{ .Values.config.mountBasePath }}"
             - "--data-mapping"
             - {{ .Values.config.dataConfigMap | quote }}
+            - "--fail-fast"
+            - "{{ .Values.config.failFastEnabled }}"
+            {{- if .Values.config.timestampFolder }}
+            - "--timestamp"
+            - "{{ .Values.config.timestampFolder }}"
+            {{- end }}
           volumeMounts:
             - name: geoaddressing-host-volume
               mountPath: {{ .Values.config.mountBasePath }}

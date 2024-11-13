@@ -1,0 +1,25 @@
+{{- if .Values.enabled }}
+{{- $top := . -}}
+{{- range $.Values.global.countries }}
+{{- if $top.Values.maxUnavailable }}
+---
+{{- if semverCompare ">=1.21-0" $top.Capabilities.KubeVersion.GitVersion -}}
+apiVersion: policy/v1
+{{- else -}}
+apiVersion: policy/v1beta1
+{{- end }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "reverse-svc.fullname" (list $top .) }}-pdb
+  labels:
+    {{- include "reverse-svc.labels" (list $top .) | nindent 4 }}
+spec:
+  maxUnavailable: {{ $top.Values.maxUnavailable }}
+  selector:
+    matchLabels:
+      service: precisely
+      app: {{ include "reverse-svc.fullname" (list $top .) }}
+      {{- include "reverse-svc.selectorLabels" (list $top .) | nindent 6 }}
+{{- end }}
+{{- end }}
+{{- end }}

@@ -116,8 +116,8 @@ You can run the following commands after extracting the zipped docker images:
 cd ./geo-addressing-images
 gcloud auth configure-docker --quiet
 docker load -i ./regional-addressing-service.tar
-docker tag regional-addressing-service:latest us.gcr.io/<project-name>/regional-addressing-service:2.0.2
-docker push us.gcr.io/<project-name>/regional-addressing-service:2.0.2
+docker tag regional-addressing-service:latest us.gcr.io/<project-name>/regional-addressing-service:3.0.0
+docker push us.gcr.io/<project-name>/regional-addressing-service:3.0.0
 ```
 
 Follow the above steps for ALL the images inside the zipped file.
