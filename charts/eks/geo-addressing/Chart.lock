@@ -1,6 +1,0 @@
-dependencies:
-- name: geo-addressing
-  repository: file://../../component-charts/geo-addressing-generic
-  version: 3.0.0
-digest: sha256:2bd02329988eb3e233a3d11f3dc90e531d74294ad033e83c5fddfda14576a6c8
-generated: "2024-11-06T10:45:34.4612949+05:30"
