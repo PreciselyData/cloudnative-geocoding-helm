@@ -1,0 +1,97 @@
+{{- if .Values.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "event-emitter.fullname" . }}
+  labels:
+    {{- include "event-emitter.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      service: precisely
+      app: {{ include "event-emitter.fullname" . }}
+      {{- include "event-emitter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        service: precisely
+        app: {{ include "event-emitter.fullname" . }}
+        {{- include "event-emitter.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "event-emitter.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ required "A docker image repository is required for running the event-emitter!" .Values.global.eventEmitterImage.repository }}:{{ .Values.global.eventEmitterImage.tag | default .Chart.AppVersion }}
+          imagePullPolicy: {{ .Values.global.eventEmitterImage.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8082
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            successThreshold: 1
+            timeoutSeconds: 1
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            successThreshold: 1
+            timeoutSeconds: 1
+            periodSeconds: 10
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          env:
+            - name: NATS_URL
+              value: {{ printf "nats://%s-nats.%s.svc.cluster.local:4222" .Release.Name .Release.Namespace }}
+            - name: BASE_URL
+              value: https://api.cloud.precisely.com
+            - name: USER_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: "dis_user_access_key"
+                  name: {{ include "event-emitter.secret" . }}
+            - name: USER_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: "dis_user_secret"
+                  name: {{ include "event-emitter.secret" . }}
+      {{- with .Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end}}

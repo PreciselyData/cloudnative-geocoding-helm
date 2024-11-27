@@ -123,6 +123,10 @@ spec:
             - name: OTEL_TRACES_EXPORTER
               value: none
             {{- end }}
+            - name: NATS_URL
+              value: {{ printf "nats://%s-nats.%s.svc.cluster.local:4222" .Release.Name .Release.Namespace }}
+            - name: NATS_ENABLED
+              value: "true"
             {{- with .Values.extraEnv }}
               {{- tpl . $top | nindent 12 }}
             {{- end }}

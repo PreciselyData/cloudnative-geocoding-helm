@@ -3,9 +3,9 @@ name: reference-data-setup-eks
 description: A Helm chart for Installation of Reference Data
 
 type: application
-version: 3.0.0
+version: 3.0.1
 appVersion: "1.16.0"
 dependencies:
   - name: reference-data-setup
     repository: file://../../component-charts/reference-data-setup-generic
-    version: "3.0.0"
+    version: "3.0.1"

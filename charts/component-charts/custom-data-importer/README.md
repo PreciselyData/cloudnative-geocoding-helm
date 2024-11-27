@@ -18,7 +18,7 @@ Use the following Helm command to deploy or upgrade the `custom-data-import` job
 helm upgrade --install custom-data-import ./charts/component-charts/custom-data-importer \
   --namespace geo-addressing \
   --set dataImport.image.repository="custom-data-importer" \
-  --set dataImport.image.tag="3.0.0" \
+  --set dataImport.image.tag="3.0.1" \
   --set dataImport.config.expressUrl="https://new-express-url.com" \
   --set dataImport.config.aws.s3AccessKeyId="NEW_AKIA_ACCESS_KEY" \
   --set dataImport.config.aws.s3AccessKeySecret="NEW_SECRET_ACCESS_KEY" \
@@ -37,7 +37,7 @@ The following table provides a summary of the key *Helm values* that can be cust
 |-------------------------------------------|--------------------------------------------------------------|----------------------------------------------|
 | `dataImport.enabled`                      | Enable or disable the `custom-data-import` job               | `true`                                       |
 | `dataImport.image.repository`             | The Docker image repository for the custom data importer     | `custom-data-importer`                       |
-| `dataImport.image.tag`                    | The Docker image tag for the custom data importer            | `3.0.0`                                      |
+| `dataImport.image.tag`                    | The Docker image tag for the custom data importer            | `3.0.1`                                      |
 | `dataImport.image.pullPolicy`             | The image pull policy                                        | `Always`                                     |
 | `dataImport.config.expressUrl`            | The URL for the express engine used in the import job        | `https://express-engine-cluster-master:9200` |
 | `dataImport.config.aws.s3AccessKeyId`     | AWS S3 access key for reading the CSV data                   | `""`                                         |
