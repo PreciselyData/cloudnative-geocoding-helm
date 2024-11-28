@@ -866,28 +866,22 @@ event-emitter:
       memory: 2Gi
     limits:
       memory: 2Gi
-  ## number of replicas for reverse-geocode pods.
   replicaCount: 1
   imagePullSecrets: [ ]
-  ## service account will be created by default for reverse-geocode deployment.
   serviceAccount:
     create: true
     annotations: { }
     name: ""
-  ## pod annotations for reverse-geocode pods
   podAnnotations: { }
-  ## the security context for the reverse-geocode Pods
   ## - spec for PodSecurityContext:
   ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core
   ##
   podSecurityContext: { }
   securityContext: { }
-  ## the toleration configs for the reverse-geocode pods
   ## - spec for Toleration:
   ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#toleration-v1-core
   ##
   tolerations: [ ]
-  ## the affinity configs for the reverse-geocode pods
   ## - spec for Affinity:
   ##    https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#affinity-v1-core
   ##
