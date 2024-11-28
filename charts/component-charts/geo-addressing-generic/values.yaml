@@ -856,7 +856,7 @@ reverse-svc:
           memory: 8Gi
 
 event-emitter:
-  enabled: true
+  enabled: false
   configuration:
     USER_KEY: # mandatory parameter to be provided in the command
     USER_SECRET: # mandatory parameter to be provided in the command
