@@ -45,4 +45,4 @@ geo-addressing:
       sysctlInit:
         enabled: true
   event-emitter:
-    enabled: true
+    enabled: false
