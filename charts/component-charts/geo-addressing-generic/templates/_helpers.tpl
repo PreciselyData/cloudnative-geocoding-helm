@@ -125,3 +125,14 @@ Addressing data config map name
 {{- end }}
 {{- end }}
 {{- end }}
+
+{{/*
+Flag to enable the NATS
+*/}}
+{{- define "regional-addressing.nats.enabled" -}}
+{{- if (index .Values "event-emitter").enabled }}
+{{- printf "%s" "true" | quote }}
+{{- else }}
+{{- printf "%s" "false" | quote }}
+{{- end }}
+{{- end }}

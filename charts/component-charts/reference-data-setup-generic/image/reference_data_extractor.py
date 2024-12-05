@@ -313,7 +313,7 @@ if not LOCAL_PATH:
     LOCAL_PATH = os.getcwd()
 provided_countries = REQUIRED_COUNTRIES.strip('[').strip(']').split()
 
-client = DataDeliveryClient(PDX_API_KEY, PDX_SECRET, "SDM_DEMO_APP_3.0.0")
+client = DataDeliveryClient(PDX_API_KEY, PDX_SECRET, "SDM_DEMO_APP_3.0.1")
 
 extract_path = args.dest_path
 if not args.dest_path:

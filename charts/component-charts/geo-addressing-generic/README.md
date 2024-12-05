@@ -13,6 +13,7 @@ Helm chart installation to deploy this specific type of infrastructure.
 To get started with installation of helm chart, follow:
 <br><br>For Amazon EKS: [Quick Start Guide for EKS](../../../docs/guides/eks/QuickStartEKS.md)
 <br>For Microsoft AKS: [Quick Start Guide for AKS](../../../docs/guides/aks/QuickStartAKS.md)
+<br>For Google's GKE: [Quick Start Guide for GKE](../../../docs/guides/gke/QuickStartGKE.md)
 
 ## Understanding Geo Addressing Helm charts
 
@@ -44,6 +45,9 @@ The geo-addressing helm chart compromises of following components:
         - addressing-express engine has two components, with different behaviors of scheduling
             - express-engine-data : One-to-One POD to Node scheduling
             - express-engine-master: Many-to-One POD to Node scheduling
+    - event-emitter:
+        - If enabled, it will deploy event-emitter service.
+        - This service collects events and generates reports in your Precisely DIS account.
 
 Feel free to modify these helm charts and update it based on your needs.
 
@@ -61,7 +65,7 @@ provided by this chart:
 | Parameter          | Description                                         | Default                       |
 |--------------------|-----------------------------------------------------|-------------------------------|
 | `image.repository` | the regional-addressing container image repository  | `regional-addressing-service` |
-| `image.tag`        | the regional-addressing container image version tag | `3.0.0`                       |
+| `image.tag`        | the regional-addressing container image version tag | `3.0.1`                       |
 
 <hr>
 </details>
@@ -84,13 +88,15 @@ provided by this chart:
 | Parameter                                         | Description                                                                                                                                                                                                                        | Default                        |
 |---------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------|
 | `global.countries`                                | this parameter enables the provided country for an addressing functionality. A comma separated value can be provided to enable a particular set of countries from: `usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world` | `{usa,gbr,aus,nzl,can}`        |
-| `global.addressingImage.repository`               | the addressing-service container image repository                                                                                                                                                                                  | `addressing-service`           |
-| `global.addressingImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `3.0.0`                        |
 | `global.manualDataConfig.*`                       | the config to enable the manual configuration for country-specific vintage data config-map. `addressing-hook.enabled` should be set to false, else `global.manualDataConfig` will be given higher precedence.                      | `false`                        |
+| `global.addressingImage.repository`               | the addressing-service container image repository                                                                                                                                                                                  | `addressing-service`           |
+| `global.addressingImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `3.0.1`                        |
 | `global.expressEngineImage.repository`            | the express-engine container image repository                                                                                                                                                                                      | `express-engine`               |
-| `global.expressEngineImage.tag`                   | the addressing-service container image version tag                                                                                                                                                                                 | `3.0.0`                        |
+| `global.expressEngineImage.tag`                   | the express-engine container image version tag                                                                                                                                                                                     | `3.0.1`                        |
 | `global.expressEngineDataRestoreImage.repository` | the express-engine-data-restore container image repository                                                                                                                                                                         | `express-engine-data-restore`  |
-| `global.expressEngineDataRestoreImage.tag`        | the addressing-service container image version tag                                                                                                                                                                                 | `3.0.0`                        |
+| `global.expressEngineDataRestoreImage.tag`        | the express-engine-data-restore container image version tag                                                                                                                                                                        | `3.0.1`                        |
+| `global.eventEmitterImage.repository`             | the event-emitter container image repository                                                                                                                                                                                       | `event-emitter`                |
+| `global.eventEmitterImage.tag`                    | the event-emitter container image version tag                                                                                                                                                                                      | `3.0.1`                        |
 | `global.nfs.addressingBasePath`                   | the base path of the folder where verify-geocode data is present                                                                                                                                                                   | `verify-geocode`               |
 | `global.nfs.autoCompleteBasePath`                 | the base path of the folder where autocomplete data is present                                                                                                                                                                     | `autocomplete`                 |
 | `global.nfs.lookupBasePath`                       | the base path of the folder where lookup data is present                                                                                                                                                                           | `lookup`                       |
@@ -168,6 +174,18 @@ provided by this chart:
 <hr>
 </details>
 
+<details>
+<summary><code>event-emitter.*</code></summary>
+
+| Parameter                                 |   | Description                                                                                                                                               | Default      |
+|-------------------------------------------|:--|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
+| `event-emitter.enabled`                   |   | flag to enable or disable the event-emitter. Refer to the comments in [values.yaml](../../../charts/component-charts/geo-addressing-generic/values.yaml). | `true`       |
+| `event-emitter.configuration.USER_KEY`    |   | The DIS API KEY required for running event-emitter.                                                                                                       | `*mandatory` |
+| `event-emitter.configuration.USER_SECRET` |   | The DIS API SECRET required for running event-emitter.                                                                                                    | `*mandatory` |
+
+<hr>
+</details>
+
 ## Environment Variables
 
 > click the `▶` symbol to expand.
@@ -226,7 +244,7 @@ variables for addressing-service.
 <summary><code>addressing-express</code></summary>
 
 Refer to the [deployment.yml](charts/addressing-express/templates/deployment.yaml) of respective service for override
-variables for addressing-service.
+variables for addressing-express.
 
 | Parameter                     | Description                                                                 | Default                                                  |
 |-------------------------------|-----------------------------------------------------------------------------|----------------------------------------------------------|
@@ -235,6 +253,22 @@ variables for addressing-service.
 | `*AUTOCOMPLETE_V2_ENABLED`    | Flag to enable autocomplete V2 endpoint endpoint.                           | `true for addressing-express service`                    |
 | `*COUNTRY_FINDER_ENABLED`     | Flag to enable automatic country finder from single line address endpoint.  | `true for addressing-express service`                    |
 | `*EXPRESS_URL`                | Url to express-engine-master service endpoint.                              | `https://express-engine-cluster-master:9200`             |
+
+<hr>
+</details>
+
+<details>
+<summary><code>event-emitter</code></summary>
+
+Refer to the [deployment.yml](charts/event-emitter/templates/deployment.yaml) of respective service for override
+variables for event-emitter service.
+
+| Parameter      | Description                                                        | Default                                                                                    |
+|----------------|--------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
+| `*NATS_URL`    | Url of the NATS server which gets deployed along with the service. | `{{ printf "nats://%s-nats.%s.svc.cluster.local:4222" .Release.Name .Release.Namespace }}` |
+| `*BASE_URL`    | The BASE URL of the DIS API Service.                               | `https://api.cloud.precisely.com`                                                          |
+| `*USER_KEY`    | DIS API User Key.                                                  | `<event-emitter.configuration.USER_KEY>`                                                   |
+| `*USER_SECRET` | DIS API User Secret.                                               | `<event-emitter.configuration.USER_SECRET>`                                                |
 
 <hr>
 </details>
