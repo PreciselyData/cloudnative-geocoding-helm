@@ -30,7 +30,7 @@ docker build . -t reference-data-extractor:3.0.1
 ##### For AWS EKS:
 
 ```shell
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 603016229198.dkr.ecr.us-east-1.amazonaws.com
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin [AWS-ACCOUNT-ID].dkr.ecr.us-east-1.amazonaws.com
 
 aws ecr create-repository --repository-name reference-data-extractor --image-scanning-configuration scanOnPush=true --region [AWS-REGION]
 
