@@ -855,9 +855,12 @@ reverse-svc:
         limits:
           memory: 8Gi
 
+## Event-Emitter is useful for tracking the application at Precisely DI Suite.
+## This service collects events and generates reports in your Precisely DIS account.
 event-emitter:
   enabled: false
   configuration:
+    ## To create the User Key and Secret, follow https://help.precisely.com/r/Precisely-Data-Integrity-Suite/Latest/en-US/Data-Integrity-Suite/Account/API-Keys/Manage-API-Keys
     USER_KEY: # mandatory parameter to be provided in the command
     USER_SECRET: # mandatory parameter to be provided in the command
   resources:

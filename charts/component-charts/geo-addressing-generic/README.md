@@ -47,7 +47,7 @@ The geo-addressing helm chart compromises of following components:
             - express-engine-master: Many-to-One POD to Node scheduling
     - event-emitter:
         - If enabled, it will deploy event-emitter service.
-        - This service collects events and generates reports in your Precisely DIS account.
+        - This service collects events and generates reports in your Precisely DIS account. (Follow <a href="https://help.precisely.com/r/Precisely-Data-Integrity-Suite/Latest/en-US/Data-Integrity-Suite/Account/Usage">this link</a> for more information.)
 
 Feel free to modify these helm charts and update it based on your needs.
 
@@ -263,12 +263,12 @@ variables for addressing-express.
 Refer to the [deployment.yml](charts/event-emitter/templates/deployment.yaml) of respective service for override
 variables for event-emitter service.
 
-| Parameter      | Description                                                        | Default                                                                                    |
-|----------------|--------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
-| `*NATS_URL`    | Url of the NATS server which gets deployed along with the service. | `{{ printf "nats://%s-nats.%s.svc.cluster.local:4222" .Release.Name .Release.Namespace }}` |
-| `*BASE_URL`    | The BASE URL of the DIS API Service.                               | `https://api.cloud.precisely.com`                                                          |
-| `*USER_KEY`    | DIS API User Key.                                                  | `<event-emitter.configuration.USER_KEY>`                                                   |
-| `*USER_SECRET` | DIS API User Secret.                                               | `<event-emitter.configuration.USER_SECRET>`                                                |
+| Parameter      | Description                                                                                                                                                                                                                      | Default                                                                                    |
+|----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
+| `*NATS_URL`    | Url of the NATS server which gets deployed along with the service.                                                                                                                                                               | `{{ printf "nats://%s-nats.%s.svc.cluster.local:4222" .Release.Name .Release.Namespace }}` |
+| `*BASE_URL`    | The BASE URL of the DIS API Service.                                                                                                                                                                                             | `https://api.cloud.precisely.com`                                                          |
+| `*USER_KEY`    | DIS API User Key. Follow <a href ="https://help.precisely.com/r/Precisely-Data-Integrity-Suite/Latest/en-US/Data-Integrity-Suite/Account/API-Keys/Manage-API-Keys">this</a> link for creating the User Access Key and Secret.    | `<event-emitter.configuration.USER_KEY>`                                                   |
+| `*USER_SECRET` | DIS API User Secret. Follow <a href ="https://help.precisely.com/r/Precisely-Data-Integrity-Suite/Latest/en-US/Data-Integrity-Suite/Account/API-Keys/Manage-API-Keys">this</a> link for creating the User Access Key and Secret. | `<event-emitter.configuration.USER_SECRET>`                                                |
 
 <hr>
 </details>
