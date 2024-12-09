@@ -23,7 +23,7 @@ This helm chart requires a `reference-data-extractor` docker image to be availab
 Follow the below steps to create and push the docker image to ECR:
 
 ```shell
-cd ./charts/reference-data-setup/image
+cd ./charts/component-charts/reference-data-setup-generic/image
 docker build . -t reference-data-extractor:3.0.1
 ```
 
