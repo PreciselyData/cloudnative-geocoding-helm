@@ -44,68 +44,68 @@ managedNodeGroups:
     labels: { node-app: geo-addressing }
     tags:
       CreatedBy: Precisely
-#
-#  - name: express-data-worker
-#    instanceType: c7g.8xlarge
-#    iam:
-#      attachPolicyARNs:
-#        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
-#        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
-#        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
-#        - arn:aws:iam::aws:policy/AmazonEC2FullAccess
-#        - arn:aws:iam::aws:policy/AutoScalingFullAccess
-#        - arn:aws:iam::aws:policy/AmazonS3FullAccess
-#        - arn:aws:iam::aws:policy/AmazonElasticFileSystemFullAccess
-#        - arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy
-#      withAddonPolicies:
-#        externalDNS: true
-#        certManager: true
-#        imageBuilder: true
-#        ebs: true
-#        fsx: true
-#        efs: true
-#        appMesh: true
-#        xRay: true
-#        autoScaler: true
-#        albIngress: true
-#        cloudWatch: true
-#    minSize: 3
-#    maxSize: 20
-#    volumeSize: 100
-#    labels: { node-app: express-data }
-#    tags:
-#      CreatedBy: Precisely
-#
-#  - name: express-master-worker
-#    instanceType: c7g.2xlarge
-#    iam:
-#      attachPolicyARNs:
-#        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
-#        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
-#        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
-#        - arn:aws:iam::aws:policy/AmazonEC2FullAccess
-#        - arn:aws:iam::aws:policy/AutoScalingFullAccess
-#        - arn:aws:iam::aws:policy/AmazonS3FullAccess
-#        - arn:aws:iam::aws:policy/AmazonElasticFileSystemFullAccess
-#        - arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy
-#      withAddonPolicies:
-#        externalDNS: true
-#        certManager: true
-#        imageBuilder: true
-#        ebs: true
-#        fsx: true
-#        efs: true
-#        appMesh: true
-#        xRay: true
-#        autoScaler: true
-#        albIngress: true
-#        cloudWatch: true
-#    minSize: 3
-#    maxSize: 20
-#    volumeSize: 100
-#    labels: { node-app: express-master }
-#    tags:
-#      CreatedBy: Precisely
+
+  - name: express-data-worker
+    instanceType: c7g.8xlarge
+    iam:
+      attachPolicyARNs:
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+        - arn:aws:iam::aws:policy/AmazonEC2FullAccess
+        - arn:aws:iam::aws:policy/AutoScalingFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AmazonElasticFileSystemFullAccess
+        - arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy
+      withAddonPolicies:
+        externalDNS: true
+        certManager: true
+        imageBuilder: true
+        ebs: true
+        fsx: true
+        efs: true
+        appMesh: true
+        xRay: true
+        autoScaler: true
+        albIngress: true
+        cloudWatch: true
+    minSize: 3
+    maxSize: 20
+    volumeSize: 100
+    labels: { node-app: express-data }
+    tags:
+      CreatedBy: Precisely
+
+  - name: express-master-worker
+    instanceType: c7g.2xlarge
+    iam:
+      attachPolicyARNs:
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+        - arn:aws:iam::aws:policy/AmazonEC2FullAccess
+        - arn:aws:iam::aws:policy/AutoScalingFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AmazonElasticFileSystemFullAccess
+        - arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy
+      withAddonPolicies:
+        externalDNS: true
+        certManager: true
+        imageBuilder: true
+        ebs: true
+        fsx: true
+        efs: true
+        appMesh: true
+        xRay: true
+        autoScaler: true
+        albIngress: true
+        cloudWatch: true
+    minSize: 3
+    maxSize: 20
+    volumeSize: 100
+    labels: { node-app: express-master }
+    tags:
+      CreatedBy: Precisely
 
   - name: geo-addressing-ingress
     instanceType: m5n.2xlarge
