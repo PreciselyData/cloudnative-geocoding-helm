@@ -8,7 +8,7 @@ metadata:
   name: {{ include "lookup-svc.fullname" (list $top .) }}
   {{- if $top.Values.global.manualDataConfig.enabled }}
   annotations:
-    preicsely.com/config-checksum: {{ $top.Values.global.manualDataConfig.configMapData | toYaml | sha256sum }}
+    precisely.com/config-checksum: {{ $top.Values.global.manualDataConfig.configMapData | toYaml | sha256sum }}
   {{- end}}
   labels:
     service: precisely
