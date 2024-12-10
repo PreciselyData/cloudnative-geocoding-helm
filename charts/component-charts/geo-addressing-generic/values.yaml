@@ -32,7 +32,7 @@ global:
   addressingImage:
     repository: addressing-service
     pullPolicy: Always
-    tag: 3.0.0
+    tag: 3.0.1
 
   ## Configurations for the express-engine container image.
   ##
@@ -40,7 +40,7 @@ global:
   ## https://data.precisely.com/products
   expressEngineImage:
     repository: express-engine
-    tag: 3.0.0
+    tag: 3.0.1
     pullPolicy: Always
 
   ## Configurations for the express-engine-data-restore container image.
@@ -51,7 +51,15 @@ global:
     repository: express-engine-data-restore
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
-    tag: 3.0.0
+    tag: 3.0.1
+
+  ##
+  ## To download container images, please visit the official 'Precisely Data Experience' website:
+  ## https://data.precisely.com/products
+  eventEmitterImage:
+    repository: event-emitter
+    pullPolicy: Always
+    tag: 3.0.1
 
   ## Configuration for manually configuring the data mount path for addressing-service
   ## When doing the manual configuration for data mount path, disable the data-vintage
@@ -145,7 +153,7 @@ replicaCount: 1
 image:
   repository: regional-addressing-service
   pullPolicy: Always
-  tag: 3.0.0
+  tag: 3.0.1
 imagePullSecrets: [ ]
 
 ## This will override the name of the installed regional-addressing deployment.
@@ -846,3 +854,44 @@ reverse-svc:
           memory: 8Gi
         limits:
           memory: 8Gi
+
+## Event-Emitter is useful for tracking the application at Precisely DI Suite.
+## This service collects events and generates reports in your Precisely DIS account.
+event-emitter:
+  enabled: false
+  configuration:
+    ## To create the User Key and Secret, follow https://help.precisely.com/r/Precisely-Data-Integrity-Suite/Latest/en-US/Data-Integrity-Suite/Account/API-Keys/Manage-API-Keys
+    USER_KEY: # mandatory parameter to be provided in the command
+    USER_SECRET: # mandatory parameter to be provided in the command
+  resources:
+    requests:
+      cpu: 1
+      memory: 2Gi
+    limits:
+      memory: 2Gi
+  replicaCount: 1
+  imagePullSecrets: [ ]
+  serviceAccount:
+    create: true
+    annotations: { }
+    name: ""
+  podAnnotations: { }
+  ## - spec for PodSecurityContext:
+  ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core
+  ##
+  podSecurityContext: { }
+  securityContext: { }
+  ## - spec for Toleration:
+  ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#toleration-v1-core
+  ##
+  tolerations: [ ]
+  ## - spec for Affinity:
+  ##    https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#affinity-v1-core
+  ##
+  affinity: { }
+  ##
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70

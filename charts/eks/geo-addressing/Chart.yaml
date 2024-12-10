@@ -3,9 +3,13 @@ name: geo-addressing-eks
 description: A Helm chart for Geo Addressing service
 
 type: application
-version: 3.0.0
+version: 3.0.1
 appVersion: "1.16.0"
 dependencies:
   - name: geo-addressing
     repository: file://../../component-charts/geo-addressing-generic
-    version: "3.0.0"
+    version: "3.0.1"
+  - name: nats
+    repository: "https://nats-io.github.io/k8s/helm/charts/"
+    version: 1.2.*
+    condition: geo-addressing.event-emitter.enabled

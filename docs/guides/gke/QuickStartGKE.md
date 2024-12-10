@@ -25,7 +25,8 @@ application's Docker images which will be used for the deployment.
 Running the geo addressing helm chart on GKE requires permissions on these Google Cloud resources along with some others
 listed below.
 
-GCP IAM Permissions
+##### GCP IAM Permissions:
+
 To deploy the geo addressing application on a GKE cluster, make sure you have the following IAM roles and permissions:
 
 - roles/container.admin - to create and manage a GKE cluster
@@ -201,12 +202,6 @@ Follow the following steps to create a Filestore instance for the Geo Addressing
   ```
   gcloud filestore instances describe <filestore-instance-name> --zone us-east1-c --format="value(fileShares[0].name)"
   ```
-- In the `./ggs/nfs-data/gke/ggs-data-pv.yaml` file, update the Filestore path and IP address:
-  ```
-  nfs:
-    path: /<filestore-instance-name-with-underscore>
-    server: <fileStoreServerIP>
-  ```  
 
 **Note:** The path of the data that you are going to use must exist on Filestore.
 
@@ -223,7 +218,7 @@ related to reference data, please refer to [this link](../../ReferenceData.md).
 You can make use of
 a [miscellaneous helm chart for installing reference data](../../../charts/component-charts/reference-data-setup-generic/README.md),
 please
-follow the instructions mentioned in the helm chart or run the below command for installing data in EFS or contact
+follow the instructions mentioned in the helm chart or run the below command for installing data in NFS or contact
 Precisely Sales Team for the reference data installation.
 
 ```shell
