@@ -57,7 +57,7 @@ global:
   ## To download container images, please visit the official 'Precisely Data Experience' website:
   ## https://data.precisely.com/products
   eventEmitterImage:
-    repository: event-emitter-image
+    repository: event-emitter
     pullPolicy: Always
     tag: 3.0.1
 

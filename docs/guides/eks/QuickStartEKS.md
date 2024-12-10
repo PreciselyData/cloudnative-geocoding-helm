@@ -128,11 +128,11 @@ cluster by creating mount targets.
 
 ## Step 5: Installation of Reference Data
 
+For installing reference data, you can make use of
+[this](../../../charts/component-charts/reference-data-setup-generic/README.md) helm chart which will download and extract the SPDs in the EFS.
+
 The Geo-Addressing Application relies on reference data for performing geo-addressing operations. For more information
 related to reference data, please refer to [this link](../../ReferenceData.md).
-
-You can make use of
-[this](../../../charts/component-charts/reference-data-setup-generic/README.md) helm chart for installing reference data
 
 ## Step 6: Installation of Geo-Addressing Helm Chart
 
