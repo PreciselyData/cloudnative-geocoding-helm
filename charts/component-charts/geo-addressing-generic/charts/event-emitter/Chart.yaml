@@ -1,6 +1,6 @@
 apiVersion: v2
 name: event-emitter
-description: A Helm chart for Nats Server
+description: A Helm chart for Event-Emitter
 
 # A chart can be either an 'application' or a 'library' chart.
 #

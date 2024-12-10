@@ -124,9 +124,9 @@ spec:
               value: none
             {{- end }}
             - name: NATS_URL
-              value: {{ printf "nats://%s-nats.%s.svc.cluster.local:4222" .Release.Name .Release.Namespace }}
+              value: {{ include "event-emitter.url" . }}
             - name: NATS_ENABLED
-              value: {{ include "regional-addressing.nats.enabled" . }}
+              value: {{ include "regional-addressing.eventEmitter.enabled" . }}
             {{- with .Values.extraEnv }}
               {{- tpl . $top | nindent 12 }}
             {{- end }}

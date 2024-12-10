@@ -69,7 +69,7 @@ spec:
           {{- end }}
           env:
             - name: NATS_URL
-              value: {{ printf "nats://%s-nats.%s.svc.cluster.local:4222" .Release.Name .Release.Namespace }}
+              value: {{ include "event-emitter.url" . }}
             - name: BASE_URL
               value: https://api.cloud.precisely.com
             - name: USER_KEY

@@ -127,12 +127,19 @@ Addressing data config map name
 {{- end }}
 
 {{/*
-Flag to enable the NATS
+Flag to enable the Event-Emitter
 */}}
-{{- define "regional-addressing.nats.enabled" -}}
+{{- define "regional-addressing.eventEmitter.enabled" -}}
 {{- if (index .Values "event-emitter").enabled }}
 {{- printf "%s" "true" | quote }}
 {{- else }}
 {{- printf "%s" "false" | quote }}
 {{- end }}
+{{- end }}
+
+{{/*
+Event-Emitter URL
+*/}}
+{{- define "event-emitter.url" -}}
+{{ printf "nats://%s-nats.%s.svc.cluster.local:4222" .Release.Name .Release.Namespace }}
 {{- end }}
