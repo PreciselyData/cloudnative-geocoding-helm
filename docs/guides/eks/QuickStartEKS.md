@@ -16,14 +16,14 @@ To deploy the Geo-Addressing application in AWS EKS, install the following clien
 
 You can create the EKS cluster or use existing EKS cluster.
 
-- If you DON'T have EKS cluster, we have provided you with a
+- If you DON'T have EKS cluster and want to start with creating it, we have provided you with a
   sample [cluster installation script](../../../cluster-sample/eks/create-eks-cluster.yaml). Run the following command
   from
   parent directory to create the cluster using the script:
     ```shell
     eksctl create cluster -f ./cluster-sample/eks/create-eks-cluster.yaml
     ```
-
+  > NOTE: This is only a sample cluster installation script and not intended for the production ready clusters. 
 - If you already have an EKS cluster, make sure you have following addons or plugins related to it, installed on the
   cluster:
     ```yaml
@@ -77,6 +77,7 @@ which are conveniently obtainable from Precisely Data Experience. The required d
 2. Addressing Service Docker Image
 3. Express Engine Docker Image
 4. Express Engine Data Restore Docker Image
+5. Event Emitter Docker Image
 
 > [!NOTE]:
 > Contact Precisely or visit [Precisely Data Experience](https://data.precisely.com/) for buying subscription to docker image
@@ -129,7 +130,7 @@ cluster by creating mount targets.
 ## Step 5: Installation of Reference Data
 
 For installing reference data, you can make use of
-[this](../../../charts/component-charts/reference-data-setup-generic/README.md) helm chart which will download and extract the SPDs in the EFS.
+[this helm chart](../../../charts/component-charts/reference-data-setup-generic/README.md) which will download and extract the SPDs in the EFS.
 
 The Geo-Addressing Application relies on reference data for performing geo-addressing operations. For more information
 related to reference data, please refer to [this link](../../ReferenceData.md).
