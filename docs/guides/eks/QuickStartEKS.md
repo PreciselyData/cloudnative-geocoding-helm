@@ -16,14 +16,14 @@ To deploy the Geo-Addressing application in AWS EKS, install the following clien
 
 You can create the EKS cluster or use existing EKS cluster.
 
-- If you DON'T have EKS cluster, we have provided you with a
+- If you DON'T have EKS cluster and want to start with creating it, we have provided you with a
   sample [cluster installation script](../../../cluster-sample/eks/create-eks-cluster.yaml). Run the following command
   from
   parent directory to create the cluster using the script:
     ```shell
-    eksctl create cluster -f ./cluster-sample/create-eks-cluster.yaml
+    eksctl create cluster -f ./cluster-sample/eks/create-eks-cluster.yaml
     ```
-
+  > NOTE: This is only a sample cluster installation script and not intended for the production ready clusters. 
 - If you already have an EKS cluster, make sure you have following addons or plugins related to it, installed on the
   cluster:
     ```yaml
@@ -37,14 +37,14 @@ You can create the EKS cluster or use existing EKS cluster.
     ```shell
     aws eks --region [aws-region] update-kubeconfig --name [cluster-name]
     
-    eksctl create addon -f ./cluster-sample/create-eks-cluster.yaml
+    eksctl create addon -f ./cluster-sample/eks/create-eks-cluster.yaml
     ```
 - Once you create EKS cluster, you can
   apply [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler) so that the
   cluster can be scaled vertically as per requirements. We have provided a sample cluster autoscaler script. Please run
   the following command to create cluster autoscaler:
     ```shell
-    kubectl apply -f ./cluster-sample/cluster-auto-scaler.yaml
+    kubectl apply -f ./cluster-sample/eks/cluster-auto-scaler.yaml
     ```
 - To enable [HorizontalPodAutoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/), the
   cluster also needs a [Metrics API Server](https://github.com/kubernetes-sigs/metrics-server) for capturing cluster
@@ -56,7 +56,7 @@ You can create the EKS cluster or use existing EKS cluster.
   controller:
   ```shell
   helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-  helm install nginx-ingress ingress-nginx/ingress-nginx -f ./cluster-sample/ingress-values.yaml
+  helm install nginx-ingress ingress-nginx/ingress-nginx -f ./cluster-sample/eks/ingress-values.yaml
   ```
   *Note: You can update the nodeSelector according to your cluster's ingress node.*
 
@@ -77,6 +77,7 @@ which are conveniently obtainable from Precisely Data Experience. The required d
 2. Addressing Service Docker Image
 3. Express Engine Docker Image
 4. Express Engine Data Restore Docker Image
+5. Event Emitter Docker Image
 
 > [!NOTE]:
 > Contact Precisely or visit [Precisely Data Experience](https://data.precisely.com/) for buying subscription to docker image
@@ -113,7 +114,7 @@ cluster by creating mount targets.
 
 - If you DON'T have existing EFS, run the following commands:
   ```shell
-  cd ./scripts/efs-creator
+  cd ./scripts/eks/efs-creator
   pip install -r requirements.txt
   python ./create_efs.py --cluster-name [eks-cluster-name] --aws-access-key [aws-access-key] --aws-secret [aws-secret] --aws-region [aws-region] --efs-name [precisely-geo-addressing-efs] --security-group-name [precisely-geo-addressing-sg]
   ```
@@ -121,18 +122,18 @@ cluster by creating mount targets.
 - If you already have EFS, but you want to create mount targets so that EFS can be accessed from the EKS cluster, run
   the following command:
   ```shell
-  cd ../scripts/efs-creator
+  cd ../scripts/eks/efs-creator
   pip install -r requirements.txt
   python ./create_efs.py --cluster-name [eks-cluster-name] --existing true --aws-access-key [aws-access-key] --aws-secret [aws-secret-key] --aws-region [aws-region] --file-system-id [file-system-id]
   ```
 
 ## Step 5: Installation of Reference Data
 
+For installing reference data, you can make use of
+[this helm chart](../../../charts/component-charts/reference-data-setup-generic/README.md) which will download and extract the SPDs in the EFS.
+
 The Geo-Addressing Application relies on reference data for performing geo-addressing operations. For more information
 related to reference data, please refer to [this link](../../ReferenceData.md).
-
-You can make use of
-[this](../../../charts/component-charts/reference-data-setup-generic/README.md) helm chart for installing reference data
 
 ## Step 6: Installation of Geo-Addressing Helm Chart
 
@@ -142,7 +143,7 @@ You can make use of
 To install/upgrade the geo-addressing helm chart, use the following command:
 
 ```shell
-helm upgrade --install geo-addressing ./charts/geo-addressing \
+helm upgrade --install geo-addressing ./charts/eks/geo-addressing \
 --dependency-update \
 --set "global.awsRegion=[aws-region]" \ 
 --set "global.nfs.fileSystemId=[file-system-id]" \

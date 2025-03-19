@@ -1,6 +1,6 @@
 apiVersion: v2
-name: express-engine
-description: A Helm chart for express engine Services
+name: event-emitter
+description: A Helm chart for Event-Emitter
 
 # A chart can be either an 'application' or a 'library' chart.
 #
