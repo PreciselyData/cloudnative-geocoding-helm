@@ -91,6 +91,10 @@ spec:
             - name: REVERSE_GEOCODE_BASE_URL
               value: http://{{ include "addressing-svc.Url" (list . "-<region>" "reverse-svc")  }}.{{ .Release.Namespace }}.svc.cluster.local:8080
             {{- end}}
+            {{- if (index .Values "proximity-svc").enabled }}
+            - name: PROXIMITY_SEARCH_BASE_URL
+              value: http://{{ include "addressing-svc.Url" (list . "-<dataset>" "proximity-svc")  }}.{{ .Release.Namespace }}.svc.cluster.local:8080
+            {{- end}}
             {{- end}}
             - name: SUPPORTED_COUNTRIES_GEOCODE
               value: {{ printf "%s,express" (join "," .Values.global.countries) }}
@@ -108,6 +112,8 @@ spec:
               value: ""
             - name: SUPPORTED_COUNTRIES_REVERSE_GEOCODE
               value: {{ join "," .Values.global.countries }}
+            - name: SUPPORTED_DATASETS_PROXIMITY_SEARCH
+              value: {{ join "," .Values.global.proximitySvcDatasets }}
             - name: AUTH_ENABLED
               value: "false"
             - name: IS_HELM_SOLUTION

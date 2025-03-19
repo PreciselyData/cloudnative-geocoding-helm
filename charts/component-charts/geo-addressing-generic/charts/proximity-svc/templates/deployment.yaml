@@ -1,19 +1,19 @@
 {{- if .Values.enabled }}
 {{- $top := . -}}
-{{- range $.Values.global.countries }}
+{{- range $.Values.global.proximitySvcDatasets }}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "addressing-svc.fullname" (list $top .) }}
+  name: {{ include "proximity-svc.fullname" (list $top .) }}
   {{- if $top.Values.global.manualDataConfig.enabled }}
   annotations:
     precisely.com/config-checksum: {{ $top.Values.global.manualDataConfig.configMapData | toYaml | sha256sum }}
   {{- end}}
   labels:
     service: precisely
-    app: {{ include "addressing-svc.fullname" (list $top .) }}
-    {{- include "addressing-svc.labels" (list $top .) | nindent 4 }}
+    app: {{ include "proximity-svc.fullname" (list $top .) }}
+    {{- include "proximity-svc.labels" (list $top .) | nindent 4 }}
 spec:
   {{- if not $top.Values.autoscaling.enabled }}
   replicas: {{ $top.Values.replicaCount }}
@@ -21,8 +21,8 @@ spec:
   selector:
     matchLabels:
       service: precisely
-      app: {{ include "addressing-svc.fullname" (list $top .) }}
-      {{- include "addressing-svc.selectorLabels" (list $top .) | nindent 6 }}
+      app: {{ include "proximity-svc.fullname" (list $top .) }}
+      {{- include "proximity-svc.selectorLabels" (list $top .) | nindent 6 }}
   template:
     metadata:
       {{- with $top.Values.podAnnotations }}
@@ -31,14 +31,14 @@ spec:
       {{- end }}
       labels:
         service: precisely
-        app: {{ include "addressing-svc.fullname" (list $top .) }}
-        {{- include "addressing-svc.selectorLabels" (list $top .) | nindent 8 }}
+        app: {{ include "proximity-svc.fullname" (list $top .) }}
+        {{- include "proximity-svc.selectorLabels" (list $top .) | nindent 8 }}
     spec:
       {{- with $top.Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "addressing-svc.serviceAccountName" (list $top .) }}
+      serviceAccountName: {{ include "proximity-svc.serviceAccountName" (list $top .) }}
       securityContext:
         {{- toYaml $top.Values.podSecurityContext | nindent 8 }}
       containers:
@@ -73,17 +73,17 @@ spec:
             timeoutSeconds: 1
             periodSeconds: 10
           resources:
-            {{- (include "common-svc.configuration" (list $top.Values.countryConfigurations . "resources")) | nindent 12 }}
+            {{- (include "common-svc.configuration" (list $top.Values.datasetConfigurations . "resources")) | nindent 12 }}
           volumeMounts:
-            {{- include "addressing-svc.volumeMounts" $top | nindent 12 }}
+            {{- include "proximity-svc.volumeMounts" $top | nindent 12 }}
           env:
             - name: DATA_PATH
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "addressing-data-config.name" $top }}
-                  key: {{ (printf "verify-geocode.%s.vintage" .) }}
+                  key: {{ (printf "proximity.%s.vintage" .) }}
             - name: GEOCODE_VERIFY_ENABLED
-              value: "true"
+              value: "false"
             - name: LOOKUP_ENABLED
               value: "false"
             - name: REVERSEGEOCODE_ENABLED
@@ -91,7 +91,7 @@ spec:
             - name: AUTOCOMPLETE_ENABLED
               value: "false"
             - name: PROXIMITY_SEARCH_ENABLED
-              value: "false"
+              value: "true"
             - name: DATA_REGION
               value: {{ . | upper }}
             {{- if $top.Values.global.otelExporterEndpoint }}

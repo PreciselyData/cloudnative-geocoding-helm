@@ -90,6 +90,8 @@ spec:
               value: "false"
             - name: AUTOCOMPLETE_ENABLED
               value: "true"
+            - name: PROXIMITY_SEARCH_ENABLED
+              value: "false"
             - name: DATA_REGION
               value: {{ . | upper }}
             {{- if $top.Values.global.otelExporterEndpoint }}

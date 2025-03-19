@@ -34,3 +34,7 @@ dependencies:
     repository: file://charts/event-emitter
     version: "3.0.1"
     condition: event-emitter.enabled
+  - name: proximity-svc
+    repository: file://charts/proximity-svc
+    version: "3.0.1"
+    condition: proximity-svc.enabled

@@ -25,6 +25,14 @@ global:
     - nzl
     - can
 
+  ## Dataset configuration for proximity search
+  ##
+  ## Specify the name of all the datasets which needs to be configured for
+  ## proximity search
+  proximitySvcDatasets: []
+  # proximitySvcDatasets:
+  #   - dataset_name
+
   ## Configurations for the addressing-service container image.
   ##
   ## To download container images, please visit the official 'Precisely Data Experience' website:
@@ -75,6 +83,7 @@ global:
       reverse.usa.vintage: /mnt/data/geoaddressing-data/verify-geocode/usa/202312131538
       lookup.usa.vintage: /mnt/data/geoaddressing-data/lookup/usa/202312131538
       autocomplete.usa.vintage: /mnt/data/geoaddressing-data/autocomplete/usa/202312131538
+      proximity.usa.vintage: /mnt/data/geoaddressing-data/proximity/dataset_name
 
   addressingHook:
     ## Create storage class as part of chart
@@ -123,6 +132,11 @@ global:
     ##
     ## [NOTE]: the data used for reverse-geocode is the exactly same, that's why the default value is set to verify-geocode.
     reverseBasePath: verify-geocode
+    ##
+    ## The base path where the data is present for proximity search functionality on NFS.
+    ##
+    ## [NOTE]: if your data for proximity search is not present in the format proximity/[country]/[timestamp], this parameter needs to be overridden.
+    proximityBasePath: proximity
     ##
     ## The base path where the data is present for express-engine.
     expressEngineDataMountPath: /usr/share/express_snapshots
@@ -177,7 +191,7 @@ podLabels: {}
 ## Default internal service URL's env variables enabled or not
 ## Below env variables with values are added or removed based on this flag
 ## ADDRESSING_BASE_URL, LOOKUP_BASE_URL, AUTOCOMPLETE_BASE_URL,
-## ADDRESSING_EXPRESS_BASE_URL, REVERSE_GEOCODE_BASE_URL
+## ADDRESSING_EXPRESS_BASE_URL, REVERSE_GEOCODE_BASE_URL, PROXIMITY_SEARCH_BASE_URL
 defaultUrlsEnabled: true
 
 extraEnv: ~
@@ -895,3 +909,81 @@ event-emitter:
     minReplicas: 1
     maxReplicas: 5
     targetCPUUtilizationPercentage: 70
+
+###################################
+## CONFIG | Proximity Search Functionalities
+###################################
+##
+## config related to proximity-svc helm chart.
+## this helm chart is required if you want to enable proximity search capabilities in your addressing infrastructure.
+proximity-svc:
+  ## config for enabling or disabling `proximity search` capabilities.
+  enabled: false
+  ## number of replicas for proximity service pods.
+  replicaCount: 1
+  imagePullSecrets: [ ]
+  ## service account will be created by default for proximity service deployment.
+  serviceAccount:
+    create: true
+    annotations: { }
+    name: ""
+  ## pod annotations for proximity service pods
+  podAnnotations: { }
+  ## the security context for the proximity service Pods
+  ## - spec for PodSecurityContext:
+  ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core
+  ##
+  podSecurityContext: { }
+  # This is the max unavailable setting for the pod disruption budget
+  # The default value of 1 will make sure that kubernetes won't allow more than 1
+  # of your pods to be unavailable during maintenance
+  maxUnavailable: 1
+  securityContext: { }
+  ## the toleration configs for the proximity service pods
+  ## - spec for Toleration:
+  ##   https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#toleration-v1-core
+  ##
+  tolerations: [ ]
+  ## the affinity configs for the proximity service pods
+  ## - spec for Affinity:
+  ##    https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#affinity-v1-core
+  ##
+  affinity: { }
+  ##
+  ## Autoscaling configs
+  ## By default, minimum replicas are set to 1 and maximum to 10
+  ## You can override this parameter as follows:
+  # --set "proximity-svc.autoscaling.minReplicas=10"
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 20
+    targetCPUUtilizationPercentage: 70
+  ##
+  ## Dataset-specific configurations for proximity service pods of the `proximity search` capability.
+  ## You can specify Dataset-specific configurations, such as resource requests, nodeSelector, and thread pool sizes.
+  ##
+  ## If a dataset-specific configuration is not provided, the default configurations will be used.
+  ## For example, to provide configurations related to [testData], use the following block:
+  ##
+  ##  testData:
+  ##      resources:
+  ##        requests:
+  ##          cpu: 1000m
+  ##          memory: 6Gi
+  ##      nodeSelector: {}
+  ##
+  ## You can also set the parameters for a country in the Helm chart like this:
+  ##
+  ##  --set "proximity-svc.datasetConfigurations.testData.resources.requests.cpu=1000m"
+  ##  --set "proximity-svc.datasetConfigurations.testData.resources.requests.memory=6Gi"
+  ##  --set "proximity-svc.datasetConfigurations.testData.nodeSelector.node-app=geo-addressing"
+  ##
+  datasetConfigurations:
+    default:
+      resources:
+        requests:
+          cpu: 2
+          memory: 2Gi
+        limits:
+          memory: 4Gi

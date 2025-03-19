@@ -82,6 +82,8 @@ spec:
               value: "false"
             - name: AUTOCOMPLETE_ENABLED
               value: "false"
+            - name: PROXIMITY_SEARCH_ENABLED
+              value: "false"
             - name: COUNTRY_FINDER_ENABLED
               value: "true"
             - name: EXPRESS_URL
