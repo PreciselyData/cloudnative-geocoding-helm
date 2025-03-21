@@ -15,7 +15,7 @@ spec:
     storage: 100Gi
   accessModes:
     - ReadWriteMany
-  persistentVolumeReclaimPolicy: Retain  # if set as "Delete" file share would be removed in pvc deletion
+  persistentVolumeReclaimPolicy: Delete  # if set as "Delete" file share would be removed in pvc deletion
   csi:
     driver: file.csi.azure.com
     readOnly: false

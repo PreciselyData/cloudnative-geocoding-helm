@@ -136,12 +136,9 @@ kubectl get pvc
 ```
 
 ```shell
-kubectl patch pv ref-reference-data-pv -p '{\"metadata\": {\"finalizers\": null}}'
-kubectl patch pvc ref-reference-data-pvc -p '{\"metadata\": {\"finalizers\": null}}'
-```
-```shell
-kubectl delete pv ref-reference-data-pv
 kubectl delete pvc ref-reference-data-pvc
+kubectl patch pv ref-reference-data-pv -p '{\"metadata\": {\"finalizers\": null}}'
+kubectl delete pv ref-reference-data-pv
 ```
 
 [🔗 Return to `Table of Contents` 🔗](../../../README.md#components)
