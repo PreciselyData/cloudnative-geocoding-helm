@@ -18,8 +18,7 @@ You can create the EKS cluster or use existing EKS cluster.
 
 - If you DON'T have EKS cluster and want to start with creating it, we have provided you with a
   sample [cluster installation script](../../../cluster-sample/eks/create-eks-cluster.yaml). Run the following command
-  from
-  parent directory to create the cluster using the script:
+  from parent directory to create the cluster using the script:
     ```shell
     eksctl create cluster -f ./cluster-sample/eks/create-eks-cluster.yaml
     ```
@@ -129,11 +128,10 @@ cluster by creating mount targets.
 
 ## Step 5: Installation of Reference Data
 
-For installing reference data, you can make use of
-[this helm chart](../../../charts/component-charts/reference-data-setup-generic/README.md) which will download and extract the SPDs in the EFS.
-
-The Geo-Addressing Application relies on reference data for performing geo-addressing operations. For more information
-related to reference data, please refer to [this link](../../ReferenceData.md).
+The Geo Addressing Application relies on reference data for performing geo addressing operations.
+If you don't have reference data installed in your mounted storage:
+- Refer to [this guide](../../ReferenceData.md) for more information about reference data, and it's recommended structure.
+- Refer to [this quickstart guide](./QuickStartReferenceDataEKS.md) for installing reference data using Helm Chart.
 
 ## Step 6: Installation of Geo-Addressing Helm Chart
 
@@ -155,18 +153,17 @@ helm upgrade --install geo-addressing ./charts/eks/geo-addressing \
 --set "global.addressingImage.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/addressing-service" \
 --set "global.expressEngineImage.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/express-engine" \
 --set "global.expressEngineDataRestoreImage.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/express-engine-data-restore" \
+--set "global.eventEmitterImage.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/event-emitter" \
 --set "geo-addressing.addressing-express.expressEngineData.nodeSelector.node-app=[node-selector-label-arm64-node]" \
 --set "geo-addressing.addressing-express.expressEngineMaster.nodeSelector.node-app=[node-selector-label-arm64-node]" \ 
 --set "geo-addressing.addressing-express.expressEngineDataRestore.nodeSelector.node-app=[node-selector-label-arm64-node]" \
 --set "global.countries={usa,can,aus,nzl}" \
 --namespace geo-addressing --create-namespace
 ```
+> Note: addressing-express service is only needed for running Geocoding WITHOUT country.
 
-By default, only verify/geocode functionality is enabled.
 
-> Note: addressing-express service is needed for Geocoding without country.
-
-To enable other functionalities like autocomplete, lookup and
+By default, only verify/geocode functionality is enabled. To enable other functionalities like autocomplete, lookup and
 reverse-geocode you have to set the parameters in helm command as follows.
 
 ```shell
@@ -192,7 +189,7 @@ reverse-geocode you have to set the parameters in helm command as follows.
 #### Mandatory Parameters
 
 * ``global.awsRegion``: AWS Region
-* ``global.efs.fileSystemId``: The ID of the EFS
+* ``global.nfs.fileSystemId``: The ID of the EFS
 * ``global.countries``: Required countries for Geo-Addressing (e.g. ``--set "global.countries={usa,deu,gbr}"``).
   Provide a comma separated list to enable a particular set of countries
   from: `{usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world}`
@@ -204,6 +201,7 @@ reverse-geocode you have to set the parameters in helm command as follows.
 * ``global.expressEngineImage.repository``: The ECR image repository for the express-engine image
 * ``global.expressEngineDataRestoreImage.repository``: The ECR image repository for the express-engine-data-restore
   image
+* ``global.eventEmitterImage.repository``: The ECR image repository for the event-emitter image
 * ``global.nodeSelector``: The node selector to run the geo-addressing solutions on nodes of the cluster. Should be an
   amd64 based Node group.
 * ``geo-addressing.addressing-express.expressEngineDataRestore.nodeSelector``: The node selector to run the express-engine data restore

@@ -202,24 +202,10 @@ cluster, then you can ignore this step and move to the next step.
 
 ## Step 5: Installation of Reference Data
 
-The Geo-Addressing Application relies on reference data for performing geo-addressing operations. For more information
-related to reference data, please refer to [this link](../../ReferenceData.md).
-
-You can make use of
-a [miscellaneous helm chart for installing reference data](../../../charts/component-charts/reference-data-setup-generic/README.md), please
-follow the instructions mentioned in the helm chart or run the below command for installing data in EFS or contact
-Precisely Sales Team for the reference data installation.
-
-```shell
-helm install reference-data ./charts/aks/reference-data-setup/ \
---set "reference-data.config.pdxApiKey=[your-pdx-key]" \
---set "reference-data.config.pdxSecret=[your-pdx-secret]" \
---set "reference-data.node-selector.node-app=geo-addressing" \
---set "global.nfs.shareName=[shareName]" \
---set "global.nfs.storageAccount=[storageAccountName]" \
---set "reference-data.dataDownload.image.repository=[reference-data-image-repository]" \
---dependency-update --timeout 60m
-```
+The Geo Addressing Application relies on reference data for performing geo addressing operations.
+If you don't have reference data installed in your mounted storage:
+- Refer to [this guide](../../ReferenceData.md) for more information about reference data, and it's recommended structure.
+- Refer to [this quickstart guide](./QuickStartReferenceDataAKS.md) for installing reference data using Helm Chart.
 
 ## Step 6: Installation of Geo-Addressing Helm Chart
 
@@ -241,17 +227,17 @@ helm upgrade --install geo-addressing ./charts/aks/geo-addressing \
 --set "global.addressingImage.repository=[azure-acr-name].azurecr.io/addressing-service" \
 --set "global.expressEngineImage.repository=[azure-acr-name].azurecr.io/express-engine" \
 --set "global.expressEngineDataRestoreImage.repository=[azure-acr-name].azurecr.io/express-engine-data-restore" \
+--set "global.eventEmitterImage.repository=[azure-acr-name].azurecr.io/event-emitter" \
 --set "geo-addressing.addressing-express.expressEngineData.nodeSelector.node-app=[node-selector-label-arm64-node]" \
 --set "geo-addressing.addressing-express.expressEngineMaster.nodeSelector.node-app=[node-selector-label-arm64-node]" \ 
 --set "geo-addressing.addressing-express.expressEngineDataRestore.nodeSelector.node-app=[node-selector-label-arm64-node]" \
 --set "global.countries={usa,can,aus,nzl}" \
 --namespace geo-addressing --create-namespace
 ```
-
-By default, only verify/geocode functionality is enabled.
-
 > Note: addressing-express service is needed for Geocoding without country.
 
+
+By default, only verify/geocode functionality is enabled.
 To enable other functionalities like autocomplete, lookup and
 reverse-geocode you have to set the parameters in helm command as follows.
 
@@ -287,6 +273,7 @@ reverse-geocode you have to set the parameters in helm command as follows.
 * ``global.expressEngineImage.repository``: The image repository for the express-engine image
 * ``global.expressEngineDataRestoreImage.repository``: The image repository for the express-engine-data-restore
   image
+* ``global.eventEmitterImage.repository``: The image repository for the event-emitter image
 * ``global.nodeSelector``: The node selector to run the geo-addressing solutions on nodes of the cluster. Should be an
   amd64 based Node group.
 * ``geo-addressing.addressing-express.expressEngineDataRestore.nodeSelector``: The node selector to run the express-engine data restore

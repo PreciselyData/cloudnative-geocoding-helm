@@ -6,9 +6,8 @@ using [persistent volume](https://kubernetes.io/docs/concepts/storage/persistent
 backed by Network File Storage so that the data is ready to use immediately when the volume is mounted to
 the pods.
 
-For more information on reference data and reference data structure, please
-visit [this link](../../../docs/ReferenceData.md).
-
-For more details on Reference Data Helm Chart, follow the guide for [reference data setup component chart](../../component-charts/reference-data-setup-generic).
+Refer to the following documentation for more information:
+- [reference data and structure](../../../docs/ReferenceData.md)
+- [reference data quick start guide for eks](../../../docs/guides/eks/QuickStartReferenceDataEKS.md)
 
 [🔗 Return to `Table of Contents` 🔗](../../../README.md#guides)

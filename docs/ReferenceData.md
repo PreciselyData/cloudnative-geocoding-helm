@@ -1,4 +1,8 @@
-# Reference Data
+# Reference Data Highlights
+
+> **_NOTE: Follow the Quick Start Guides based on your cloud provided for installing the reference data using provided Helm
+Charts for reference data installation.
+[EKS](guides/eks/QuickStartReferenceDataEKS.md)|[AKS](guides/aks/QuickStartReferenceDataAKS.md)|[GKE](guides/gke/QuickStartReferenceDataGKE.md)_**
 
 Precisely offers a large variety of datasets, which can be utilized depending on the use case.
 
@@ -23,13 +27,12 @@ To accommodate reference data and software upgrades, you should upload newer dat
 on the mounted storage. The Geo-Addressing Helm Chart can then be rolled out with the new reference data location
 seamlessly and with zero downtime.
 
-
 # Reference Data Structure
 
-As a generalized step, the reference data should exist in the following format only:
-<br>`[basePath]/[addressing-functionality]/[country]/[current-time]/[vintage]/[data]`
+As a generalized step, the reference data should exist in the following format only: `[basePath]/[addressing-functionality]/[country]/[current-time]/[vintage]/[data]`
 
 NOTE: The current-time folder name should always be in the format: `YYMMDDhhmm` e.g. 202311081159
+
 ```
 basePath/
 ├── verify-geocode/
@@ -80,13 +83,36 @@ basePath/
 │   │           └── poi/
 ```
 
-# Reference Data Installation
+### Helm Values
 
-To download the reference data (country-specific data) and all the required components for running the Helm Chart,
-visit [Precisely Data Portfolio](https://dataguide.precisely.com/) where you can also sign up for a free account and
-access files available in [Precisely Data Experience](https://data.precisely.com/).
+The following is the summary of some *helm values*
+provided by this chart:
 
-Additionally, we have provided a miscellaneous helm chart which will download the required reference data SPDs from Precisely Data Experience and extract it to the necessary reference data structure.
-Please visit the [reference-data-setup helm chart](../charts/component-charts/reference-data-setup-generic/README.md).
+> click the `▶` symbol to expand
+
+<details>
+<summary><code>reference-data.dataDownload.*</code></summary>
+
+| Parameter                                       | Description                                              | Default                    |
+|-------------------------------------------------|----------------------------------------------------------|----------------------------|
+| *`reference-data.dataDownload.image.repository` | the reference-data-extractor container image repository  | `reference-data-extractor` |
+| `reference-data.dataDownload.image.tag`         | the reference-data-extractor container image version tag | `4.0.0`                    |
+
+<hr>
+</details>
+
+<details>
+<summary><code>reference-data.config.*</code></summary>
+
+| Parameter                               | Description                                                                                                                      | Default                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+|-----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *`reference-data.config.pdxApiKey`      | the apiKey of your PDX account                                                                                                   | `pdx-api-key`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| *`reference-data.config.pdxSecret`      | the secret key of your PDX account                                                                                               | `pdx-api-secret`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| *`reference-data.config.countries`      | the countries for which you want to install reference data                                                                       | `{usa,aus}`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `reference-data.config.dataConfigMap`   | a Map of reference data to be downloaded against countries                                                                       | `{\"verify-geocode\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"lookup\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"autocomplete\":{\"usa\":[\"Predictive Addressing Points#United States#All USA#Interactive\"],\"aus\":[\"Predictive Addressing Points#Australia#All AUS#Interactive\"]},\"express_data\":{\"usa\":[\"Address Express#United States#All USA#Spectrum Platform Data\",\"POI Express#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Address Express#Australia#All AUS#Spectrum Platform Data\"]}}` |
+| `reference-data.config.failFastEnabled` | failFast flag allows the reference-data job to fail fast for any exception. By default, it will continue downloading other SPDs. | `false`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `reference-data.config.timestampFolder` | The timestampFolder path where all the reference data is installed. If not passed, it will pick the current time of job run.     | ``                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+
+</details>
 
 [🔗 Return to `Table of Contents` 🔗](../README.md#components)

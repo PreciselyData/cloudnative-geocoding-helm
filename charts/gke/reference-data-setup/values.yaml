@@ -2,3 +2,22 @@ global:
   nfs:
     path: /ga_data
     server: fileStoreServerIP
+
+reference-data:
+  dataDownload:
+    image:
+      # Provide the image repository and tag in the correct format.
+      repository: reference-data-extractor
+      tag: 4.0.0
+  config:
+    #
+    # Update your Precisely Data Experience Credentials.
+    pdxApiKey: "your-pdx-api-key"
+    pdxSecret: "your-pdx-api-secret"
+    #
+    # Provide the list of countries for which you want to install the reference data.
+    countries:
+      - usa
+    #
+    # Prepare your dataConfigMap by providing the necessary SPD files that you want to install.
+    dataConfigMap: "{\"verify-geocode\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"]}}"

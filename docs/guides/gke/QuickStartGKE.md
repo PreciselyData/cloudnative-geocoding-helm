@@ -207,30 +207,10 @@ Follow the following steps to create a Filestore instance for the Geo Addressing
 
 ## Step 5: Installation of Reference Data
 
-The Geo-Addressing Application relies on reference data for performing geo-addressing operations. For more information
-related to reference data, please refer to [this link](../../ReferenceData.md).
-
-> Note: You can run the reference data helm chart after you have configured Filestore instances and linked it to the
-> cluster
-> when you need to update the deployed data, such as with a new vintage, or if you want to add
-> support for additional countries.
-
-You can make use of
-a [miscellaneous helm chart for installing reference data](../../../charts/component-charts/reference-data-setup-generic/README.md),
-please
-follow the instructions mentioned in the helm chart or run the below command for installing data in NFS or contact
-Precisely Sales Team for the reference data installation.
-
-```shell
-helm install reference-data ./charts/gke/reference-data-setup/ \
---set "reference-data.config.pdxApiKey=<pdx-api-key>" \
---set "reference-data.config.pdxSecret=<pdx-api-secret>" \
---set "reference-data.node-selector.node-app=<node-selector-label>" \
---set "global.nfs.path=/<filestore-instance-name-with-underscore>" \
---set "global.nfs.server=<filestoreServerIP>" \
---set "reference-data.dataDownload.image.repository=[e.g. us.gcr.io/<project-id>/reference-data-extractor]" \
---dependency-update --timeout 60m
-```
+The Geo Addressing Application relies on reference data for performing geo addressing operations.
+If you don't have reference data installed in your mounted storage:
+- Refer to [this guide](../../ReferenceData.md) for more information about reference data, and it's recommended structure.
+- Refer to [this quickstart guide](./QuickStartReferenceDataGKE.md) for installing reference data using Helm Chart.
 
 ## Step 6: Installation of Geo-Addressing Helm Chart
 
@@ -251,6 +231,7 @@ helm upgrade --install geo-addressing ./charts/gke/geo-addressing \
 --set "geo-addressing.image.repository=[e.g. us.gcr.io/<project-id>/regional-addressing-service]" \
 --set "global.addressingImage.repository=[e.g. us.gcr.io/<project-id>/addressing-service]" \
 --set "global.expressEngineImage.repository=[e.g. us.gcr.io/<project-id>/express-engine]" \
+--set "global.eventEmitterImage.repository=[e.g. us.gcr.io/<project-id>/event-emitter]" \
 --set "global.expressEngineDataRestoreImage.repository=[e.g. us.gcr.io/<project-id>/express-engine-data-restore]" \
 --set "geo-addressing.addressing-express.expressenginedata.nodeSelector.node-app=<node-selector-label-arm64-node>" \
 --set "geo-addressing.addressing-express.expressenginemaster.nodeSelector.node-app=<node-selector-label-arm64-node>" \ 
@@ -258,12 +239,10 @@ helm upgrade --install geo-addressing ./charts/gke/geo-addressing \
 --set "global.countries={usa,can,aus,nzl}" \
 --namespace geo-addressing --create-namespace
 ```
-
 > Note: addressing-express service is needed for Geocoding without country.
 
-By default, only verify/geocode functionality is enabled.
 
-To enable other functionalities like autocomplete, lookup and
+By default, only verify/geocode functionality is enabled. To enable other functionalities like autocomplete, lookup and
 reverse-geocode you have to set the parameters in helm command as follows.
 
 ```shell
@@ -301,6 +280,7 @@ reverse-geocode you have to set the parameters in helm command as follows.
 * ``global.expressEngineImage.repository``: The image repository for the express-engine image
 * ``global.expressEngineDataRestoreImage.repository``: The image repository for the express-engine-data-restore
   image
+* ``global.eventEmitterImage.repository``: The image repository for the event-emitter image
 * ``global.nodeSelector``: The node selector to run the geo-addressing solutions on nodes of the cluster. Should be an
   amd64 based Node group.
 * ``geo-addressing.addressing-express.expressEngineDataRestore.nodeSelector``: The node selector to run the
