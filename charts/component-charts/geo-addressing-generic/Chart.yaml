@@ -3,38 +3,38 @@ name: geo-addressing
 description: A Helm chart for Geo Addressing service
 
 type: application
-version: 3.0.1
+version: 4.0.0
 appVersion: "1.16.0"
 dependencies:
   - name: addressing-hook
     repository: file://charts/addressing-hook
-    version: "3.0.1"
+    version: "4.0.0"
     condition: addressing-hook.enabled
   - name: addressing-svc
     repository: file://charts/addressing-svc
-    version: "3.0.1"
+    version: "4.0.0"
     condition: addressing-svc.enabled
   - name: autocomplete-svc
     repository: file://charts/autocomplete-svc
-    version: "3.0.1"
+    version: "4.0.0"
     condition: autocomplete-svc.enabled
   - name: lookup-svc
     repository: file://charts/lookup-svc
-    version: "3.0.1"
+    version: "4.0.0"
     condition: lookup-svc.enabled
   - name: reverse-svc
     repository: file://charts/reverse-svc
-    version: "3.0.1"
+    version: "4.0.0"
     condition: reverse-svc.enabled
   - name: addressing-express
     repository: file://charts/addressing-express
-    version: "3.0.1"
+    version: "4.0.0"
     condition: addressing-express.enabled
   - name: event-emitter
     repository: file://charts/event-emitter
-    version: "3.0.1"
+    version: "4.0.0"
     condition: event-emitter.enabled
   - name: proximity-svc
     repository: file://charts/proximity-svc
-    version: "3.0.1"
+    version: "4.0.0"
     condition: proximity-svc.enabled

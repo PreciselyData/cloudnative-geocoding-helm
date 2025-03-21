@@ -24,7 +24,7 @@ Follow the below steps to create and push the docker image to ECR:
 
 ```shell
 cd ./charts/component-charts/reference-data-setup-generic/image
-docker build . -t reference-data-extractor:3.0.1
+docker build . -t reference-data-extractor:4.0.0
 ```
 
 ##### For AWS EKS:
@@ -34,9 +34,9 @@ aws ecr get-login-password --region us-east-1 | docker login --username AWS --pa
 
 aws ecr create-repository --repository-name reference-data-extractor --image-scanning-configuration scanOnPush=true --region [AWS-REGION]
 
-docker tag reference-data-extractor:3.0.1 [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:3.0.1
+docker tag reference-data-extractor:4.0.0 [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:4.0.0
 
-docker push [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:3.0.1
+docker push [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:4.0.0
 ```
 
 ##### For Microsoft AKS:
@@ -45,9 +45,9 @@ docker push [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-e
 az login
 az acr login --name <registry-name> --subscription <subscription-id>
 
-docker tag reference-data-extractor:3.0.1 <your-container-registry-name>.azurecr.io/reference-data-extractor:3.0.1
+docker tag reference-data-extractor:4.0.0 <your-container-registry-name>.azurecr.io/reference-data-extractor:4.0.0
 
-docker push <your-container-registry-name>.azurecr.io/reference-data-extractor:3.0.1
+docker push <your-container-registry-name>.azurecr.io/reference-data-extractor:4.0.0
 ```
 
 ##### For Google's GKE:
@@ -103,7 +103,7 @@ provided by this chart:
 | Parameter          | Description                                              | Default                    |
 |--------------------|----------------------------------------------------------|----------------------------|
 | `image.repository` | the reference-data-extractor container image repository  | `reference-data-extractor` |
-| `image.tag`        | the reference-data-extractor container image version tag | `3.0.1`                    |
+| `image.tag`        | the reference-data-extractor container image version tag | `4.0.0`                    |
 
 <hr>
 </details>
