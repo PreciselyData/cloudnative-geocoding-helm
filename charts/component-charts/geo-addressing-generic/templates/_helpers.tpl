@@ -98,6 +98,23 @@ Gets the global config from the provided country
 {{- end }}
 {{- end }}
 
+{{/*
+Gets the global config from the provided dataset
+*/}}
+{{- define "proximity-svc.global" -}}
+{{- $dictionary := index . 0 -}}
+{{- $dataset := index . 1 -}}
+{{- $config := index . 2 -}}
+{{- if hasKey (get $dictionary "datasetConfigurations") $dataset }}
+{{- if hasKey (get (get $dictionary "datasetConfigurations") $dataset) $config }}
+{{- (get (get (get $dictionary "datasetConfigurations") $dataset) $config) | toYaml }}
+{{- else}}
+{{- (get (get $dictionary "global") $config) | toYaml }}
+{{- end }}
+{{- else}}
+{{- (get (get $dictionary "global") $config) | toYaml }}
+{{- end }}
+{{- end }}
 
 {{/*
 Addressing data config map name
@@ -108,6 +125,13 @@ Addressing data config map name
 {{- else }}
 {{- printf "%s" "addressing-data-mnt-config" }}
 {{- end }}
+{{- end }}
+
+{{/*
+Addressing data manual config map name
+*/}}
+{{- define "addressing-data-mnl-config.name" -}}
+{{- printf "%s-%s" .Values.global.manualDataConfig.nameOverride .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{- define "addressing-svc.Url" -}}
