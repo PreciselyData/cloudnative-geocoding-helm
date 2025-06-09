@@ -1,0 +1,8 @@
+{{- if .Values.enabled }}
+apiVersion: v1
+kind: ConfigMap
+data:
+  {{- .Values.datasetConfig.configMapData | toYaml | nindent 2 }}
+metadata:
+  name: {{ printf "%s-%s" .Values.datasetConfig.nameOverride .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- end }}

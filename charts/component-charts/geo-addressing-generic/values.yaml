@@ -83,7 +83,6 @@ global:
       reverse.usa.vintage: /mnt/data/geoaddressing-data/verify-geocode/usa/202312131538
       lookup.usa.vintage: /mnt/data/geoaddressing-data/lookup/usa/202312131538
       autocomplete.usa.vintage: /mnt/data/geoaddressing-data/autocomplete/usa/202312131538
-      proximity.usa.vintage: /mnt/data/geoaddressing-data/proximity/dataset_name
 
   addressingHook:
     ## Create storage class as part of chart
@@ -919,6 +918,12 @@ event-emitter:
 proximity-svc:
   ## config for enabling or disabling `proximity search` capabilities.
   enabled: false
+  
+  datasetConfig:
+    nameOverride: proximity-svc-data-config
+    configMapData:
+      proximity.sample-dataset.vintage: /mnt/data/geoaddressing-data/proximity/sample-dataset
+
   ## number of replicas for proximity service pods.
   replicaCount: 1
   imagePullSecrets: [ ]

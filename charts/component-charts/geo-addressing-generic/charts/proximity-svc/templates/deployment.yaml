@@ -80,7 +80,7 @@ spec:
             - name: DATA_PATH
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "addressing-data-config.name" $top }}
+                  name: {{ printf "%s-%s" $top.Values.datasetConfig.nameOverride $top.Release.Name | trunc 63 | trimSuffix "-" }}
                   key: {{ (printf "proximity.%s.vintage" .) }}
             - name: GEOCODE_VERIFY_ENABLED
               value: "false"
@@ -104,7 +104,7 @@ spec:
             - name: AUTH_ENABLED
               value: "false"
       nodeSelector:
-        {{- include "common-svc.global" (list $top.Values . "nodeSelector") | nindent 8 }}
+        {{- include "proximity-svc.global" (list $top.Values . "nodeSelector") | nindent 8 }}
       {{- with $top.Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
