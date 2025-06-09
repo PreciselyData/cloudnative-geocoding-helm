@@ -16,7 +16,7 @@ spec:
     storage: 100Gi
   accessModes:
     - ReadWriteMany
-  persistentVolumeReclaimPolicy: Delete  # if set as "Delete" file share would be removed in pvc deletion
+  persistentVolumeReclaimPolicy: Retain  # if set as "Delete" file share would be removed in pvc deletion
   volumeMode: Filesystem
   nfs:
     path: {{ .Values.global.nfs.path }}

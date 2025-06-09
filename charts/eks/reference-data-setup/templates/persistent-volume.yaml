@@ -29,7 +29,7 @@ spec:
   volumeMode: Filesystem
   accessModes:
     - ReadWriteMany
-  persistentVolumeReclaimPolicy: Delete
+  persistentVolumeReclaimPolicy: Retain
   storageClassName: {{include "addressing-ref-storage-class.name" .}}
   mountOptions:
     - tls
