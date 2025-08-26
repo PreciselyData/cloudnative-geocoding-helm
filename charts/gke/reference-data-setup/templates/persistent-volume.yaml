@@ -15,7 +15,7 @@ spec:
     storage: 100Gi
   accessModes:
     - ReadWriteMany
-  persistentVolumeReclaimPolicy: Retain  # if set as "Delete" file share would be removed in pvc deletion
+  persistentVolumeReclaimPolicy: Delete  # if set as "Delete" file share would be removed in pvc deletion
   volumeMode: Filesystem
   nfs:
     path: {{ .Values.global.nfs.path }}
@@ -27,7 +27,7 @@ metadata:
   name: {{include "addressing-ref-pvc.name" .}}
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-weight": "2"
+    "helm.sh/hook-weight": "3"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
     "helm.sh/resource-policy": delete
   labels:
