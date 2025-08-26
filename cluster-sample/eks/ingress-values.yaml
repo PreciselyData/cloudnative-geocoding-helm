@@ -27,5 +27,5 @@ controller:
       prometheus.io/port: "10254"
   config:
     use-forwarded-headers: "true"
-    proxy-buffer-size: "128k"
-    proxy-body-size: "10m"
+#    proxy-buffer-size: "128k"
+#    proxy-body-size: "10m"
