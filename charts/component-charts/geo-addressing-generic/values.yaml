@@ -25,6 +25,20 @@ global:
     - nzl
     - can
 
+##
+## This parameter is helpful if you want to set up region-specific deployments.
+## For example, if you want to set up deployments for custom region and provide countries in that region, you can edit the following specified JSON:
+## Make sure to add the custom regions in the countries as well.
+## e.g. --set "global.countries={usa,custom}"
+##
+#  customRegions: |
+#    {
+#      "custom": ["aus","can"]
+#    }
+  customRegions: |
+    {
+    }
+
   ## Configurations for the addressing-service container image.
   ##
   ## To download container images, please visit the official 'Precisely Data Experience' website:
@@ -32,7 +46,7 @@ global:
   addressingImage:
     repository: addressing-service
     pullPolicy: Always
-    tag: 3.0.1
+    tag: 3.0.2
 
   ## Configurations for the express-engine container image.
   ##
@@ -40,7 +54,7 @@ global:
   ## https://data.precisely.com/products
   expressEngineImage:
     repository: express-engine
-    tag: 3.0.1
+    tag: 3.0.2
     pullPolicy: Always
 
   ## Configurations for the express-engine-data-restore container image.
@@ -51,7 +65,7 @@ global:
     repository: express-engine-data-restore
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
-    tag: 3.0.1
+    tag: 3.0.2
 
   ##
   ## To download container images, please visit the official 'Precisely Data Experience' website:
@@ -59,7 +73,7 @@ global:
   eventEmitterImage:
     repository: event-emitter
     pullPolicy: Always
-    tag: 3.0.1
+    tag: 3.0.2
 
   ## Configuration for manually configuring the data mount path for addressing-service
   ## When doing the manual configuration for data mount path, disable the data-vintage
@@ -140,7 +154,7 @@ global:
   ## For more information, refer to https://opentelemetry.io/docs/concepts/sdk-configuration/otlp-exporter-configuration/
   ## For information related to Jaeger installation, refer to https://github.com/jaegertracing/helm-charts/tree/main/charts/jaeger
   ## Example endpoind http://jaeger-collector.default.svc.cluster.local:4317
-  otelExporterEndpoint: ""
+  otelExporterEndpoint: ~
 
 enabled: ~
 ## The number of regional-addressing pods to run
@@ -153,7 +167,7 @@ replicaCount: 1
 image:
   repository: regional-addressing-service
   pullPolicy: Always
-  tag: 3.0.1
+  tag: 3.0.2
 imagePullSecrets: [ ]
 
 ## This will override the name of the installed regional-addressing deployment.

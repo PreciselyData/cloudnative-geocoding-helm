@@ -92,7 +92,7 @@ and push it to your Elastic Container Repositories.
 (Note: This script requires python, docker and awscli to be installed in your system)
 
 ```shell
-cd ./scripts/images-to-ecr-uploader
+cd ./scripts/eks/images-to-ecr-uploader
 pip install -r requirements.txt
 python upload_ecr.py --pdx-api-key [pdx-api-key] --pdx-api-secret [pdx-secret] --aws-access-key [aws-access-key] --aws-secret [aws-secret] --aws-region [aws-region]
 ```
@@ -122,7 +122,7 @@ cluster by creating mount targets.
 - If you already have EFS, but you want to create mount targets so that EFS can be accessed from the EKS cluster, run
   the following command:
   ```shell
-  cd ../scripts/eks/efs-creator
+  cd ./scripts/eks/efs-creator
   pip install -r requirements.txt
   python ./create_efs.py --cluster-name [eks-cluster-name] --existing true --aws-access-key [aws-access-key] --aws-secret [aws-secret-key] --aws-region [aws-region] --file-system-id [file-system-id]
   ```

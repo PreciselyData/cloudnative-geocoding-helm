@@ -65,7 +65,7 @@ provided by this chart:
 | Parameter          | Description                                         | Default                       |
 |--------------------|-----------------------------------------------------|-------------------------------|
 | `image.repository` | the regional-addressing container image repository  | `regional-addressing-service` |
-| `image.tag`        | the regional-addressing container image version tag | `3.0.1`                       |
+| `image.tag`        | the regional-addressing container image version tag | `3.0.2`                       |
 
 <hr>
 </details>
@@ -88,15 +88,16 @@ provided by this chart:
 | Parameter                                         | Description                                                                                                                                                                                                                        | Default                        |
 |---------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------|
 | `global.countries`                                | this parameter enables the provided country for an addressing functionality. A comma separated value can be provided to enable a particular set of countries from: `usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world` | `{usa,gbr,aus,nzl,can}`        |
+| `global.customRegions`                            | this parameter enables custom regions for addressing functionality. A JSON of region with comma separated countries as values can be provided to enable a particular region: `{"apac": ["ind", "pak", "china"]}`                   | `{}`                           |
 | `global.manualDataConfig.*`                       | the config to enable the manual configuration for country-specific vintage data config-map. `addressing-hook.enabled` should be set to false, else `global.manualDataConfig` will be given higher precedence.                      | `false`                        |
 | `global.addressingImage.repository`               | the addressing-service container image repository                                                                                                                                                                                  | `addressing-service`           |
-| `global.addressingImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `3.0.1`                        |
+| `global.addressingImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `3.0.2`                        |
 | `global.expressEngineImage.repository`            | the express-engine container image repository                                                                                                                                                                                      | `express-engine`               |
-| `global.expressEngineImage.tag`                   | the express-engine container image version tag                                                                                                                                                                                     | `3.0.1`                        |
+| `global.expressEngineImage.tag`                   | the express-engine container image version tag                                                                                                                                                                                     | `3.0.2`                        |
 | `global.expressEngineDataRestoreImage.repository` | the express-engine-data-restore container image repository                                                                                                                                                                         | `express-engine-data-restore`  |
-| `global.expressEngineDataRestoreImage.tag`        | the express-engine-data-restore container image version tag                                                                                                                                                                        | `3.0.1`                        |
+| `global.expressEngineDataRestoreImage.tag`        | the express-engine-data-restore container image version tag                                                                                                                                                                        | `3.0.2`                        |
 | `global.eventEmitterImage.repository`             | the event-emitter container image repository                                                                                                                                                                                       | `event-emitter`                |
-| `global.eventEmitterImage.tag`                    | the event-emitter container image version tag                                                                                                                                                                                      | `3.0.1`                        |
+| `global.eventEmitterImage.tag`                    | the event-emitter container image version tag                                                                                                                                                                                      | `3.0.2`                        |
 | `global.nfs.addressingBasePath`                   | the base path of the folder where verify-geocode data is present                                                                                                                                                                   | `verify-geocode`               |
 | `global.nfs.autoCompleteBasePath`                 | the base path of the folder where autocomplete data is present                                                                                                                                                                     | `autocomplete`                 |
 | `global.nfs.lookupBasePath`                       | the base path of the folder where lookup data is present                                                                                                                                                                           | `lookup`                       |
@@ -207,6 +208,7 @@ service.
 | `REVERSE_GEOCODE_BASE_URL`             | The internal url of country-based reverse-geocode service. If you prefer not to maintain separate infrastructure for the reverse-geocode service and would like all calls to be handled by the addressing service, you have the flexibility to modify this URL and point it to addressing service. | `http://reverse-<region>.{{ .Release.Namespace }}.svc.cluster.local:8080`      |
 | `OTEL_EXPORTER_OTLP_ENDPOINT`          | If tracing is enabled, this is the endpoint for tracer host.                                                                                                                                                                                                                                       | `http://jaeger-collector.default.svc.cluster.local:4317`                       |
 | `*SUPPORTED_COUNTRIES_GEOCODE`         | The countries that are supported for geocode functionality.                                                                                                                                                                                                                                        | `<referred from global.countries>`                                             |
+| `CUSTOM_REGIONS_ADDRESSING`            | The custom regions along with countries for geocode functionality.                                                                                                                                                                                                                                 | `<referred from global.customRegions>`                                         |
 | `*SUPPORTED_REGIONS_GEOCODE`           | The regions that are supported for geocode functionality.                                                                                                                                                                                                                                          |                                                                                |
 | `*SUPPORTED_COUNTRIES_VERIFY`          | The countries that are supported for verify.                                                                                                                                                                                                                                                       | `<referred from global.countries>`                                             |
 | `*SUPPORTED_REGIONS_VERIFY`            | The regions that are supported for verify.                                                                                                                                                                                                                                                         |                                                                                |
@@ -305,7 +307,7 @@ repository for hitting the APIs.
 
 Few APIs and sample requests are provided below:
 
-### `/li/v1/oas/geocode`:
+### `/v1/geocode`:
 
 API to geocode the addresses
 
@@ -313,7 +315,7 @@ Sample Request:
 
 ```curl
 curl -X 'POST' \
-  'https://[EXTERNAL-URL]/li/v1/oas/geocode' \
+  'https://[EXTERNAL-URL]/v1/geocode' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -336,7 +338,7 @@ curl -X 'POST' \
 
 ```curl
 curl -X 'POST' \
-  'https://[EXTERNAL-URL]/li/v1/oas/geocode' \
+  'https://[EXTERNAL-URL]/v1/geocode' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -356,7 +358,7 @@ curl -X 'POST' \
 }'
 ```
 
-### `/li/v1/oas/verify`:
+### `/v1/verify`:
 
 API to verify the addresses
 
@@ -364,7 +366,7 @@ Sample Request:
 
 ```curl
 curl -X 'POST' \
-  'https://[EXTERNAL-URL]/li/v1/oas/verify' \
+  'https://[EXTERNAL-URL]/v1/verify' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -385,7 +387,7 @@ curl -X 'POST' \
 }'
 ```
 
-### `/li/v1/oas/reverse-geocode`:
+### `/v1/reverse-geocode`:
 
 API to reverse-geocode the addresses
 
@@ -393,7 +395,7 @@ Sample Request:
 
 ```curl
 curl -X 'POST' \
-  'https://[EXTERNAL-URL]/li/v1/oas/reverse-geocode' \
+  'https://[EXTERNAL-URL]/v1/reverse-geocode' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -414,7 +416,7 @@ curl -X 'POST' \
 }'
 ```
 
-### `/li/v1/oas/lookup`:
+### `/v1/lookup`:
 
 API to `lookup` the addresses
 
@@ -422,7 +424,7 @@ Sample Request:
 
 ```curl
 curl -X 'POST' \
-  'https://[EXTERNAL-URL]/li/v1/oas/lookup' \
+  'https://[EXTERNAL-URL]/v1/lookup' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -451,14 +453,14 @@ curl -X 'POST' \
 }'
 ```
 
-### `/li/v1/oas/autocomplete`:
+### `/v1/autocomplete`:
 
 API to autocomplete the addresses
 
 Sample Request:
 
 ```curl
-curl --location 'https://[EXTERNAL-URL]/li/v1/oas/autocomplete' --header 'Content-Type: application/json' --data '{
+curl --location 'https://[EXTERNAL-URL]/v1/autocomplete' --header 'Content-Type: application/json' --data '{
   "preferences": {
         "maxResults": 2,
         "returnAllInfo": true,
@@ -482,7 +484,7 @@ API to autocomplete the addresses
 Sample Request:
 
 ```curl
-curl --location 'http://[EXTERNAL-URL]/v2/autocomplete' \
+curl --location 'http://[EXTERNAL-URL]/v1/express-autocomplete' \
 --header 'Content-Type: application/json' \
 --data '{
     "preferences": {
