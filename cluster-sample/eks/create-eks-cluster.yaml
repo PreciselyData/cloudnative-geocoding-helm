@@ -29,15 +29,15 @@ managedNodeGroups:
       withAddonPolicies:
         externalDNS: true
         certManager: true
-        imageBuilder: true
+        imageBuilder: false
         ebs: true
-        fsx: true
+        fsx: false
         efs: true
-        appMesh: true
-        xRay: true
+        appMesh: false
+        xRay: false
         autoScaler: true
-        albIngress: true
-        cloudWatch: true
+        albIngress: false
+        cloudWatch: false
     minSize: 1
     maxSize: 20
     volumeSize: 300
@@ -60,15 +60,15 @@ managedNodeGroups:
       withAddonPolicies:
         externalDNS: true
         certManager: true
-        imageBuilder: true
+        imageBuilder: false
         ebs: true
-        fsx: true
+        fsx: false
         efs: true
-        appMesh: true
-        xRay: true
+        appMesh: false
+        xRay: false
         autoScaler: true
-        albIngress: true
-        cloudWatch: true
+        albIngress: false
+        cloudWatch: false
     minSize: 3
     maxSize: 20
     volumeSize: 100
@@ -91,15 +91,15 @@ managedNodeGroups:
       withAddonPolicies:
         externalDNS: true
         certManager: true
-        imageBuilder: true
+        imageBuilder: false
         ebs: true
-        fsx: true
+        fsx: false
         efs: true
-        appMesh: true
-        xRay: true
+        appMesh: false
+        xRay: false
         autoScaler: true
-        albIngress: true
-        cloudWatch: true
+        albIngress: false
+        cloudWatch: false
     minSize: 3
     maxSize: 20
     volumeSize: 100
@@ -122,15 +122,15 @@ managedNodeGroups:
       withAddonPolicies:
         externalDNS: true
         certManager: true
-        imageBuilder: true
+        imageBuilder: false
         ebs: true
-        fsx: true
+        fsx: false
         efs: true
-        appMesh: true
-        xRay: true
+        appMesh: false
+        xRay: false
         autoScaler: true
-        albIngress: true
-        cloudWatch: true
+        albIngress: false
+        cloudWatch: false
     desiredCapacity: 1
     labels: { node-app: geo-addressing-ingress }
     volumeSize: 50

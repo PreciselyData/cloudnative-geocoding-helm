@@ -116,6 +116,11 @@ spec:
               value: "true"
             - name: COUNTRY_FINDER_SINGLE_LINE_ENABLED
               value: "false"
+            {{- $custom := .Values.global.customRegions | fromJson }}
+            {{- if $custom }}
+            - name: CUSTOM_REGIONS_ADDRESSING
+              value: {{ $custom | toJson | quote }}
+            {{- end }}
             {{- if .Values.global.otelExporterEndpoint }}
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: {{ .Values.global.otelExporterEndpoint }}
