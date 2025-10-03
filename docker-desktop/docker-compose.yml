@@ -25,10 +25,12 @@ services:
       - SUPPORTED_COUNTRIES_REVERSE_GEOCODE=usa,gbr,deu,aus,fra,can,mex,bra,arg,rus,ind,sgp,nzl,jpn,world
       - AUTH_ENABLED=false
       - IS_HELM_SOLUTION=true
-      - OTEL_TRACES_EXPORTER=none
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317  # use OTLP gRPC port
     networks:
       - preciselyaddressing
     restart: always
+
   precisely-addressing-svc:
     image: ${_ADDRESSING_IMAGE:-addressing-service:latest}
     platform: linux/amd64
@@ -45,11 +47,24 @@ services:
       - LOOKUP_ENABLED=${_LOOKUP_ENABLED:-false}
       - REVERSEGEOCODE_ENABLED=${_REVERSEGEOCODE_ENABLED:-false}
       - AUTOCOMPLETE_ENABLED=${_AUTOCOMPLETE_ENABLED:-false}
-      - OTEL_TRACES_EXPORTER=none
       - AUTH_ENABLED=false
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317  # use OTLP gRPC port
     networks:
       - preciselyaddressing
     restart: always
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    ports:
+      - "16686:16686"   # Jaeger UI
+      - "4317:4317"     # OTLP gRPC
+      - "4318:4318"     # OTLP HTTP
+    networks:
+      - preciselyaddressing
+    restart: unless-stopped
+
 networks:
   preciselyaddressing:
     name: geo-addressing
