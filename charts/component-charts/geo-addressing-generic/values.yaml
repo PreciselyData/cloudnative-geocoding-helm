@@ -35,7 +35,9 @@ global:
 #    {
 #      "custom": ["aus","can"]
 #    }
-  customRegions: ~
+  customRegions: |
+    {
+    }
 
   ## Configurations for the addressing-service container image.
   ##
