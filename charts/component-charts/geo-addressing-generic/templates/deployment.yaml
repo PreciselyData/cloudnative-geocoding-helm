@@ -100,10 +100,10 @@ spec:
             {{- if (index .Values "reverse-svc").enabled }}
             - name: REVERSE_GEOCODE_BASE_URL
               value: http://{{ include "addressing-svc.Url" (list . "-<region>" "reverse-svc")  }}.{{ .Release.Namespace }}.svc.cluster.local:8080
-            {{- $custom := .Values.global.customRegions | fromJson }}
-            {{- if $custom }}
+            {{- $customReverse := .Values.global.customRegions | fromJson }}
+            {{- if $customReverse }}
             - name: CUSTOM_REGIONS_REVERSE
-              value: {{ $custom | toJson | quote }}
+              value: {{ $customReverse | toJson | quote }}
             {{- end }}
             {{- end}}
             {{- end}}
