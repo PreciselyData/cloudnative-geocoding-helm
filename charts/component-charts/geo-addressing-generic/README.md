@@ -47,9 +47,104 @@ The geo-addressing helm chart compromises of following components:
             - express-engine-master: Many-to-One POD to Node scheduling
     - event-emitter:
         - If enabled, it will deploy event-emitter service.
-        - This service collects events and generates reports in your Precisely DIS account. (Follow <a href="https://help.precisely.com/r/Precisely-Data-Integrity-Suite/Latest/en-US/Data-Integrity-Suite/Account/Usage">this link</a> for more information.)
+        - This service collects events and generates reports in your Precisely DIS account. (
+          Follow <a href="https://help.precisely.com/r/Precisely-Data-Integrity-Suite/Latest/en-US/Data-Integrity-Suite/Account/Usage">
+          this link</a> for more information.)
 
 Feel free to modify these helm charts and update it based on your needs.
+
+## Custom Regions for Geo Addressing Helm Charts
+
+The geo-addressing helm chart provides flexibility to deploy custom regions for addressing functionality.
+
+You can create the custom regions by providing the `global.customRegions` parameter in the
+[values.yaml](values.yaml) file.
+
+Follow the below steps to create a custom region:
+
+### Deploy Reference Data according to custom regions
+
+To create a custom region, you first need to deploy the reference data according to your custom region.
+e.g. If you want to create a custom region named `apac` with countries `ind`, `pak`, and `china` 
+along with separate deployment for `usa`, you need to deploy the relevant reference data
+for these countries in the NFS path with the region's folder name as follows:
+
+NOTE: `apac` is just region created for countries `ind`, `pak`, and `china` for this example only, 
+you can add other custom regions accordingly. Also, create custom regions according to the functionality.
+e.g. If lookup functionality is not required, you can skip creating custom region for lookup.
+
+
+```json
+{
+  "verify-geocode": {
+    "usa": [
+      "Geocoding MLD US#United States#All USA#Spectrum Platform Data",
+      "Geocoding NT Street US#United States#All USA#Spectrum Platform Data"
+    ],
+    "apac": [
+      "Geocoding World Places Geocoder#Global#All GLB#Geocoding"
+    ]
+  },
+  "autocomplete": {
+    "usa": [
+      "Predictive Addressing Points#United States#All USA#Interactive"
+    ],
+    "apac": [
+      "Address Autocomplete Data Option 3#Americas#ALL AME#INTERACTIVE"
+    ]
+  },
+  "lookup": {
+    "usa": [
+      "Geocoding MLD US#United States#All USA#Spectrum Platform Data",
+      "Geocoding NT Street US#United States#All USA#Spectrum Platform Data",
+      "Geocoding Reverse PRECISELYID#United States#All USA#Spectrum Platform Data"
+    ],
+    "apac": [
+      "Geocoding World Places Geocoder#Global#All GLB#Geocoding"
+    ]
+  }
+}
+```
+By this way, you can upload reference data of custom regions with multiple countries for different functionalities.
+
+
+### Update custom region parameters in values.yaml
+
+Once the reference data is deployed according to the custom regions, 
+you need to provide the custom region parameters based on the functionality enabled.
+and update the [values.yaml](values.yaml) file as follows:
+```yaml
+global:
+  countries: 
+    - usa
+    - apac  # add your custom region only here also
+  
+  # provide the mapping of countries for your region for verify-geocode and reverse-geocode functionality
+  customRegions: |
+    {
+      "apac": ["ind", "pak", "china"]
+    }
+    
+  # provide the mapping of countries for your region for autocomplete functionality
+  customRegionsAutocomplete: |
+    {
+      "apac": ["ind", "pak", "china"]
+    }
+
+  # provide the mapping of countries for your region for lookup functionality
+  customRegionsLookup: |
+    {
+      "apac": ["ind", "pak", "china"]
+    }
+```
+**NOTE: Add your custom region in the countries parameter also.**
+
+Once you deploy the helm chart with the above configuration, it will create a service having custom region `apac`.
+Also, this service will be responsible for handling requests for provided countries `ind`, `pak`, and `china` only.
+
+Note: Avoid deploying the same country both as part of a custom region and as a separate deployment. 
+If a country is duplicated in this way, it is not guaranteed which service will process requests for that country. 
+For example, do **NOT** include `usa` in the `apac` custom region while also deploying it separately.
 
 ## Helm Values
 

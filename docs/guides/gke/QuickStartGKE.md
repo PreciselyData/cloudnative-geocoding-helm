@@ -241,25 +241,36 @@ To install/upgrade the geo-addressing helm chart, use the following command:
 
 ```shell
 helm upgrade --install geo-addressing ./charts/gke/geo-addressing \
---dependency-update \
 --set "global.nfs.path=/<filestore-instance-name-with-underscore>" \
 --set "global.nfs.server=<filestoreServerIP>" \
+--set "geo-addressing.ingress.enabled=true" \
 --set "geo-addressing.ingress.hosts[0].host=[ingress-host-name]" \ 
 --set "geo-addressing.ingress.hosts[0].paths[0].path=/precisely/addressing" \
 --set "geo-addressing.ingress.hosts[0].paths[0].pathType=ImplementationSpecific" \
 --set "global.nodeSelector.node-app=<node-selector-label>" \
 --set "geo-addressing.image.repository=[e.g. us.gcr.io/<project-id>/regional-addressing-service]" \
+--set "geo-addressing.image.tag=[IMAGE-TAG defaults to chart version]" \
 --set "global.addressingImage.repository=[e.g. us.gcr.io/<project-id>/addressing-service]" \
---set "global.expressEngineImage.repository=[e.g. us.gcr.io/<project-id>/express-engine]" \
---set "global.expressEngineDataRestoreImage.repository=[e.g. us.gcr.io/<project-id>/express-engine-data-restore]" \
---set "geo-addressing.addressing-express.expressenginedata.nodeSelector.node-app=<node-selector-label-arm64-node>" \
---set "geo-addressing.addressing-express.expressenginemaster.nodeSelector.node-app=<node-selector-label-arm64-node>" \ 
---set "geo-addressing.addressing-express.expressEngineDataRestore.nodeSelector.node-app=<node-selector-label-arm64-node>" \
---set "global.countries={usa,can,aus,nzl}" \
---namespace geo-addressing --create-namespace
+--set "global.addressingImage.tag=[IMAGE-TAG defaults to chart version]" \
+--set "geo-addressing.addressing-express.enabled=false" \
+--set "global.countries={usa,can,apac}" \
+--dependency-update --namespace geo-addressing --create-namespace
 ```
 
 > Note: addressing-express service is needed for Geocoding without country.
+>
+> If you want to enable the express service, set the following parameter in helm command:
+>
+> ```shell
+> --set "geo-addressing.addressing-express.enabled=true"
+> --set "global.expressEngineImage.repository=[e.g. us.gcr.io/<project-id>/express-engine]"
+> --set "global.expressEngineImage.tag=[IMAGE-TAG defaults to chart version]"
+> --set "global.expressEngineDataRestoreImage.repository=[e.g. us.gcr.io/<project-id>/express-engine-data-restore]"
+> --set "global.expressEngineDataRestoreImage.tag=[IMAGE-TAG defaults to chart version]"
+> --set "geo-addressing.addressing-express.expressEngineData.nodeSelector.node-app=[node-selector-label-arm64-node]"
+> --set "geo-addressing.addressing-express.expressEngineMaster.nodeSelector.node-app=[node-selector-label-arm64-node]"
+> --set "geo-addressing.addressing-express.expressEngineDataRestore.nodeSelector.node-app=[node-selector-label-arm64-node]"
+> ```
 
 By default, only verify/geocode functionality is enabled.
 

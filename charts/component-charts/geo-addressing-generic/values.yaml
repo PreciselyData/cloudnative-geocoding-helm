@@ -25,17 +25,46 @@ global:
     - nzl
     - can
 
-##
-## This parameter is helpful if you want to set up region-specific deployments.
-## For example, if you want to set up deployments for custom region and provide countries in that region, you can edit the following specified JSON:
-## Make sure to add the custom regions in the countries as well.
-## e.g. --set "global.countries={usa,custom}"
-##
-#  customRegions: |
-#    {
-#      "custom": ["aus","can"]
-#    }
+  ##
+  ## This parameter is helpful if you want to set up region-specific deployments for verify, geocode and reverse-geocode operations.
+  ## For example, if you want to set up deployments for custom region and provide countries in that region, you can edit the following specified JSON:
+  ## Make sure to add the custom regions in the countries as well.
+  ## e.g. --set "global.countries={usa,custom}"
+  ##
+  #  customRegions: |
+  #    {
+  #      "custom": ["aus","can"]
+  #    }
   customRegions: |
+    {
+    }
+
+  ##
+  ## This parameter is helpful if you want to set up region-specific deployments for lookup.
+  ## For example, if you want to set up deployments for custom region and provide countries in that region, you can edit the following specified JSON:
+  ## Make sure to add the custom regions in the countries as well.
+  ## e.g. --set "global.countries={usa,custom}"
+  ##
+  #  customRegions: |
+  #    {
+  #      "custom": ["aus","can"]
+  #    }
+  customRegionsLookup: |
+    {
+    }
+  
+
+  ##
+  ## This parameter is helpful if you want to set up region-specific deployments for autocomplete.
+  ## For example, if you want to set up deployments for custom region and provide countries in that region, you can edit the following specified JSON:
+  ## Make sure to add the custom regions in the countries as well.
+  ## e.g. --set "global.countries={usa,custom}"
+  ##
+  #  customRegions: |
+  #    {
+  #      "custom": ["aus","can"]
+  #    }
+  customRegionsAutocomplete: |
     {
     }
 
