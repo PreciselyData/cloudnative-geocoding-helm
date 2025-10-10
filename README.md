@@ -131,6 +131,7 @@ Deploy the geo-addressing application using helm. Follow the guides to get the s
 ## Guides
 
 - [Reference Data Installation Helm Chart](charts/component-charts/reference-data-setup-generic/README.md)
+- [Deploying Custom Regions](./charts/component-charts/geo-addressing-generic/README.md#custom-regions-for-geo-addressing-helm-charts)
 - [Quickstart Guide For AWS EKS](docs/guides/eks/QuickStartEKS.md)
 - [Quickstart Guide For Microsoft AKS](docs/guides/aks/QuickStartAKS.md)
 - [Quickstart Guide For Google GKE](docs/guides/gke/QuickStartGKE.md)

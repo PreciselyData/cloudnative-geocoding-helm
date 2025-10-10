@@ -80,16 +80,31 @@ spec:
             {{- if (index .Values "lookup-svc").enabled }}
             - name: LOOKUP_BASE_URL
               value: http://{{ include "addressing-svc.Url" (list . "-<region>" "lookup-svc")  }}.{{ .Release.Namespace }}.svc.cluster.local:8080
+            {{- $customLookup := .Values.global.customRegionsLookup | fromJson }}
+            {{- if $customLookup }}
+            - name: CUSTOM_REGIONS_LOOKUP
+              value: {{ $customLookup | toJson | quote }}
+            {{- end }}
             {{- end}}
             {{- if (index .Values "autocomplete-svc").enabled }}
             - name: AUTOCOMPLETE_BASE_URL
               value: http://{{ include "addressing-svc.Url" (list . "-<region>" "autocomplete-svc")  }}.{{ .Release.Namespace }}.svc.cluster.local:8080
+            {{- $customAutocomplete := .Values.global.customRegionsAutocomplete | fromJson }}
+            {{- if $customAutocomplete }}
+            - name: CUSTOM_REGIONS_AUTOCOMPLETE
+              value: {{ $customAutocomplete | toJson | quote }}
+            {{- end }}
             {{- end}}
             - name: ADDRESSING_EXPRESS_BASE_URL
               value: http://{{ include "addressing-svc.Url" (list . "-express" "addressing-express")  }}.{{ .Release.Namespace }}.svc.cluster.local:8080
             {{- if (index .Values "reverse-svc").enabled }}
             - name: REVERSE_GEOCODE_BASE_URL
               value: http://{{ include "addressing-svc.Url" (list . "-<region>" "reverse-svc")  }}.{{ .Release.Namespace }}.svc.cluster.local:8080
+            {{- $customReverse := .Values.global.customRegions | fromJson }}
+            {{- if $customReverse }}
+            - name: CUSTOM_REGIONS_REVERSE
+              value: {{ $customReverse | toJson | quote }}
+            {{- end }}
             {{- end}}
             {{- end}}
             - name: SUPPORTED_COUNTRIES_GEOCODE

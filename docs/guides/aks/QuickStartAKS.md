@@ -230,27 +230,39 @@ To install/upgrade the geo-addressing helm chart, use the following command:
 
 ```shell
 helm upgrade --install geo-addressing ./charts/aks/geo-addressing \
---dependency-update \
 --set "global.nfs.shareName=[shareName]" \
 --set "global.nfs.storageAccount=[storageAccount]" \
+--set "geo-addressing.ingress.enabled=true" \
 --set "geo-addressing.ingress.hosts[0].host=[ingress-host-name]" \ 
 --set "geo-addressing.ingress.hosts[0].paths[0].path=/precisely/addressing" \
 --set "geo-addressing.ingress.hosts[0].paths[0].pathType=ImplementationSpecific" \
 --set "global.nodeSelector.node-app=[node-selector-label]" \
 --set "geo-addressing.image.repository=[azure-acr-name].azurecr.io/regional-addressing-service" \
+--set "geo-addressing.image.tag=[IMAGE-TAG defaults to chart version]" \
 --set "global.addressingImage.repository=[azure-acr-name].azurecr.io/addressing-service" \
---set "global.expressEngineImage.repository=[azure-acr-name].azurecr.io/express-engine" \
---set "global.expressEngineDataRestoreImage.repository=[azure-acr-name].azurecr.io/express-engine-data-restore" \
---set "geo-addressing.addressing-express.expressEngineData.nodeSelector.node-app=[node-selector-label-arm64-node]" \
---set "geo-addressing.addressing-express.expressEngineMaster.nodeSelector.node-app=[node-selector-label-arm64-node]" \ 
---set "geo-addressing.addressing-express.expressEngineDataRestore.nodeSelector.node-app=[node-selector-label-arm64-node]" \
---set "global.countries={usa,can,aus,nzl}" \
---namespace geo-addressing --create-namespace
+--set "global.addressingImage.tag=[IMAGE-TAG defaults to chart version]" \
+--set "geo-addressing.addressing-express.enabled=false" \
+--set "global.countries={usa,can,apac}" \
+--dependency-update --namespace geo-addressing --create-namespace
 ```
 
 By default, only verify/geocode functionality is enabled.
 
 > Note: addressing-express service is needed for Geocoding without country.
+>
+> If you want to enable the express service, set the following parameter in helm command:
+>
+> ```shell
+> --set "geo-addressing.addressing-express.enabled=true"
+> --set "global.expressEngineImage.repository=[azure-acr-name].azurecr.io/express-engine"
+> --set "global.expressEngineImage.tag=[IMAGE-TAG defaults to chart version]"
+> --set "global.expressEngineDataRestoreImage.repository=[azure-acr-name].azurecr.io/express-engine-data-restore"
+> --set "global.expressEngineDataRestoreImage.tag=[IMAGE-TAG defaults to chart version]"
+> --set "geo-addressing.addressing-express.expressEngineData.nodeSelector.node-app=[node-selector-label-arm64-node]"
+> --set "geo-addressing.addressing-express.expressEngineMaster.nodeSelector.node-app=[node-selector-label-arm64-node]"
+> --set "geo-addressing.addressing-express.expressEngineDataRestore.nodeSelector.node-app=[node-selector-label-arm64-node]"
+> ```
+
 
 To enable other functionalities like autocomplete, lookup and
 reverse-geocode you have to set the parameters in helm command as follows.
