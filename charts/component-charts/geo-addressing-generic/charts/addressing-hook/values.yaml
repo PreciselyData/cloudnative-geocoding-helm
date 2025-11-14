@@ -7,7 +7,7 @@ dataVintage:
   image:
     repository: bitnami/kubectl
     pullPolicy: Always
-    tag: 1.25.12
+    tag: latest
     pullSecrets: [ ]
 
   configMap:
