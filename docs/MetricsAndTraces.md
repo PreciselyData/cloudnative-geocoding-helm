@@ -8,6 +8,9 @@ performance and behavior of the geo-addressing application.
 Depending on your alerting setup, you can set up alerts based on these metrics to proactively respond to the issues in
 your application.
 
+> **NOTE**: Metrics are exposed in Prometheus format at the `/prometheus` endpoint of each service.
+> You can also check the available metrics by navigating to `/metrics`.
+
 ### Exposed Metrics
 
 Following are the metrics exposed by Regional-Addressing Application:
