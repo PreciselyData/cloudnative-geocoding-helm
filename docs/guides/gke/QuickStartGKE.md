@@ -207,29 +207,22 @@ Follow the following steps to create a Filestore instance for the Geo Addressing
 
 ## Step 5: Installation of Reference Data
 
+For installing reference data, you can make use of
+[this helm chart](../../../charts/component-charts/reference-data-setup-generic/README.md) which will download and extract the SPDs in the EFS.
+
 The Geo-Addressing Application relies on reference data for performing geo-addressing operations. For more information
 related to reference data, please refer to [this link](../../ReferenceData.md).
 
-> Note: You can run the reference data helm chart after you have configured Filestore instances and linked it to the
-> cluster
-> when you need to update the deployed data, such as with a new vintage, or if you want to add
-> support for additional countries.
-
-You can make use of
-a [miscellaneous helm chart for installing reference data](../../../charts/component-charts/reference-data-setup-generic/README.md),
-please
-follow the instructions mentioned in the helm chart or run the below command for installing data in NFS or contact
-Precisely Sales Team for the reference data installation.
-
+The command used to run the reference data setup helm chart is as follows:
+<br>**NOTE: Edit the `gke-values-reference-data.yaml` file to provide the required reference data and other parameters.**
 ```shell
-helm install reference-data ./charts/gke/reference-data-setup/ \
---set "reference-data.config.pdxApiKey=<pdx-api-key>" \
---set "reference-data.config.pdxSecret=<pdx-api-secret>" \
---set "reference-data.node-selector.node-app=<node-selector-label>" \
---set "global.nfs.path=/<filestore-instance-name-with-underscore>" \
---set "global.nfs.server=<filestoreServerIP>" \
---set "reference-data.dataDownload.image.repository=[e.g. us.gcr.io/<project-id>/reference-data-extractor]" \
---dependency-update --timeout 60m
+helm upgrade --install reference-data ./charts/gke/reference-data-setup \
+  -f ./charts/gke/reference-data-setup/gke-values-reference-data.yaml \
+  --namespace geo-addressing \
+  --create-namespace \
+  --dependency-update \
+  --debug \
+  --timeout 60m
 ```
 
 ## Step 6: Installation of Geo-Addressing Helm Chart
@@ -237,25 +230,18 @@ helm install reference-data ./charts/gke/reference-data-setup/ \
 > NOTE: For every helm chart version update, make sure you run
 > the [Step 3](#step-3-download-geo-addressing-docker-images) for uploading the docker images with the newest tag.
 
-To install/upgrade the geo-addressing helm chart, use the following command:
+To install/upgrade the geo-addressing helm chart, edit the [`gke-values-geo-addressing.yaml`](../../../charts/gke/geo-addressing/gke-values-geo-addressing.yaml) file to provide the required parameters and run the following command:
 
 ```shell
 helm upgrade --install geo-addressing ./charts/gke/geo-addressing \
---set "global.nfs.path=/<filestore-instance-name-with-underscore>" \
---set "global.nfs.server=<filestoreServerIP>" \
---set "geo-addressing.ingress.enabled=true" \
---set "geo-addressing.ingress.hosts[0].host=[ingress-host-name]" \ 
---set "geo-addressing.ingress.hosts[0].paths[0].path=/precisely/addressing" \
---set "geo-addressing.ingress.hosts[0].paths[0].pathType=ImplementationSpecific" \
---set "global.nodeSelector.node-app=<node-selector-label>" \
---set "geo-addressing.image.repository=[e.g. us.gcr.io/<project-id>/regional-addressing-service]" \
---set "geo-addressing.image.tag=[IMAGE-TAG defaults to chart version]" \
---set "global.addressingImage.repository=[e.g. us.gcr.io/<project-id>/addressing-service]" \
---set "global.addressingImage.tag=[IMAGE-TAG defaults to chart version]" \
---set "geo-addressing.addressing-express.enabled=false" \
---set "global.countries={usa,can,apac}" \
---dependency-update --namespace geo-addressing --create-namespace
+  -f ./charts/gke/geo-addressing/gke-values-geo-addressing.yaml \
+  --namespace geo-addressing \
+  --create-namespace \
+  --dependency-update \
+  --debug
 ```
+
+You can also provide the parameters directly in the helm command using `--set` option.
 
 > Note: addressing-express service is needed for Geocoding without country.
 >

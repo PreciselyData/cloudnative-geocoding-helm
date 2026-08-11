@@ -60,7 +60,7 @@ expressEngineDataRestore:
     repository: express-engine-data-restore
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
-    tag: 3.0.2
+    tag: 3.1.0
   ##
   ## Do not update
   ##

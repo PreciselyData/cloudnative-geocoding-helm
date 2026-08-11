@@ -1,7 +1,9 @@
 global:
+  # AWS region where EKS cluster and backing resources are provisioned.
   awsRegion: "us-east-1"
   nfs:
-    fileSystemId: fileSystemId
+    # EFS file system ID used to persist downloaded reference data.
+    fileSystemId: "<your-nfs-file-system-id>"
     ## Create storage class as part of chart
     storageClass:
       enabled: true
@@ -9,5 +11,65 @@ global:
       name: ~
 
 reference-data:
+  dataDownload:
+    image:
+      # Reference data extractor image details.
+      repository: "<your-reference-data-extractor-image-repository>"
+      pullPolicy: Always
+      tag: "<your-reference-data-extractor-image-tag>"
+
+  nodeSelector: {}
+    # Optional: schedule data download job on dedicated nodes.
+    # node-app: geo-addressing
+
   config:
-    dataConfigMap: "{\"verify-geocode\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geo Addressing Reference Data\",\"Geocoding GNAF Address Point#Australia#All AUS#Geo Addressing Reference Data\"]},\"lookup\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\",\"Geocoding Reverse PRECISELYID#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geo Addressing Reference Data\",\"Geocoding GNAF Address Point#Australia#All AUS#Geo Addressing Reference Data\"]},\"autocomplete\":{\"usa\":[\"Predictive Addressing Points#United States#All USA#Interactive\"],\"aus\":[\"Predictive Addressing Points#Australia#All AUS#Interactive\"]},\"express_data\":{\"usa\":[\"Address Express#United States#All USA#Spectrum Platform Data\",\"POI Express#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Address Express#Australia#All AUS#Spectrum Platform Data\"]}}"
+    # Precisely Data Experience API credentials.
+    pdxApiKey: "<your-pdx-api-key>"
+    pdxSecret: "<your-pdx-api-secret>"
+    # Countries to process in this run.
+    countries:
+      - usa
+      - aus
+    # JSON mapping for datasets to download per capability and country.
+    # Remove or add reference data information to be downloaded.
+    dataConfigMap: |-
+      {
+        "verify-geocode": {
+          "usa": [
+            "Geocoding MLD US#United States#All USA#Spectrum Platform Data",
+            "Geocoding NT Street US#United States#All USA#Spectrum Platform Data"
+          ],
+          "aus": [
+            "Geocoding PSMA Street#Australia#All AUS#Geo Addressing Reference Data",
+            "Geocoding GNAF Address Point#Australia#All AUS#Geo Addressing Reference Data"
+          ]
+        },
+        "lookup": {
+          "usa": [
+            "Geocoding MLD US#United States#All USA#Spectrum Platform Data",
+            "Geocoding NT Street US#United States#All USA#Spectrum Platform Data",
+            "Geocoding Reverse PRECISELYID#United States#All USA#Spectrum Platform Data"
+          ],
+          "aus": [
+            "Geocoding PSMA Street#Australia#All AUS#Geo Addressing Reference Data",
+            "Geocoding GNAF Address Point#Australia#All AUS#Geo Addressing Reference Data"
+          ]
+        },
+        "autocomplete": {
+          "usa": [
+            "Predictive Addressing Points#United States#All USA#Geo Addressing Autocomplete Data"
+          ],
+          "aus": [
+            "Predictive Addressing Points#Australia#All AUS#Geo Addressing Autocomplete Data"
+          ]
+        },
+        "express_data": {
+          "usa": [
+            "Address Express#United States#All USA#Spectrum Platform Data",
+            "POI Express#United States#All USA#Spectrum Platform Data"
+          ],
+          "aus": [
+            "Address Express#Australia#All AUS#Spectrum Platform Data"
+          ]
+        }
+      }

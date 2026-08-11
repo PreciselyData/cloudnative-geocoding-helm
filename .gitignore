@@ -5,3 +5,6 @@
 **/*Chart.lock
 **/**/Chart.lock
 **/**/**/Chart.lock
+**/*.tgz
+**/**/*.tgz
+**/**/**/*.tgz

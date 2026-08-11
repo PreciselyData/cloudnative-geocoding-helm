@@ -24,7 +24,7 @@ Follow the below steps to create and push the docker image to ECR:
 
 ```shell
 cd ./charts/component-charts/reference-data-setup-generic/image
-docker build . -t reference-data-extractor:3.0.2
+docker build . -t reference-data-extractor:3.1.0
 ```
 
 ##### For AWS EKS:
@@ -34,9 +34,9 @@ aws ecr get-login-password --region us-east-1 | docker login --username AWS --pa
 
 aws ecr create-repository --repository-name reference-data-extractor --image-scanning-configuration scanOnPush=true --region [AWS-REGION]
 
-docker tag reference-data-extractor:3.0.2 [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:3.0.2
+docker tag reference-data-extractor:3.1.0 [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:3.1.0
 
-docker push [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:3.0.2
+docker push [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-extractor:3.1.0
 ```
 
 ##### For Microsoft AKS:
@@ -45,9 +45,9 @@ docker push [AWS-ACCOUNT-ID].dkr.ecr.[AWS-REGION].amazonaws.com/reference-data-e
 az login
 az acr login --name <registry-name> --subscription <subscription-id>
 
-docker tag reference-data-extractor:3.0.2 <your-container-registry-name>.azurecr.io/reference-data-extractor:3.0.2
+docker tag reference-data-extractor:3.1.0 <your-container-registry-name>.azurecr.io/reference-data-extractor:3.1.0
 
-docker push <your-container-registry-name>.azurecr.io/reference-data-extractor:3.0.2
+docker push <your-container-registry-name>.azurecr.io/reference-data-extractor:3.1.0
 ```
 
 ##### For Google's GKE:
@@ -78,16 +78,47 @@ mentioned [here](../../../docs/guides/gke/QuickStartGKE.md#step-4-create-and-con
 
 ## Step 4: Running the Reference Data Installation Helm Chart
 
-Run the below command for installation of reference data in EFS:
+
+##### For AWS EKS:
+
+Edit the values in the `eks-values-reference-data.yaml` file as needed. Then run the below command for installation of reference data in EFS:
 
 ```shell
-helm install reference-data ./charts/reference-data-setup/ \
---set "reference-data.config.pdxApiKey=[your-pdx-key]" \
---set "reference-data.config.pdxSecret=[your-pdx-secret]" \
---set "reference-data.dataDownload.image.repository=[reference-data-image-repository]" \
---set "reference-data.config.countries={usa,aus}" \
---set "reference-data.config.dataConfigMap={\"verify-geocode\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"lookup\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"autocomplete\":{\"usa\":[\"Predictive Addressing Points#United States#All USA#Interactive\"],\"aus\":[\"Predictive Addressing Points#Australia#All AUS#Interactive\"]},\"express_data\":{\"usa\":[\"Address Express#United States#All USA#Spectrum Platform Data\",\"POI Express#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Address Express#Australia#All AUS#Spectrum Platform Data\"]}}" \
---dependency-update --timeout 60m
+helm upgrade --install reference-data ./charts/eks/reference-data-setup \
+  -f ./charts/eks/reference-data-setup/eks-values-reference-data.yaml \
+  --namespace geo-addressing \
+  --create-namespace \
+  --dependency-update \
+  --debug \
+  --timeout 60m
+```
+
+##### For Microsoft AKS:
+
+Edit the values in the `aks-values-reference-data.yaml` file as needed. Then run the below command for installation of reference data in Azure Files:
+
+```shell
+helm upgrade --install reference-data ./charts/aks/reference-data-setup \
+  -f ./charts/aks/reference-data-setup/aks-values-reference-data.yaml \
+  --namespace geo-addressing \
+  --create-namespace \
+  --dependency-update \
+  --debug \
+  --timeout 60m
+```
+
+##### For Google's GKE:
+
+Edit the values in the `gke-values-reference-data.yaml` file as needed. Then run the below command for installation of reference data in Google Filestore:
+
+```shell
+helm upgrade --install reference-data ./charts/gke/reference-data-setup \
+  -f ./charts/gke/reference-data-setup/gke-values-reference-data.yaml \
+  --namespace geo-addressing \
+  --create-namespace \
+  --dependency-update \
+  --debug \
+  --timeout 60m
 ```
 
 ### Helm Values
@@ -103,7 +134,7 @@ provided by this chart:
 | Parameter          | Description                                              | Default                    |
 |--------------------|----------------------------------------------------------|----------------------------|
 | `image.repository` | the reference-data-extractor container image repository  | `reference-data-extractor` |
-| `image.tag`        | the reference-data-extractor container image version tag | `3.0.2`                    |
+| `image.tag`        | the reference-data-extractor container image version tag | `3.1.0`                    |
 
 <hr>
 </details>
@@ -111,14 +142,14 @@ provided by this chart:
 <details>
 <summary><code>reference-data.*</code></summary>
 
-| Parameter                               | Description                                                                                                                      | Default                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-|-----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *`reference-data.config.pdxApiKey`      | the apiKey of your PDX account                                                                                                   | `pdx-api-key`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| *`reference-data.config.pdxSecret`      | the secret key of your PDX account                                                                                               | `pdx-api-secret`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| *`reference-data.config.countries`      | the countries for which you want to install reference data                                                                       | `{usa,aus,can,gbr,nzl}`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `reference-data.config.dataConfigMap`   | a Map of reference data to be downloaded against countries                                                                       | `{\"verify-geocode\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"lookup\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"autocomplete\":{\"usa\":[\"Predictive Addressing Points#United States#All USA#Interactive\"],\"aus\":[\"Predictive Addressing Points#Australia#All AUS#Interactive\"]},\"express_data\":{\"usa\":[\"Address Express#United States#All USA#Spectrum Platform Data\",\"POI Express#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Address Express#Australia#All AUS#Spectrum Platform Data\"]}}` |
-| `reference-data.config.failFastEnabled` | failFast flag allows the reference-data job to fail fast for any exception. By default, it will continue downloading other SPDs. | `false`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `reference-data.config.timestampFolder` | The timestampFolder path where all the reference data is installed. If not passed, it will pick the current time of job run.     | ``                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Parameter                               | Description                                                                                                                      | Default               |
+|-----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|-----------------------|
+| *`reference-data.config.pdxApiKey`      | the apiKey of your PDX account                                                                                                   | `pdx-api-key`         |
+| *`reference-data.config.pdxSecret`      | the secret key of your PDX account                                                                                               | `pdx-api-secret`      |
+| *`reference-data.config.countries`      | the countries for which you want to install reference data                                                                       | `{usa,aus}`           |
+| `reference-data.config.dataConfigMap`   | a Map of reference data to be downloaded against countries                                                                       | `<refer values.yaml>` |
+| `reference-data.config.failFastEnabled` | failFast flag allows the reference-data job to fail fast for any exception. By default, it will continue downloading other SPDs. | `false`               |
+| `reference-data.config.timestampFolder` | The timestampFolder path where all the reference data is installed. If not passed, it will pick the current time of job run.     | ``                    |
 
 <hr>
 </details>
@@ -136,8 +167,8 @@ example of default reference data map:
       "Geocoding NT Street US#United States#All USA#Spectrum Platform Data"
     ],
     "aus": [
-      "Geocoding PSMA Street#Australia#All AUS#Geocoding",
-      "Geocoding GNAF Address Point#Australia#All AUS#Geocoding"
+      "Geocoding PSMA Street#Australia#All AUS#Geo Addressing Reference Data",
+      "Geocoding GNAF Address Point#Australia#All AUS#Geo Addressing Reference Data"
     ]
   },
   "lookup": {
@@ -146,16 +177,16 @@ example of default reference data map:
       "Geocoding NT Street US#United States#All USA#Spectrum Platform Data"
     ],
     "aus": [
-      "Geocoding PSMA Street#Australia#All AUS#Geocoding",
-      "Geocoding GNAF Address Point#Australia#All AUS#Geocoding"
+      "Geocoding PSMA Street#Australia#All AUS#Geo Addressing Reference Data",
+      "Geocoding GNAF Address Point#Australia#All AUS#Geo Addressing Reference Data"
     ]
   },
   "autocomplete": {
     "usa": [
-      "Predictive Addressing Points#United States#All USA#Interactive"
+      "Predictive Addressing Points#United States#All USA#Geo Addressing Autocomplete Data"
     ],
     "aus": [
-      "Predictive Addressing Points#Australia#All AUS#Interactive"
+      "Predictive Addressing Points#Australia#All AUS#Geo Addressing Autocomplete Data"
     ]
   },
   "express_data": {
@@ -188,10 +219,6 @@ installing the helm chart as follows:
 > [ProductName#Geography#RoasterGranularity#DataFormat#Vintage]
 >
 > e.g. `Geocoding NT Street US#United States#All USA#Spectrum Platform Data#2023.11`
-
-```shell
---set "reference-data.config.dataConfigMap={\"verify-geocode\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"lookup\":{\"usa\":[\"Geocoding MLD US#United States#All USA#Spectrum Platform Data\",\"Geocoding NT Street US#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Geocoding PSMA Street#Australia#All AUS#Geocoding\",\"Geocoding GNAF Address Point#Australia#All AUS#Geocoding\"]},\"autocomplete\":{\"usa\":[\"Predictive Addressing Points#United States#All USA#Interactive\"],\"aus\":[\"Predictive Addressing Points#Australia#All AUS#Interactive\"]},\"express_data\":{\"usa\":[\"Address Express#United States#All USA#Spectrum Platform Data\",\"POI Express#United States#All USA#Spectrum Platform Data\"],\"aus\":[\"Address Express#Australia#All AUS#Spectrum Platform Data\"]}}"
-```
 
 ## Monitoring the Helm Chart
 
