@@ -1,0 +1,72 @@
+global:
+  # AWS region where EKS cluster and backing resources are provisioned.
+  awsRegion: "us-east-1"
+  nfs:
+    # Azure File share configuration used to persist downloaded reference data.
+    shareName: geoaddressingshare
+    storageAccount: geoaddressing
+
+reference-data:
+  dataDownload:
+    image:
+      # Reference data extractor image details.
+      repository: "<your-reference-data-extractor-image-repository>"
+      pullPolicy: Always
+      tag: "<your-reference-data-extractor-image-tag>"
+
+  nodeSelector: {}
+    # Optional: schedule data download job on dedicated nodes.
+  # node-app: geo-addressing
+
+  config:
+    # Precisely Data Experience API credentials.
+    pdxApiKey: "<your-pdx-api-key>"
+    pdxSecret: "<your-pdx-api-secret>"
+    # Countries to process in this run.
+    # Default is USA and Australia. Add or remove countries as needed.
+    countries:
+      - usa
+      - aus
+    # JSON mapping for datasets to download per capability and country.
+    # Add or remove reference data information to be downloaded.
+    dataConfigMap: |-
+      {
+        "verify-geocode": {
+          "usa": [
+            "Geocoding MLD US#United States#All USA#Spectrum Platform Data",
+            "Geocoding NT Street US#United States#All USA#Spectrum Platform Data"
+          ],
+          "aus": [
+            "Geocoding PSMA Street#Australia#All AUS#Geo Addressing Reference Data",
+            "Geocoding GNAF Address Point#Australia#All AUS#Geo Addressing Reference Data"
+          ]
+        },
+        "lookup": {
+          "usa": [
+            "Geocoding MLD US#United States#All USA#Spectrum Platform Data",
+            "Geocoding NT Street US#United States#All USA#Spectrum Platform Data",
+            "Geocoding Reverse PRECISELYID#United States#All USA#Spectrum Platform Data"
+          ],
+          "aus": [
+            "Geocoding PSMA Street#Australia#All AUS#Geo Addressing Reference Data",
+            "Geocoding GNAF Address Point#Australia#All AUS#Geo Addressing Reference Data"
+          ]
+        },
+        "autocomplete": {
+          "usa": [
+            "Predictive Addressing Points#United States#All USA#Geo Addressing Autocomplete Data"
+          ],
+          "aus": [
+            "Predictive Addressing Points#Australia#All AUS#Geo Addressing Autocomplete Data"
+          ]
+        },
+        "express_data": {
+          "usa": [
+            "Address Express#United States#All USA#Spectrum Platform Data",
+            "POI Express#United States#All USA#Spectrum Platform Data"
+          ],
+          "aus": [
+            "Address Express#Australia#All AUS#Spectrum Platform Data"
+          ]
+        }
+      }

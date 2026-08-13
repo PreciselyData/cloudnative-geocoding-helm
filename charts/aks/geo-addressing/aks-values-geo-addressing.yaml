@@ -1,0 +1,77 @@
+# Edit the values accordingly to your environment.
+# The values in this file will override the default values in charts/eks/geo-addressing/values.yaml
+global:
+  ## Configurations related to Network File System
+  nfs:
+    ##
+    ## The Azure Storage Name
+    shareName: geoaddressingshare
+    ##
+    ## The Azure Storage Account ID
+    storageAccount: geoaddressing
+
+  countries:
+    - usa
+
+  nodeSelector:
+    node-app: geo-addressing
+
+  addressingImage:
+    repository: "<azure-container-services-repository>/addressing-service"
+    tag: "3.1.0"
+  expressEngineImage:
+    repository: "<azure-container-services-repository>/express-engine"
+    tag: "3.1.0"
+  expressEngineDataRestoreImage:
+    repository: "<azure-container-services-repository>/express-engine-data-restore"
+    tag: "3.1.0"
+
+  # Set to true if you want to use a manual data config instead of the default data configuration.
+  # Disable geo-addressing.addressing-hook.enabled if manualDataConfig.enabled is set to true.
+  manualDataConfig:
+    enabled: false
+    nameOverride: addressing-data-mnl-config
+    configMapData:
+      verify-geocode.usa.vintage: /mnt/data/geoaddressing-data/verify-geocode/usa/202601130631
+      reverse.usa.vintage: /mnt/data/geoaddressing-data/verify-geocode/usa/202601130631
+      lookup.usa.vintage: /mnt/data/geoaddressing-data/lookup/usa/202601130631
+      autocomplete.usa.vintage: /mnt/data/geoaddressing-data/autocomplete/usa/202411271017
+
+
+geo-addressing:
+  ingress:
+    enabled: true
+    hosts:
+      - host: "<your-azure-dns-name e.g. geo-addressing.eastus.cloudapp.azure.com>"
+        paths:
+          - path: /precisely/addressing
+            pathType: ImplementationSpecific
+
+  autoscaling:
+    minReplicas: 3
+
+  image:
+    repository: "<azure-container-services-repository>/regional-addressing-service"
+    tag: "3.1.0"
+
+  # Disable hook, if manual data config is provided.
+  addressing-hook:
+    enabled: true
+
+  # Enable if Express Engine is required for your use case. Express Engine is used for high-performance autocomplete.
+  addressing-express:
+    enabled: false
+    expressEngineData:
+      nodeSelector:
+        node-app: express-data
+    expressEngineMaster:
+      nodeSelector:
+        node-app: express-master
+    expressEngineDataRestore:
+      nodeSelector:
+        node-app: express-data
+  # Configurations related to Addressing Service
+  addressing-svc:
+    enabled: true
+    autoscaling:
+      minReplicas: 3

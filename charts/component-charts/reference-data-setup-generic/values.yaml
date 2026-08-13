@@ -1,29 +1,24 @@
 dataDownload:
   enabled: true
   image:
-    repository: reference-data-extractor
-    pullPolicy: Always
-    tag: 3.0.2
+    repository: ~
+    pullPolicy: ~
+    tag: ~
     pullSecrets: [ ]
 
 nameOverride: "reference-data"
 fullnameOverride: "reference-data"
 
-nodeSelector: { }
+nodeSelector: ~
 
 serviceAccount:
   annotations: { }
 
 config:
-  pdxApiKey: "pdx-api-key"
-  pdxSecret: "pdx-api-secret"
+  pdxApiKey: ~
+  pdxSecret: ~
   mountBasePath: "/mnt/data/geoaddressing-data"
-  countries:
-    - usa
-    - aus
-    - can
-    - gbr
-    - nzl
+  countries: ~
   dataConfigMap: ~
   failFastEnabled: "false"
   timestampFolder:

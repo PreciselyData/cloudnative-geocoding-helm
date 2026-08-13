@@ -107,7 +107,6 @@ e.g. If lookup functionality is not required, you can skip creating custom regio
 ```
 By this way, you can upload reference data of custom regions with multiple countries for different functionalities.
 
-
 ### Update custom region parameters in values.yaml
 
 Once the reference data is deployed according to the custom regions, 
@@ -160,7 +159,7 @@ provided by this chart:
 | Parameter          | Description                                         | Default                       |
 |--------------------|-----------------------------------------------------|-------------------------------|
 | `image.repository` | the regional-addressing container image repository  | `regional-addressing-service` |
-| `image.tag`        | the regional-addressing container image version tag | `3.0.2`                       |
+| `image.tag`        | the regional-addressing container image version tag | `3.1.0`                       |
 
 <hr>
 </details>
@@ -186,13 +185,13 @@ provided by this chart:
 | `global.customRegions`                            | this parameter enables custom regions for addressing functionality. A JSON of region with comma separated countries as values can be provided to enable a particular region: `{"apac": ["ind", "pak", "china"]}`                   | `{}`                           |
 | `global.manualDataConfig.*`                       | the config to enable the manual configuration for country-specific vintage data config-map. `addressing-hook.enabled` should be set to false, else `global.manualDataConfig` will be given higher precedence.                      | `false`                        |
 | `global.addressingImage.repository`               | the addressing-service container image repository                                                                                                                                                                                  | `addressing-service`           |
-| `global.addressingImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `3.0.2`                        |
+| `global.addressingImage.tag`                      | the addressing-service container image version tag                                                                                                                                                                                 | `3.1.0`                        |
 | `global.expressEngineImage.repository`            | the express-engine container image repository                                                                                                                                                                                      | `express-engine`               |
-| `global.expressEngineImage.tag`                   | the express-engine container image version tag                                                                                                                                                                                     | `3.0.2`                        |
+| `global.expressEngineImage.tag`                   | the express-engine container image version tag                                                                                                                                                                                     | `3.1.0`                        |
 | `global.expressEngineDataRestoreImage.repository` | the express-engine-data-restore container image repository                                                                                                                                                                         | `express-engine-data-restore`  |
-| `global.expressEngineDataRestoreImage.tag`        | the express-engine-data-restore container image version tag                                                                                                                                                                        | `3.0.2`                        |
+| `global.expressEngineDataRestoreImage.tag`        | the express-engine-data-restore container image version tag                                                                                                                                                                        | `3.1.0`                        |
 | `global.eventEmitterImage.repository`             | the event-emitter container image repository                                                                                                                                                                                       | `event-emitter`                |
-| `global.eventEmitterImage.tag`                    | the event-emitter container image version tag                                                                                                                                                                                      | `3.0.2`                        |
+| `global.eventEmitterImage.tag`                    | the event-emitter container image version tag                                                                                                                                                                                      | `3.1.0`                        |
 | `global.nfs.addressingBasePath`                   | the base path of the folder where verify-geocode data is present                                                                                                                                                                   | `verify-geocode`               |
 | `global.nfs.autoCompleteBasePath`                 | the base path of the folder where autocomplete data is present                                                                                                                                                                     | `autocomplete`                 |
 | `global.nfs.lookupBasePath`                       | the base path of the folder where lookup data is present                                                                                                                                                                           | `lookup`                       |
@@ -391,6 +390,63 @@ minimum amount of pod memory for the addressing-services for each specific count
 
 You can adjust the values in [values.yaml](values.yaml), or you can set these parameters in the helm command itself
 during installation/up-gradation.
+
+## Debugging and Addressing SDK Performance Tuning
+
+If there are any performance issues or memory leaks at addressing service, you can handle this by controlling the environment variables.
+These environment variables should be added to the addressing service, by editing the deployment. Following are the environment variables that can control the behavior of the addressing service during performance evaluation.
+As a best practice, these are set to default values, however, user should provide those values accordingly.
+
+### Generating the Journal File for Addressing Service
+
+To generate the journal file for addressing service, you can set the following environment variables in the deployment of the addressing service:
+```
+- name: GEOSTAN_JOURNAL_FILE
+  value: "/mnt/data/geoaddressing-data/journal.gsj"
+```
+
+This will generate the journal file at the specified path. 
+You can then use this journal file to analyze the performance of the addressing service at geostan level.
+
+**NOTE:** The path provided should be writable by the addressing service (777 permissions). As this is the path of NFS, the required permissions can be controlled at Persistent Volume level. 
+Please ensure that the path is writable by the addressing service. Manually update the permission of the folder path before starting the addressing service.
+
+### Controlling SDK Pool Configurations
+
+To control the minimum number of SDK instances that are kept alive in the pool even during idle time, 
+you can set the following environment variables in the deployment of the addressing service:
+```
+- name: SDK_POOL_MIN_IDLE
+  value: "8"
+```
+
+To control the maximum number of concurrent SDK instances of addressing service for processing geocoding requests simultaneously, 
+you can set the following environment variables in the deployment of the addressing service:
+```
+- name: SDK_POOL_MAX_ACTIVE
+  value: "8"
+```
+
+You can set the pool size to a value higher than the available vCPU count; 
+however, the practical limit is typically determined by the memory allocated to the container rather than CPU alone. 
+Each pooled instance consumes additional runtime memory, and total memory usage increases as pool size grows. 
+As a result, pool sizing should be based on both expected concurrency and available container memory.
+For stable and predictable behavior, it is recommended to configure SDK_POOL_MIN_IDLE and SDK_POOL_MAX_ACTIVE to the same value.
+
+Consider the following chart for pool sizing recommendations:
+
+| Container Memory (GB) | Recommended Pool Size (SDK_POOL_MIN_IDLE / SDK_POOL_MAX_ACTIVE) |
+|-----------------------|-----------------------------------------------------------------|
+| 2                     | 1-2                                                             |
+| 4                     | 2-4                                                             |
+| 8                     | 6-8                                                             |
+| 16                    | 8-10                                                            |
+| 16+                   | Size according to throughput requirements and benchmark results |
+
+**NOTE:** Users should validate sizing in their own environment and adjust based on workload volume, concurrency, dataset configuration, JVM settings, and overall container resource allocation. 
+The optimal configuration may vary depending on the specific deployment and usage patterns.
+
+
 
 ## Geo Addressing Service API Usage
 

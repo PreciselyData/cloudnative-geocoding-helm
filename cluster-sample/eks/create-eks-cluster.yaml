@@ -4,7 +4,7 @@ kind: ClusterConfig
 metadata:
   name: geo-addressing
   region: us-east-1
-  version: "1.29"
+  version: "1.36"
 
 addons:
   - name: vpc-cni

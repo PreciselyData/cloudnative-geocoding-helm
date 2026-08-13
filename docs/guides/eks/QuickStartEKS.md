@@ -52,6 +52,11 @@ You can create the EKS cluster or use existing EKS cluster.
     ```shell
     kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
     ```
+  For newer k8s versions, metrics server is already available in the cluster. 
+  If it's not available, it can be installed using the following command:
+    ```shell
+    eksctl update addon --cluster geo-addressing --name metrics-server --force
+    ```
 - The geo-addressing service requires ingress controller setup. Run the following command for setting up NGINX ingress
   controller:
   ```shell
@@ -94,7 +99,11 @@ and push it to your Elastic Container Repositories.
 ```shell
 cd ./scripts/eks/images-to-ecr-uploader
 pip install -r requirements.txt
-python upload_ecr.py --pdx-api-key [pdx-api-key] --pdx-api-secret [pdx-secret] --aws-access-key [aws-access-key] --aws-secret [aws-secret] --aws-region [aws-region]
+
+python upload_ecr.py \
+  --pdx-api-key [pdx-api-key] --pdx-api-secret [pdx-secret] \
+  --aws-access-key [aws-access-key] --aws-secret [aws-secret] \
+  --aws-region [aws-region]
 ```
 
 For more details related to docker images download script, follow the
@@ -116,7 +125,12 @@ cluster by creating mount targets.
   ```shell
   cd ./scripts/eks/efs-creator
   pip install -r requirements.txt
-  python ./create_efs.py --cluster-name [eks-cluster-name] --aws-access-key [aws-access-key] --aws-secret [aws-secret] --aws-region [aws-region] --efs-name [precisely-geo-addressing-efs] --security-group-name [precisely-geo-addressing-sg]
+  
+  python ./create_efs.py --cluster-name [eks-cluster-name] \
+    --aws-access-key [aws-access-key] --aws-secret [aws-secret] \
+    --aws-region [aws-region] \
+    --efs-name [precisely-geo-addressing-efs] \
+    --security-group-name [precisely-geo-addressing-sg]
   ```
 
 - If you already have EFS, but you want to create mount targets so that EFS can be accessed from the EKS cluster, run
@@ -124,7 +138,12 @@ cluster by creating mount targets.
   ```shell
   cd ./scripts/eks/efs-creator
   pip install -r requirements.txt
-  python ./create_efs.py --cluster-name [eks-cluster-name] --existing true --aws-access-key [aws-access-key] --aws-secret [aws-secret-key] --aws-region [aws-region] --file-system-id [file-system-id]
+  
+  python ./create_efs.py --cluster-name [eks-cluster-name] \
+    --aws-access-key [aws-access-key] --aws-secret [aws-secret-key] \
+    --aws-region [aws-region] \
+    --existing true \
+    --file-system-id [file-system-id]
   ```
 
 ## Step 5: Installation of Reference Data
@@ -135,30 +154,35 @@ For installing reference data, you can make use of
 The Geo-Addressing Application relies on reference data for performing geo-addressing operations. For more information
 related to reference data, please refer to [this link](../../ReferenceData.md).
 
+The command used to run the reference data setup helm chart is as follows:
+<br>**NOTE: Edit the `eks-values-reference-data.yaml` file to provide the required reference data and other parameters.**
+```shell
+helm upgrade --install reference-data ./charts/eks/reference-data-setup \
+  -f ./charts/eks/reference-data-setup/eks-values-reference-data.yaml \
+  --namespace geo-addressing \
+  --create-namespace \
+  --dependency-update \
+  --debug \
+  --timeout 60m
+```
+
 ## Step 6: Installation of Geo-Addressing Helm Chart
 
 > NOTE: For every helm chart version update, make sure you run
 > the [Step 3](#step-3-download-geo-addressing-docker-images) for uploading the docker images with the newest tag.
 
-To install/upgrade the geo-addressing helm chart, use the following command:
+To install/upgrade the geo-addressing helm chart, edit the [`eks-values-geo-addressing.yaml`](../../../charts/eks/geo-addressing/eks-values-geo-addressing.yaml) file to provide the required parameters and run the following command:
 
 ```shell
 helm upgrade --install geo-addressing ./charts/eks/geo-addressing \
---set "global.awsRegion=[aws-region]" \ 
---set "global.nfs.fileSystemId=[file-system-id]" \
---set "geo-addressing.ingress.enabled=true" \
---set "geo-addressing.ingress.hosts[0].host=[ingress-host-name]" \ 
---set "geo-addressing.ingress.hosts[0].paths[0].path=/precisely/addressing" \
---set "geo-addressing.ingress.hosts[0].paths[0].pathType=ImplementationSpecific" \
---set "global.nodeSelector.node-app=[node-selector-label]" \
---set "geo-addressing.image.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/regional-addressing-service" \
---set "geo-addressing.image.tag=[IMAGE-TAG defaults to chart version]" \
---set "global.addressingImage.repository=[aws-account-id].dkr.ecr.[aws-region].amazonaws.com/addressing-service" \
---set "global.addressingImage.tag=[IMAGE-TAG defaults to chart version]" \
---set "geo-addressing.addressing-express.enabled=false" \
---set "global.countries={usa,can,apac}" \
---dependency-update --namespace geo-addressing --create-namespace
+  -f ./charts/eks/geo-addressing/eks-values-geo-addressing.yaml \
+  --namespace geo-addressing \
+  --create-namespace \
+  --dependency-update \
+  --debug
 ```
+
+You can also provide the parameters directly in the helm command using `--set` option.
 
 By default, **ONLY verify/geocode** functionality is **enabled**.
 

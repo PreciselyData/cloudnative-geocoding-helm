@@ -50,9 +50,7 @@ spec:
     - tls
   csi:
     driver: efs.csi.aws.com
-    volumeHandle: {{ .Values.global.nfs.fileSystemId }}.efs.{{ .Values.global.awsRegion }}.amazonaws.com
-    volumeAttributes:
-      path: /
+    volumeHandle: {{ .Values.global.nfs.fileSystemId }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
